@@ -1,0 +1,12 @@
+---
+layout: default
+img: phones.png
+category: Services
+title: Events
+description: |
+---
+  - 24.-26.06.2015 SLAC, Berlin, Germany - https://www.heinlein-support.de/secure-linux-administration-conference
+  - 15.-22.08.2015 DebConf15, Heidelberg, Germany - http://debconf15.debconf.org/
+  - 05.-09.10.2015 PuppetConf, Portland, OR, USA - http://2015.puppetconf.com/
+  - 20.-22.10.2015 OpenNebulaConf, Barcelona, Spain - http://2015.opennebulaconf.com/
+

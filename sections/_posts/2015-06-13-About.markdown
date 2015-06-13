@@ -1,0 +1,18 @@
+---
+layout: default
+img: ipad.png
+category: Services
+title: About us
+description: |
+---
+We believe in and support Open Source, DevOps culture, knowledge sharing and automation.
+
+We like Puppet and all the technologies that make IT operations smarter. 
+
+### Founders
+
+#### Martin Alfke - CEO
+Martin is long term Linux system engineer and specialist. His experience covers finance and automotive industry systems, large web economy platforms and start-ups. He is working with Puppet since 2007 and conducts official PuppetLabs Trainings as Authorized Training Partner since 2011.
+
+#### Alessandro Franceschi - CTO
+Early Internet age entrepreneur and consultant. Working on IT since 1995. Puppet user since 2007, modules developer, trainer and book's author. Has really seen and managed infrastructures of any kind.

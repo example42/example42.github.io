@@ -1,0 +1,29 @@
+# ----------------------- #
+#      Main Configs       #
+# ----------------------- #
+
+url: http://new.example42.com
+title: Example42
+email: info@example42.com
+author: Example42 PuppetMasters 
+description: > # "Example42 delivers Puppet training, consulting and development services. It provides consulting on automation and DevOps practices"
+
+# ----------------------- #
+#    Jekyll & Plugins     #
+# ----------------------- #
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+
+# ----------------------- #
+#   3rd Party Settings    #
+# ----------------------- #
+
+social:
+  - title: twitter
+    url: https://twitter.com/alvagante
+  - title: github
+    url: https://github.com/example42
+  - title: linkedin
+    url: 
