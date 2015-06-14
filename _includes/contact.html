@@ -1,34 +1,14 @@
 <section id="contact">
-    <div class="content-section-b">
+    <div class="content-section-a">
         <div class="container">
 
             <div class="row">
-                <div class="col-lg-5 col-sm-6">
-                    <hr class="section-heading-spacer">
+                <div class="col-lg-6 col-sm-6">
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">Contact US</h2>
-                    <div class="lead">
-<div id="wufoo-z1vt9prh1fctjuf">
-Fill out my <a href="https://example42.wufoo.com/forms/z1vt9prh1fctjuf">online form</a>.
-</div>
-<script type="text/javascript">var z1vt9prh1fctjuf;(function(d, t) {
-var s = d.createElement(t), options = {
-'userName':'example42',
-'formHash':'z1vt9prh1fctjuf',
-'autoResize':true,
-'height':'571',
-'async':true,
-'host':'wufoo.com',
-'header':'show',
-'ssl':true};
-s.src = ('https:' == d.location.protocol ? 'https://' : 'http://') + 'wufoo.com/scripts/embed/form.js';
-s.onload = s.onreadystatechange = function() {
-var rs = this.readyState; if (rs) if (rs != 'complete') if (rs != 'loaded') return;
-try { z1vt9prh1fctjuf = new WufooForm();z1vt9prh1fctjuf.initialize(options);z1vt9prh1fctjuf.display(); } catch (e) {}};
-var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr);
-})(document, 'script');</script>
-                </div>
-                <div class="col-lg-5 col-lg-offset-2  col-sm-2">
+                    <h2 class="section-heading">Contact</h2>
+                    {% include wufoo.html %}
+                  </div>
+                <div class="col-lg-4 col-lg-offset-2  col-sm-6">
                   <img class="img-responsive" src="img/services/dog.png" alt="">
                 </div>
             </div>
