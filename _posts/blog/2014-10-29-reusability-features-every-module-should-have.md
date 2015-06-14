@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Simple and powerful reusability features every module should have
+title: Reusability features every module should have
 ---
 
 The quality of Puppet modules is constantly increasing, for each relevant application there's a good module to manage it.
