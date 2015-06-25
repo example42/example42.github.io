@@ -5,7 +5,7 @@ title: Reusability features every module should have
 
 The quality of Puppet modules is constantly increasing, for each relevant application there's a good module to manage it.
 
-They may have different structures, feature sets, OS coverage and naming conventions (:-I) but most of the times the better modules around do their work.
+They may have different structures, features sets, OS coverage and naming conventions (:-I) but most of the times the better modules around do their work.
 
 Still, often, also in some of the most popular modules, I desperately miss a few basic features that would allow me to use them without being forced to make a local fork.
 
