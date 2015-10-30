@@ -19,6 +19,7 @@ permalink: pretty
 # ----------------------- #
 #   3rd Party Settings    #
 # ----------------------- #
+include: guide/slides
 
 social:
   - title: github
