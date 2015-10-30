@@ -5,7 +5,7 @@
 url: http://www.example42.com
 title: Example42
 email: info@example42.com
-author: Example42 PuppetMasters 
+author: Example42 PuppetMasters
 description: > # "Example42 delivers Puppet training, consulting and development services. It provides consulting on automation and DevOps practices"
 
 # ----------------------- #
@@ -19,9 +19,7 @@ permalink: pretty
 # ----------------------- #
 #   3rd Party Settings    #
 # ----------------------- #
-include:
-  - guide/slides/beginner/file/_images
-  - guide/slides/beginner/file/_fonts
+include: ['guide/slides/beginner//file/_images/logoguide.jpg','guide/slides/beginner/file/_images/logoguide.jpg']
 
 social:
   - title: github
