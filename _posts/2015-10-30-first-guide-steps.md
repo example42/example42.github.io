@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: First steps for the Puppet Guide 42 slides for Puppet beginners
+title: First steps for the Puppet Guide - 42 slides for Puppet beginners
 ---
 
 A few weeks ago we announced a new Example42 project:  **The [DevOps] Guide to Puppet, Universe and Everything**.
@@ -12,13 +12,13 @@ It is an holistic, Open Source, [documentation project](http://www.example42.com
 - A modular **slides deck**
 - A practical **Puppet Universal Reference**
 
-We have launched an [IndieGogo campaign](http://igg.me/at/guide42) about it, which actually is proceeding in quite a miserable way, but that won't stop us from trying to deliver high quality material for who wants to learn and use Puppet.
+We have launched an [IndieGogo campaign](http://igg.me/at/guide42) about it, which actually is proceeding in quite a miserable way, but that won't stop us from trying to deliver quality material for who wants to learn and use Puppet.
 
 This first output of the guide is **here now**: a set of 42 slides for Puppet beginners. It's the first module of the slides deck (others are expected for more expert users).
 
-The slides are published on [GitHub](https://github.com/example42/puppetguide-slides/tree/master/Beginner), we will publish them on the web as soon as a few technical issues, mostly due to the tools we wanted to use to show them, are sorted out.
+The slides markdown code is on [GitHub](https://github.com/example42/puppetguide-slides/tree/master/Beginner), we will publish them, in rendered format, on the web as soon as a few technical issues, mostly due to the tools we wanted to use to show them, are sorted out.
 
-In the meantime you can see them using [Showoff](https://github.com/puppetlabs/showoff) following these instructions:
+In the meantime you can see them from your computer using [Showoff](https://github.com/puppetlabs/showoff) following these instructions:
 
     # Install the showoff gem
     gem install install
