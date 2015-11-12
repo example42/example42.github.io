@@ -407,7 +407,7 @@
 <h4><a href="https://www.chef.io/" target="_blank">Chef</a></h4>
 
 <ul>
-<li>Has Chef clients that connect to Ceph server</li>
+<li>Has Chef clients that connect to Chef server</li>
 <li>Has characteristic similar to Puppet</li>
 <li>Community code is shared on the <a href="https://galaxy.ansible.com/intro#review" target="_blank">Chef Supermarket</a>
 </li>
@@ -445,7 +445,7 @@
 <li>Roles are equivalent to modules, they are shared on the <a href="https://galaxy.ansible.com/intro#review" target="_blank">Ansible Galaxy</a>
 </li>
 <li>Can centralise multi node task executions, software deployments and configuration management.</li>
-<li>Software eveloped in Python. Bought by RedHad in October 2015</li>
+<li>Software eveloped in Python. Bought by RedHat in October 2015</li>
 </ul>
 </div>
 </div>
@@ -549,7 +549,7 @@ The ones developed by PuppetLabs are:</p>
 <li><p><a href="http://docs.puppetlabs.com/mcollective/" target="_blank">MCollective</a> - Infrastructure Orchestration framework</p></li>
 <li><p><a href="http://docs.puppetlabs.com/pe/latest/razor_intro.html/" target="_blank">Razor</a> - A provisioning system</p></li>
 <li><p><a href="http://puppetlabs.github.io/geppetto/" target="_blank">Geppetto</a> - A Puppet IDE based on Eclipse</p></li>
-<li><p><a href="https://github.com/puppetlabs/r10k/" target="_blank">r10k</a> - A tool to manage deployments of Puppet codeker</p></li>
+<li><p><a href="https://github.com/puppetlabs/r10k/" target="_blank">r10k</a> - A tool to manage deployments of Puppet code</p></li>
 </ul>
 </div>
 </div>
@@ -575,7 +575,7 @@ The ones developed by PuppetLabs are:</p>
 <li>
 <a href="http://puppet-lint.com/" target="_blank">Puppet Lint</a> - A tool to check Puppet code style</li>
 <li>
-<a href="http://rspec-puppet.com/" target="_blank">Rpec Puppet</a> - A tool to make unit tests of Puppet code</li>
+<a href="http://rspec-puppet.com/" target="_blank">Rspec Puppet</a> - A tool to make unit tests of Puppet code</li>
 <li>
 <a href="http://www.kermit.fr/" target="_blank">Kermit</a> - A web frontend for MCollective</li>
 </ul>
@@ -650,7 +650,7 @@ The ones developed by PuppetLabs are:</p>
 <p>to their actual fulfillment on the system, such as</p>
 
 <pre><code>apt-get install openssh # On Debian derivatives
-yum install openssh     # On RedHad derivatings
+yum install openssh     # On RedHat derivatives
 </code></pre>
 
 <p>The catalog is saved by the client in:</p>
@@ -888,7 +888,7 @@ virtual =&gt; physical
 <li>
 <strong>Native facts</strong> written in ruby and shipped with modules (in the <code>lib/facter</code> directory)</li>
 <li>
-<strong>External facts</strong> can be simple ini-file like texts (with <code>.txt</code> extension), Yaml files or even commands in any language, which returns a fact name and its value. External faccts are located in the nodes' <code>/etc/facter/facts.d</code> directory and can be shipped also from modules (in the <code>facts.d</code> directory)</li>
+<strong>External facts</strong> can be simple ini-file like texts (with <code>.txt</code> extension), Yaml files or even commands in any language, which returns a fact name and its value. External facts are located in the nodes' <code>/etc/facter/facts.d</code> directory and can be shipped also from modules (in the <code>facts.d</code> directory)</li>
 </ul>
 </div>
 </div>
@@ -901,8 +901,8 @@ virtual =&gt; physical
 <p>Example of a class <strong>definition</strong> (here we describe what the class does and what parameters it has, we don't actually add it and its resources to the catalog):</p>
 
 <pre><code>class mysql (
-  root_password =&gt; 'default_value',
-  port          =&gt; '3306',
+  root_password = 'default_value',
+  port          = '3306',
 ) {
   package { 'mysql-server': ensure =&gt; present }
   service { 'mysql': ensure =&gt; running }
@@ -1183,12 +1183,14 @@ sudo ./puppet-enterprise-installer</tarballdir></tarball></p>
 <li>
 <p>Run the remote installation script:</p>
 
-<p>curl -k https://<puppet_server>:8140/packages/current/install.bash | sudo bash</puppet_server></p>
+<pre><code>curl -k https://&lt;puppet_server&gt;:8140/packages/current/install.bash | sudo bash
+</code></pre>
 </li>
 <li>
 <p>Distribute the tarball and eventually use an answer file for unattended setup:</p>
 
-<p>sudo ./puppet-enterprise-installer -a ~/pe_answers.txt</p>
+<pre><code>sudo ./puppet-enterprise-installer -a ~/pe_answers.txt
+</code></pre>
 </li>
 <li><p>Use dedicated public modules</p></li>
 </ul>
@@ -1351,7 +1353,7 @@ resource          The resource abstraction layer shell
 
 <p>SSL directory (<code>$libdir</code>) (contains all the SSL certificates)</p>
 
-<pre><code>$logdir/ssl  # Puppet 3 or earlier
+<pre><code>$libdir/ssl  # Puppet 3 or earlier
 $confdir/ssl # Puppet 4
 </code></pre>
 
@@ -1366,6 +1368,7 @@ $confdir/ssl # Puppet 4
 
 <pre><code>/etc/puppet/modules:/usr/share/puppet/modules # Puppet 3
 /etc/puppet/environments/$environment/modules # Added modules dir in Puppet 3 when using **directory environments**
+/etc/puppetlabs/code/environments/$environment/modules # Puppet 4
 </code></pre>
 
 <p>Code directory in Puppet 4:</p>
@@ -1374,13 +1377,13 @@ $confdir/ssl # Puppet 4
 /etc/puppetlabs/code/environments/$environment # $environmentpath
 </code></pre>
 
-<p>Inside the $environmentpath
-    hieradata/ # Hiera files dir
-    environment.conf *
-        manifests *
-        modules *
-        hiera.yaml *                      # :hiera_config
-    modules *                         # user modulepath    </p>
+<p>Inside the $environmentpath</p>
+
+<pre><code>hieradata/ # Hiera files dir
+modules/   # User modulepath    
+manifests/ # Manifests dirs
+environment.conf
+</code></pre>
 </div>
 </div>
 <div id="Using_Puppet_Troubleshooting" class="slide " data-transition="none">
