@@ -16,9 +16,11 @@ We have launched an [IndieGogo campaign](http://igg.me/at/guide42) about it, whi
 
 This first output of the guide is here now: a **set of 42 slides for Puppet beginners**. It's the first module of the slides deck (others are expected for more expert users).
 
-The slides markdown code is on [GitHub](https://github.com/example42/puppetguide-slides/tree/master/Beginner), we will publish them, in rendered format, on the web as soon as a few technical issues are sorted out.
+The slides markdown code is on [GitHub](https://github.com/example42/puppetguide-slides/tree/master/Beginner).
 
-In the meantime you can see them from your computer using [Showoff](https://github.com/puppetlabs/showoff) following these instructions:
+Check [this link](http://www.example42.com/guide/slides/beginner/) for the rendered slides.
+
+To see them from your computer using [Showoff](https://github.com/puppetlabs/showoff) follow these instructions:
 
     # Install the showoff gem
     gem install install
