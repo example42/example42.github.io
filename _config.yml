@@ -19,7 +19,7 @@ permalink: pretty
 # ----------------------- #
 #   3rd Party Settings    #
 # ----------------------- #
-include: ['guide/slides/beginner//file/_images/logoguide.jpg','guide/slides/beginner/file/_images/logoguide.jpg']
+include: ['guide/slides/beginner/file/_images/logoguide.jpg','guide/slides/beginner/file/_images/logoguide.jpg']
 
 social:
   - title: github
