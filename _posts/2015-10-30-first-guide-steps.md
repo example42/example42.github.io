@@ -22,10 +22,10 @@ Check [this link](http://www.example42.com/guide/slides/beginner/) for the rende
 
 To see them from your computer using [Showoff](https://github.com/puppetlabs/showoff) follow these instructions:
 
-    # Install the showoff gem
-    gem install install
+    # Install the showoff gem
+    gem install showoff
 
-    # Clone the slides repo and move into the Beginner directory
+    # Clone the slides repo and move into the Beginner directory
     git clone https://github.com/example42/puppetguide-slides
     cd puppetguide-slides/Beginner
 
