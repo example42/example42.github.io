@@ -33,7 +33,7 @@ With Puppet 2.x many things changed and modules' classes could finally have para
 
   - Use of skeletons for quick creation of full featured modules
 
-  - The params_lookup() function, provided by the Puppi module. Used for each class parameter. It partly  anticipated the behavior of Puppet 3's Hiera data bindings and actually permitted even more flexible lookup options.
+  - The params_lookup() function, provided by the Puppi module. Used for each class parameter. It partly  anticipated the behavior of Puppet 3's Hiera data bindings and actually allowed even more flexible lookup options.
 
 In this occasion independent git repos for each module were introduced and the main [puppet-modules](https://github.com/example42/puppet-modules) repo linking them as submodules.
 
@@ -59,17 +59,19 @@ Time to take radical decisions for our fourth generation of Puppet modules:
 
   - A huge amount of modules have been deprecated. For specialized tasks there are better alternatives around, for common package, service, files management Tiny Puppet can do the same.
 
-  - The repository layout has been overhauled: from a collection of submodules to a Puppet **control-repo** with a Puppetfile (with Example42 and third party modules), sample local roles and profiles, sample Hiera data
+  - The repository layout has been overhauled: from a collection of submodules to a Puppet **control-repo** with a Puppetfile (with example42 and third party modules), sample local roles and profiles, sample Hiera data
 
   - Vagrant and (soon) Docker environments are added to the repo for testing Puppet code and data.
 
-  - The repository is now more suitable as a starting, point for a flexible and decently structured Puppet infrastructure.
+  - The repository is now more suitable as a starting point for a flexible and decently structured Puppet infrastructure.
 
 Work has just begun, a modules set is developed over time. Most of the current modules are still in their "NextGen" layout and all of them should work on Puppet 2, 3 and 4.
 
-We are considering how to evolve: if to follow the backwards compatibility we always wanted to preserve, in terms of supported Puppet versions, or if to drop completely Puppet 3 support and design the new versions of the modules using the most advanced techniques that come with the Future parser.
+Fourth generation is for Puppet 4.
 
-In the next months we will see how this generation evolves and I have reasons to believe that it will be luckier than the previous also because something has changed in the meantime: there a company behind example42, not just a single person.
+The sample profiles in the puppet-modules repository work only on Puppet 4, backwards compatibility may be preserved in the single component modules.
+
+In the next months we will see how this generation evolves now the and I have reasons to believe that it will be luckier than the previous also because something has changed in the meantime: there a company behind example42, not just a single person.
 
 Per Aspera ad Astra
 
