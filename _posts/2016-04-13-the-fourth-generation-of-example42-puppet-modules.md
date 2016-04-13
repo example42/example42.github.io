@@ -71,7 +71,7 @@ Fourth generation is for Puppet 4.
 
 The sample profiles in the puppet-modules repository work only on Puppet 4, backwards compatibility may be preserved in the single component modules.
 
-In the next months we will see how this generation evolves now the and I have reasons to believe that it will be luckier than the previous also because something has changed in the meantime: there a company behind example42, not just a single person.
+In the next months we will see how this generation evolves, I have reasons to believe that it will be luckier than the previous also because something has changed in the meantime: there a company behind example42, not just a single person.
 
 Per Aspera ad Astra
 
