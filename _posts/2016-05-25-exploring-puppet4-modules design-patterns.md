@@ -3,13 +3,13 @@ layout: blog
 title: Exploring Puppet(4) modules design patterns
 ---
 
-The enhancements coming with Puppet 4's parser and type system are starting to appear in the modules ecosystem, still the need to preserve backwards compatibility is often slowing authors from fully embracing the powers of the new Puppet.
+The enhancements coming with Puppet 4's parser and type system are starting to appear in the modules ecosystem, still the need to preserve backwards compatibility is often slowing authors from fully embracing the powers and the elegance of the new Puppet language.
 
 When example42 announced the 4th generation of its Puppet modules and introduced its [control repo](https://github.com/example42/control-repo), we decided to fully embrace Puppet 4 and ignore backwards compatibility.
 
 I, Alessandro, was struggling to find a sane way to put together the possibilities (and limitations) of Tiny Puppet, the structure of a full featured control-repo, and the usage of third party modules when I met, at the last [OSDC](https://www.netways.de/en/events_trainings/osdc/overview/), David.
 
-He talked about a few very design principles for modules that found me in complete agreement, and I'm glad to have him here to describe them directly:
+He talked about a few very design principles for modules that found me in complete agreement, and I'm glad to have him here to describe them in first person:
 
 ----
 ### David here
@@ -17,33 +17,38 @@ He talked about a few very design principles for modules that found me in comple
 
 ### From theory to practice
 
-Based on these principles I've started to work on some sample proof of concepts.
+Based on these principles I've started to work on some sample **proof of concepts**.
+
 The first attempt was with [Apache](https://github.com/example42/puppet-apache/tree/4.x), here we have a very compact main class with a few general purpose parameters and no resource directly managed:
 
     class apache (
+      # Manage presence
       Variant[Boolean,String] $ensure           = present,
 
-      # How apache is installed. Tiny Puppet is used in the default class
+      # The name of the class that manages apache installation. Tiny Puppet is used here by default
       String                  $install_class    = '::apache::install::tp',
 
       # A single hash to override the module general configuration settings (names, paths...)
       Hash                    $settings         = { },
 
-      # This is tp specific as for the settings param, allows to use a custom module for the (tp) data
+      # The name of the module to use for tiny puppet data
       String[1]               $data_module      = 'apache',
 
-      # Useful, module wide, default behaviors. These can be referenced in any module's class or define:
+      # Here follow some useful, module wide, default behaviors.
+      # These can be referenced in any module's class or define.
+
       # If to restart services when changes occur:
-      Boolean                 $auto_restart     = true,
+      Boolean                 $auto_restart       = true,
 
-      # If to automatically apply default configurations:
-      Boolean                 $auto_conf        = false,
+      # If to automatically apply default configurations (if present):
+      Boolean                 $auto_conf          = false,
 
-      # If to automatically apply prerequisites resources, when needed
-      Boolean                 $auto_prerequisites = true,
+      # If to automatically add prerequisites resources (repos, users, packages...) when needed:
+      Boolean                 $auto_prerequisites = false,
 
-I wanted to reproduce the behavior of the current apache example42 module, adding defines for manage virtual hosts, modules and configuration fragments.
-They were easy and quick to write, also thanks to Tiny Puppet features and the choice to use the main class as the module's general entry point:
+I wanted to reproduce the behavior of the current apache example42 module, adding defines to manage virtual hosts, modules and configuration files.
+
+They were easy and quick to write, also thanks to Tiny Puppet features and the choice to use the main class as the module's general entry point for variables:
 
     define apache::vhost (
       Variant[Boolean,String] $ensure           = '',
@@ -57,8 +62,8 @@ They were easy and quick to write, also thanks to Tiny Puppet features and the c
         template           => $template,
         options_hash       => $::apache::options + $options,
         data_module        => $::apache::data_module,
-        settings           => $::apache::module_settings,
-        config_file_notify => $::apache::service_autorestart,
+        settings           => $::apache::real_settings,
+        config_file_notify => $::apache::service_notify,
       }
     }
 
@@ -78,8 +83,9 @@ Finally I started to make some sample profiles in module, and also in this case 
       }
     }
 
-Having a minimal main class and using it as main entry point implies that that class can be included in all the other classes, and its variables be safely referenced wherever needed.
-Having separated classes for separated profiles solves one of the typical dilemma of modules' authors: provide functionality vs the single point of responsibility pattern: the era of reusable and interoperable profiles is close.
+Having a minimal main class and using it as main entry point implies that that class can, and should, be included in all the other module's classes and defines.
+
+Having a single core and separated profiles solves one of the typical dilemma of modules' authors: provide functionality vs follow the single point of responsibility pattern.
 
 
 ### Data in modules, the Tiny Puppet way
@@ -115,14 +121,14 @@ The Docker module uses two different sources for module's data and this needs so
     String[1]               $data_module         = 'docker',
     String[1]               $tinydata_module     = 'tinydata',
 
-First of all one concept must be clear, the approach used by Tuny Puppet to get data is not based on Puppet 4's data in modules design. It uses a custom ```tp_lookup``` function that looks for data in yaml files organized according to a hierarchy defined in a hiera.yaml file (it uses Hiera's same syntax and logic but Hiera is not actually used for the lookups, [read here](http://tiny-puppet.com/tinydata.html) for more details).
+First of all one concept must be clear, the approach used by Tiny Puppet to get data is not based on Puppet 4's data in modules design. It uses a custom ```tp_lookup``` function that looks for data in yaml files organized according to a hierarchy defined in a hiera.yaml file (it uses Hiera's same syntax and logic but Hiera is not actually used for the lookups, [read here](http://tiny-puppet.com/tinydata.html) for more details).
 
-The tp_lookup function allows the choice of the data module to use, by default Tiny Puppet uses the [tinydata](https://github.com/example42/tinydata) module where common settings for different applications on different OS are defined but in all the Puppet 4 modules shown here, the data_module is the module itself, which contains in its data directory not only the common settings, already defined in tinydata, but also more data, specific to the module's application.
+The tp_lookup function allows the choice of the data module to use, by default Tiny Puppet uses the [tinydata](https://github.com/example42/tinydata) module where common settings for different applications on different OS are defined but in all the Puppet 4 modules shown here, the data_module is the module itself, which contains in its ```data``` directory not only the common settings, already defined in tinydata, but also more data, specific to the module's application.
 
 For example in the [ansible](https://github.com/example42/puppet-ansible) module I started to add all the default Ansible [application options](https://github.com/example42/puppet-ansible/blob/master/data/ansible/default.yaml) and provide a sample ```config_file_template: '[ansible/ansible.cfg.erb](https://github.com/example42/puppet-ansible/blob/master/templates/ansible.cfg.erb)'``` .
 Note that the ```<%= @options['keyname'] %>``` variables are the result of the merge of users' custom ```$::ansible::options``` and the module's default options shown before.
 
-This follows the **options_hash + default options + template** pattern described in [this blog post](http://www.example42.com/2014/10/29/reusability-features-every-module-should-have/).
+This follows the **options_hash + default options + [custom] template** pattern described in [this blog post](http://www.example42.com/2014/10/29/reusability-features-every-module-should-have/).
 
 The Docker module is a particular case, as it has also a ```$tinydata_module``` parameter, which defines the data module to use to get info about any application (not Docker) and this data is used to build the relevant images.
 
@@ -146,15 +152,23 @@ The module is intended not only to manage the installation of Rails but of all t
 
 Here the deploy class can be used to manage different Rails applications, which might be provided as dedicated profiles in the rails or in other modules.
 
+So, bringing on this logic, the module is supposed to be a sort of super-module which not only manages the installation of the components of a distributed Rails architecture, but also the deployment and the configuration of different Rails applications, each one in their one, independent and interoperable, profile classes.
+
+Is this a bad idea as it breaks most of the modules' basic rules? Maybe, or maybe it's simply a different way to define boundaries and responsibilities of Puppet classes.
+
 Note also how having different options for the install class may make the module more complete and feature rich. Check, for example, the different [install classes](https://github.com/example42/puppet-rails/tree/master/manifests/install) currently available on that module.
 
 
-We have seen some sample modules following the patterns that David has described, they are not complete and may be over simplified. For example I like the *options_hash + template* pattern, and I prefer it over having classes with a huge amount of parameters (for each application configuration entry), so I did these modules with this principle in mind, but this is not a requirement.
+We have seen some sample modules following the patterns that David has described, they are not complete and may be over simplified. For example I like the *options_hash + template* pattern, and I prefer it over having classes with a huge amount of parameters (up to one for each application configuration entry), so I did these modules with this principle in mind.
+
+Still this is not a requirement.
 
 Once you keep a minimal "just install and do nothing else" approach for the main class (and if you do it, please use install_class indirection) and move into profiles in modules all the customization, typical use cases, opinionated setups, you can actually have endless options. You might even provide in the same module alternative profiles using either an essential options_hash + template approach or one based on multiple (profile class') parameters.
 
 Also the idea of using Tiny Puppet in component modules (originally I considered it mostly as a possible replacement of component modules, to be used in local profiles) has proven to be useful and practical: it saves modules authors from managing a lot of common logic and module data and provides an handy abstraction on application management.
 
-This is the direction that the 4th generation of example42 modules are taking: this time we ABSOLUTELY don't want to follow past errors, trying to write by ourselves most of our modules (also because we didn't like what was available at the times). We hope the community of modules' authors will start to write modules following similar designs, this would allow us, and everybody, to more easily use third party modules and integrated them in existing Puppet installations.
+This is the direction that the 4th generation of example42 modules are taking: this time we ABSOLUTELY don't want to follow past errors, trying to write by ourselves most of our modules.
+
+We hope the community of modules' authors will start to write modules following similar design patterns, this would allow us, and everybody, to more easily use third party modules and integrated them in existing Puppet installations.
 
 And, btw, if you want us to write a ```yourmodule::install::tp``` class for your module, just tell us: having the option to install an application also via Tiny Puppet can only be a good thing.
