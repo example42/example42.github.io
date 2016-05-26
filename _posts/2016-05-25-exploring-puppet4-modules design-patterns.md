@@ -5,7 +5,7 @@ title: Exploring Puppet(4) modules design patterns
 
 The enhancements coming with Puppet 4's parser and type system are starting to appear in the modules ecosystem, still the need to preserve backwards compatibility is often slowing authors from fully embracing the powers and the elegance of the new Puppet language.
 
-When example42 announced the 4th generation of its Puppet modules and introduced its [control repo](https://github.com/example42/control-repo), we decided to fully embrace Puppet 4 and ignore backwards compatibility.
+When example42 announced the 4th generation of its Puppet modules and introduced a complete [control repo](https://github.com/example42/control-repo), we decided to fully embrace Puppet 4 and ignore backwards compatibility.
 
 I, Alessandro, was struggling to find a sane way to put together the possibilities (and limitations) of Tiny Puppet, the structure of a full featured control-repo, and the usage of third party modules when I met, at the last [OSDC](https://www.netways.de/en/events_trainings/osdc/overview/), David.
 
@@ -45,6 +45,7 @@ The first attempt was with [Apache](https://github.com/example42/puppet-apache/t
 
       # If to automatically add prerequisites resources (repos, users, packages...) when needed:
       Boolean                 $auto_prerequisites = false,
+    ) { ... }
 
 I wanted to reproduce the behavior of the current apache example42 module, adding defines to manage virtual hosts, modules and configuration files.
 
@@ -67,7 +68,7 @@ They were easy and quick to write, also thanks to Tiny Puppet features and the c
       }
     }
 
-Finally I started to make some sample profiles in module, and also in this case I found out that the whole model was consistent, reusable, and elegant:
+Finally I started to add some sample profiles to the module, and also in this case I found out that the whole model was consistent, reusable, and elegant:
 
     class apache::profile::passenger (
       Variant[Boolean,String]  $ensure    = '',
@@ -83,14 +84,14 @@ Finally I started to make some sample profiles in module, and also in this case 
       }
     }
 
-Having a minimal main class and using it as main entry point implies that that class can, and should, be included in all the other module's classes and defines.
+Having a minimal main class and using it as main entry point for all the general module's variables implies that that class can, and should, be included in all the other module's classes and defines.
 
 Having a single core and separated profiles solves one of the typical dilemma of modules' authors: provide functionality vs follow the single point of responsibility pattern.
 
 
 ### Data in modules, the Tiny Puppet way
 
-I continued this exploration with a [Docker](https://github.com/example42/puppet-docker), here integration with Tiny Puppet is even deeper, as tp is not only used to configure and install Docker, but also to build Docker images for any application, based on starting images from different Operating Systems.
+I continued this exploration with a [Docker](https://github.com/example42/puppet-docker) module, here integration with Tiny Puppet is even deeper, as tp is not only used to configure and install Docker, but also to build Docker images for any application, based on starting images from different Operating Systems.
 
 This is done via the [docker::tp_build](https://github.com/example42/puppet-docker/blob/master/manifests/tp_build.pp) define which is used, for example, in the [builder profile](https://github.com/example42/puppet-docker/blob/master/manifests/profile/builder.pp) which can be applied to any node to convert it to a Docker build system, which can be configured with Hiera data like:
 
@@ -125,7 +126,8 @@ First of all one concept must be clear, the approach used by Tiny Puppet to get 
 
 The tp_lookup function allows the choice of the data module to use, by default Tiny Puppet uses the [tinydata](https://github.com/example42/tinydata) module where common settings for different applications on different OS are defined but in all the Puppet 4 modules shown here, the data_module is the module itself, which contains in its ```data``` directory not only the common settings, already defined in tinydata, but also more data, specific to the module's application.
 
-For example in the [ansible](https://github.com/example42/puppet-ansible) module I started to add all the default Ansible [application options](https://github.com/example42/puppet-ansible/blob/master/data/ansible/default.yaml) and provide a sample ```config_file_template: '[ansible/ansible.cfg.erb](https://github.com/example42/puppet-ansible/blob/master/templates/ansible.cfg.erb)'``` .
+For example in the [ansible](https://github.com/example42/puppet-ansible) module I started to add all the default Ansible [application options](https://github.com/example42/puppet-ansible/blob/master/data/ansible/default.yaml) and provide a sample ```config_file_template: '[ansible/ansible.cfg.erb](https://github.com/example42/puppet-ansible/blob/master/templates/ansible.cfg.erb)'``` which is automatically added when the ```auto_conf``` option is true.
+
 Note that the ```<%= @options['keyname'] %>``` variables are the result of the merge of users' custom ```$::ansible::options``` and the module's default options shown before.
 
 This follows the **options_hash + default options + [custom] template** pattern described in [this blog post](http://www.example42.com/2014/10/29/reusability-features-every-module-should-have/).
@@ -165,7 +167,7 @@ Still this is not a requirement.
 
 Once you keep a minimal "just install and do nothing else" approach for the main class (and if you do it, please use install_class indirection) and move into profiles in modules all the customization, typical use cases, opinionated setups, you can actually have endless options. You might even provide in the same module alternative profiles using either an essential options_hash + template approach or one based on multiple (profile class') parameters.
 
-Also the idea of using Tiny Puppet in component modules (originally I considered it mostly as a possible replacement of component modules, to be used in local profiles) has proven to be useful and practical: it saves modules authors from managing a lot of common logic and module data and provides an handy abstraction on application management.
+Also the idea of using Tiny Puppet in component modules (originally I considered it mostly as a possible replacement for component modules, to be used in local profiles) has proven to be useful and practical: it saves modules authors from managing a lot of common logic and module data and provides an handy abstraction on application management.
 
 This is the direction that the 4th generation of example42 modules are taking: this time we ABSOLUTELY don't want to follow past errors, trying to write by ourselves most of our modules.
 
