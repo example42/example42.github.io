@@ -75,7 +75,7 @@ Beyond that, a component should expose information about the capabilities and fe
 
 ### From theory to practice
 
-Based on these principles I've started to work on some sample **proof of concepts**.
+Based on these principles just described by David, I (Alessandro) have started to work on some sample **proof of concepts**.
 
 The first attempt was with [Apache](https://github.com/example42/puppet-apache/tree/4.x), here we have a very compact main class with a few general purpose parameters and no resource directly managed:
 
