@@ -42,8 +42,8 @@ Example:
     # Configure an NTP client to listen to local broadcasts signed by a ntp::server::local_broadcast with the same $keygroup_name.
     # $interface can be used to only bind to a specific network interface
     class ntp::client::local_broadcast(String $keygroup_name = $facts['domain'], String $interface = 'ALL') {
-      class { ntp:
-        ensure          => present,
+      include ::ntp
+      ntp::conf {
         source_template => 'ntp/client/local_broadcast.cfg.erb',
       }
     }
@@ -54,21 +54,18 @@ The Component Layer is a transparent, mandatory foundation for all consumers of 
 
 Being **mandatory** enables the interaction of multiple different consumers on the same node, and avoids namespace clashes across complete environments, as everyone shares a common language to manage the basics of a thing.
 
-Being **transparent** avoids putting untoward constraints on the component's consumer. The basic layer contains all platform knowledge, but no configuration information, or domain-specific abstractions. It also exposes this platform knowledge for consumption by the profiles, to allow them to be portable, without having to have all that logic themselves. Andfinally, this means that innovative profiles can still rely on the services of the component layer, as they have full control over the configuration.
+Being **transparent** avoids putting untoward constraints on the component's consumer. The basic layer contains all platform knowledge, but no configuration information, or domain-specific abstractions. It also exposes this platform knowledge for consumption by the profiles, to allow them to be portable, without having to have all that logic themselves. And finally, this means that innovative profiles can still rely on the services of the component layer, as they have full control over the configuration.
 
 Being a **foundation** requires to be broad, stable, well-tested. Being a shared resource brings great responsibilities. Foremost a broad platform support, to cover the component layer's core competency. Then, a good test coverage. Profile authors and direct consumers need assurance that they can rely on the component layer's services across all platforms. As a shared resource, the investment pays off over a bigger number of uses and improved stability for a larger number of systems.
 
 Example:
 
-```
-# install and configure NTPd
-class ntp(
-  Enum[present, absent]  $ensure          = 'present',
-  String                 $config_source   = undef,
-  String                 $config_content  = undef,
-  ) {
-    # ...
-```
+    # install and configure NTPd
+    class ntp(
+      Enum[present, absent]  $ensure          = 'present',
+      String                 $config_source   = undef,
+      String                 $config_content  = undef,
+    ) { [...]}
 
 Beyond that, a component should expose information about the capabilities and features of the installed software. A example is which of the many mysql versions is installed, as this has consequences in details of configuration. Doing this allows all the platform- and version-specific niggles to be concentrated in one location. Whenever a profile needs to make a decision on one of those values, confident in their fidelity, without having to fall back to guessing from operating system versions, or similar.
 
@@ -86,10 +83,11 @@ The first attempt was with [Apache](https://github.com/example42/puppet-apache/t
       # The name of the class that manages apache installation. Tiny Puppet is used here by default
       String                  $install_class    = '::apache::install::tp',
 
-      # A single hash to override the module general configuration settings (names, paths...)
+      # A **single** hash to override the module general configuration settings for the
+      # underlying OS (package names, file paths...)
       Hash                    $settings         = { },
 
-      # The name of the module to use for tiny puppet data
+      # The name of the module to use for [tiny puppet] data
       String[1]               $data_module      = 'apache',
 
       # Here follow some useful, module wide, default behaviors.
@@ -214,16 +212,15 @@ Here the deploy class can be used to manage different Rails applications, which 
 
 So, bringing on this logic, the module is supposed to be a sort of super-module which not only manages the installation of the components of a distributed Rails architecture, but also the deployment and the configuration of different Rails applications, each one in their one, independent and interoperable, profile classes.
 
-Is this a bad idea as it breaks most of the modules' basic rules? Maybe, or maybe it's simply a different way to define boundaries and responsibilities of Puppet classes.
+Is this a bad idea as it breaks the first rule of modules design (Single Responsibility principle)? Maybe, or maybe it's simply a different way to define boundaries and responsibilities of Puppet classes and modules.
 
 Note also how having different options for the install class may make the module more complete and feature rich. Check, for example, the different [install classes](https://github.com/example42/puppet-rails/tree/master/manifests/install) currently available on that module.
-
 
 We have seen some sample modules following the patterns that David has described, they are not complete and may be over simplified. For example I like the *options_hash + template* pattern, and I prefer it over having classes with a huge amount of parameters (up to one for each application configuration entry), so I did these modules with this principle in mind.
 
 Still this is not a requirement.
 
-Once you keep a minimal "just install and do nothing else" approach for the main class (and if you do it, please use install_class indirection) and move into profiles in modules all the customization, typical use cases, opinionated setups, you can actually have endless options. You might even provide in the same module alternative profiles using either an essential options_hash + template approach or one based on multiple (profile class') parameters.
+Once you keep a minimal "just install and do nothing else" approach for the main class (and if you do it, please use install_class indirection as it would greatly enhance its interoperability) and move into profiles in modules all the customization, typical use cases, opinionated setups, you can actually have endless options. You might even provide in the same module alternative profiles using either an essential options_hash + template approach or one based on multiple (profile class') parameters, for example.
 
 Also the idea of using Tiny Puppet in component modules (originally I considered it mostly as a possible replacement for component modules, to be used in local profiles) has proven to be useful and practical: it saves modules authors from managing a lot of common logic and module data and provides an handy abstraction on application management.
 
@@ -232,3 +229,5 @@ This is the direction that the 4th generation of example42 modules are taking: t
 We hope the community of modules' authors will start to write modules following similar design patterns, this would allow us, and everybody, to more easily use third party modules and integrated them in existing Puppet installations.
 
 And, btw, if you want us to write a ```yourmodule::install::tp``` class for your module, just tell us: having the option to install an application also via Tiny Puppet can only be a good thing.
+
+Alessandro Franceschi and David Schmitt
