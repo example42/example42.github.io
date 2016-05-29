@@ -228,6 +228,12 @@ This is the direction that the 4th generation of example42 modules are taking: t
 
 We hope the community of modules' authors will start to write modules following similar design patterns, this would allow us, and everybody, to more easily use third party modules and integrated them in existing Puppet installations.
 
-And, btw, if you want us to write a ```yourmodule::install::tp``` class for your module, just tell us: having the option to install an application also via Tiny Puppet can only be a good thing.
+A good starting point to write modules based on these principles is the module skeleton [here](https://github.com/example42/control-repo/tree/production/skeleton).
+
+To use create a module based on it from example42 [control-repo](https://github.com/example42/control-repo/) you have just to run:
+
+    fab puppet.module_generate
+
+The same control-repo can be used as a reference on how roles, local profiles and profiles in modules can seamlessly work together.
 
 Alessandro Franceschi and David Schmitt
