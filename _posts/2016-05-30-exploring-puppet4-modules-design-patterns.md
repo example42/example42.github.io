@@ -44,7 +44,7 @@ Example:
     class ntp::client::local_broadcast(String $keygroup_name = $facts['domain'], String $interface = 'ALL') {
       include ::ntp
       ntp::conf {
-        source_template => 'ntp/client/local_broadcast.cfg.erb',
+        config_content => template('ntp/client/local_broadcast.cfg.erb'),
       }
     }
 
@@ -60,12 +60,16 @@ Being a **foundation** requires to be broad, stable, well-tested. Being a shared
 
 Example:
 
-    # install and configure NTPd
+    # install NTPd
     class ntp(
-      Enum[present, absent]  $ensure          = 'present',
-      String                 $config_source   = undef,
-      String                 $config_content  = undef,
-    ) { [...]}
+      Enum[present, absent] $ensure = 'present',
+    ) { [...] }
+
+    # deploy configuration file for NTPd
+    ntp::conf(
+      String $config_source  = undef,
+      String $config_content = undef,
+    ) { [...] }
 
 Beyond that, a component should expose information about the capabilities and features of the installed software. A example is which of the many mysql versions is installed, as this has consequences in details of configuration. Doing this allows all the platform- and version-specific niggles to be concentrated in one location. Whenever a profile needs to make a decision on one of those values, confident in their fidelity, without having to fall back to guessing from operating system versions, or similar.
 
