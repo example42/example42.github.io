@@ -128,7 +128,7 @@ They were easy and quick to write, also thanks to Tiny Puppet features and the c
       }
     }
 
-Finally I started to add some sample profiles to the module, and also in this case I found out that the whole model was consistent, reusable, and elegant:
+Finally I started to add some sample profiles to the module, and also in this case I found out that the whole model was consistent, reusable, and elegant. I liked the idea of namespacing them explicitly, so that profile classes in the module are easy to recognize, and well distinguished from the component classes and defines:
 
     class apache::profile::passenger (
       Variant[Boolean,String]  $ensure    = '',
@@ -146,7 +146,7 @@ Finally I started to add some sample profiles to the module, and also in this ca
 
 Having a minimal main class and using it as main entry point for all the general module's variables implies that that class can, and should, be included in all the other module's classes and defines.
 
-Having a single core and separated profiles solves one of the typical dilemma of modules' authors: provide functionality vs follow the single point of responsibility pattern.
+In order to be able to compose profiles freely and have more than one of them on a node the main class, and other classes, should always be **included** and never declared with explicit parameters.
 
 
 ### Data in modules, the Tiny Puppet way
@@ -182,7 +182,7 @@ The Docker module uses two different sources for module's data and this needs so
     String[1]               $data_module         = 'docker',
     String[1]               $tinydata_module     = 'tinydata',
 
-First of all one concept must be clear, the approach used by Tiny Puppet to get data is not based on Puppet 4's data in modules design. It uses a custom ```tp_lookup``` function that looks for data in yaml files organized according to a hierarchy defined in a hiera.yaml file (it uses Hiera's same syntax and logic but Hiera is not actually used for the lookups, [read here](http://tiny-puppet.com/tinydata.html) for more details).
+First of all one concept must be clear, the approach used by Tiny Puppet to get data is not based on Puppet 4's data in modules design (also because Tiny Puppet was conveived and released far before the current implementation of data in modules). It uses a custom ```tp_lookup``` function that looks for data in yaml files organized according to a hierarchy defined in a hiera.yaml file (it uses Hiera's same syntax and logic but Hiera is not actually used for the lookups, [read here](http://tiny-puppet.com/tinydata.html) for more details).
 
 The tp_lookup function allows the choice of the data module to use, by default Tiny Puppet uses the [tinydata](https://github.com/example42/tinydata) module where common settings for different applications on different OS are defined but in all the Puppet 4 modules shown here, the data_module is the module itself, which contains in its ```data``` directory not only the common settings, already defined in tinydata, but also more data, specific to the module's application.
 
@@ -212,9 +212,18 @@ The module is intended not only to manage the installation of Rails but of all t
       [...]
     ) {
 
+In such a scenario we may configure a node (via Hiera) to be a all-in-one server by settings something like:
+
+    rails::proxy_class: '::rails::proxy::nginx'
+    rails::app_class: '::rails::app::unicorn'
+    rails::db_class: '::rails::app::mysql'
+    rails::deploy_class: '::rails::deploy::redmine'
+
+But we can also split these classes across different nodes, enabling or disabling the relevant classes.
+
 Here the deploy class can be used to manage different Rails applications, which might be provided as dedicated profiles in the rails or in other modules.
 
-So, bringing on this logic, the module is supposed to be a sort of super-module which not only manages the installation of the components of a distributed Rails architecture, but also the deployment and the configuration of different Rails applications, each one in their one, independent and interoperable, profile classes.
+So, bringing on this logic, the module is supposed to be a sort of **super-module** which not only manages the installation of the components of a distributed Rails architecture, but also the deployment and the configuration of different Rails applications, each one in their one, independent and interoperable, profile classes.
 
 Is this a bad idea as it breaks the first rule of modules design (Single Responsibility principle)? Maybe, or maybe it's simply a different way to define boundaries and responsibilities of Puppet classes and modules.
 
@@ -224,20 +233,22 @@ We have seen some sample modules following the patterns that David has described
 
 Still this is not a requirement.
 
-Once you keep a minimal "just install and do nothing else" approach for the main class (and if you do it, please use install_class indirection as it would greatly enhance its interoperability) and move into profiles in modules all the customization, typical use cases, opinionated setups, you can actually have endless options. You might even provide in the same module alternative profiles using either an essential options_hash + template approach or one based on multiple (profile class') parameters, for example.
+Once you keep a minimal "just install and do nothing else" approach for the main class (and if you do it, please use install_class indirection as it would greatly enhance its interoperability and potential) and move into profiles in modules all the customization, typical use cases, opinionated setups, you can actually have endless options. You might even provide in the same module alternative profiles using either an essential options_hash + template approach or one based on multiple (profile class') parameters, for example.
 
 Also the idea of using Tiny Puppet in component modules (originally I considered it mostly as a possible replacement for component modules, to be used in local profiles) has proven to be useful and practical: it saves modules authors from managing a lot of common logic and module data and provides an handy abstraction on application management.
+
+Note that even if Tiny Puppet has a sort of own implementation of the data in modules concept, it's not just a data in modules implementation. You can still have modules with data in modules and Tiny Puppet.
 
 This is the direction that the 4th generation of example42 modules are taking: this time we ABSOLUTELY don't want to follow past errors, trying to write by ourselves most of our modules.
 
 We hope the community of modules' authors will start to write modules following similar design patterns, this would allow us, and everybody, to more easily use third party modules and integrated them in existing Puppet installations.
 
-A good starting point to write modules based on these principles is the module skeleton [here](https://github.com/example42/control-repo/tree/production/skeleton).
+A good starting point to write modules based on these principles is [this module skeleton](https://github.com/example42/control-repo/tree/production/skeleton).
 
-To use create a module based on it from example42 [control-repo](https://github.com/example42/control-repo/) you have just to run:
+To create a module based on it from example42 [control-repo](https://github.com/example42/control-repo/) you have just to run this Fabric task:
 
     fab puppet.module_generate
 
-The same control-repo can be used as a reference on how roles, local profiles and profiles in modules can seamlessly work together.
+The same example42 control-repo can be used as a reference on how roles, local profiles and profiles in modules can seamlessly work together.
 
 Alessandro Franceschi and David Schmitt
