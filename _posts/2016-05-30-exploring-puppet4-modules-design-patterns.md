@@ -186,7 +186,7 @@ First of all one concept must be clear, the approach used by Tiny Puppet to get 
 
 The tp_lookup function allows the choice of the data module to use, by default Tiny Puppet uses the [tinydata](https://github.com/example42/tinydata) module where common settings for different applications on different OS are defined but in all the Puppet 4 modules shown here, the data_module is the module itself, which contains in its ```data``` directory not only the common settings, already defined in tinydata, but also more data, specific to the module's application.
 
-For example in the [ansible](https://github.com/example42/puppet-ansible) module I started to add all the default Ansible [application options](https://github.com/example42/puppet-ansible/blob/master/data/ansible/default.yaml) and provide a sample ```config_file_template: [ansible/ansible.cfg.erb](https://github.com/example42/puppet-ansible/blob/master/templates/ansible.cfg.erb)``` which is automatically added when the ```auto_conf``` option is true.
+For example in the [ansible](https://github.com/example42/puppet-ansible) module I started to add all the default Ansible [application options](https://github.com/example42/puppet-ansible/blob/master/data/ansible/default.yaml) and provide a sample **config_file_template: [ansible/ansible.cfg.erb](https://github.com/example42/puppet-ansible/blob/master/templates/ansible.cfg.erb)** which is automatically added when the ```auto_conf``` option is true.
 
 Note that the ```<%= @options['keyname'] %>``` variables are the result of the merge of users' custom ```$::ansible::options``` and the module's default options shown before.
 
