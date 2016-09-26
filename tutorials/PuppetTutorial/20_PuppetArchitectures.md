@@ -112,4 +112,4 @@ The classes to include in each node can be defined on:
 
   Sensitive data might be present in the puppet code (Propagated under a SCM)
 
-  [Security advisories](http://www.puppetlas.com/security)
+  [Security advisories](http://www.puppetlabs.com/security)
