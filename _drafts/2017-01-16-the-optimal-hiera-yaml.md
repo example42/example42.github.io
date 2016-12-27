@@ -5,7 +5,7 @@ title: Tip of the Week [3] - The optimal hiera.yaml
 
 Yes, we are cheating. There's not a single optimal hiera.yaml file to configure [Hiera](https://docs.puppet.com/hiera/) in the perfect way for any infrastructure.
 
-As usual different shops may need different approaches and have different preferences on how and where to store data.
+As usual different infrastructures may need different approaches and have different preferences on how and where to store data.
 
 Here we are going a few suggestions on what could be common use cases.
 
@@ -62,6 +62,6 @@ I personally prefer to leave inside my profile and local classes the company def
 Also, when a ENC is used, I avoid to use it to store data, so that infrastructure data is not present in multiple places.
 The only exception is when the ENC is used to set global parameters in the hierarchy.
 
-Still, your mileage may vary and you might find better or more fitting solutions for your use case.
+Still, your mileage may vary and you might find better or more fitting solutions for your use case. Maybe you want to check [VoxPupuli Website](https://voxpupuli.org/) for other [Hiera data backends](https://voxpupuli.org/plugins/#hiera).
 
 Alessandro Franceschi

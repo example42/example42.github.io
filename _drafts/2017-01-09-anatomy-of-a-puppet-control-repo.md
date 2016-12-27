@@ -5,7 +5,7 @@ title: Tip of the Week [2] - Anatomy of a Puppet control-repo
 
 For years Puppeteers have struggled to find a way to organize their Puppet code to manage their infrastructures in an optimal way, following the evolution of Puppet itself and its ecosystem.
 
-Many different approaches were taken some worked better, some worse, but there was not actually a single, common approach.
+Many different approaches were taken, some worked better, some worse, but there was no single, common approach.
 
 Now things are different. There are established tools to manage Puppet data ([Hiera](https://docs.puppet.com/hiera/)), deployment of external modules ([r10k](https://docs.puppet.com/pe/latest/r10k.html) or [Librarian Puppet](https://github.com/voxpupuli/librarian-puppet)) and a standard place where to place everything ([directory environments](https://docs.puppet.com/puppet/latest/environments_configuring.html)).
 

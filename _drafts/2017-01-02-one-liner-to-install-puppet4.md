@@ -3,7 +3,7 @@ layout: blog
 title: Tip of the Week [1] - One-liner to install Puppet 4
 ---
 
-New year, new challenges. At example42 we continuously develop Puppet solutions but not often we take the occasion to talk about them.
+New year, new challenges. At example42 we continuously develop Puppet solutions but we seldomly take the occasion to talk about them.
 
 We decided, starting today, to publish every week a blog post with tips and infos about Puppet, DevOps, Automation and what we do with it.
 
