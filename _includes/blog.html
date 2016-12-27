@@ -8,13 +8,15 @@
                     <div class="clearfix"></div>
                     <h2 class="section-heading">Blog posts</h2>
                     <div class="lead">
-                    <ul class="posts">  
-                    {% for post in site.posts limit:8 %}  
-                      <li>  
-                        <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>  
-                      </li>  
-                    {% endfor %}  
+                    <ul class="posts">
+                    {% for post in site.posts limit:8 %}
+                      <li>
+                        <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
+                      </li>
+                    {% endfor %}
                     </ul>
+                    <a href="/blog/">Full list of blog posts</a>
+
                     </div>
                 </div>
                 <div class="col-lg-4 col-lg-offset-2  col-sm-6">
@@ -23,5 +25,5 @@
             </div>
 
         </div>
-  
+
 </section>
