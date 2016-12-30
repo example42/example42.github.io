@@ -1,0 +1,15 @@
+# done
+2017-01-02-one-liner-to-install-puppet4.md
+2017-01-09-anatomy-of-a-puppet-control-repo.md
+2017-01-16-the-optimal-hiera-yaml.md
+2017-01-23-existing-code-on-puppet4.md
+2017-01-30-rspec-on-existing-code.md
+2017-02-06-resources-from-hash-in-puppet4.md
+2017-02-13-exec-done-right.md
+2017-02-20-local-references.md
+
+# open - suggestions
+2017-02-27 - building your own data types
+2017-03-06 - hiera in modules
+2017-03-13 - data files at second mount point
+2017-03-20 - 
