@@ -1,13 +1,13 @@
----
+--
 layout: blog
 title: Tip of the Week [1] - One-liner to install Puppet 4
 ---
 
 New year, new challenges. At example42 we continuously develop Puppet solutions but we seldomly take the occasion to talk about them.
 
-We decided, starting today, to publish every week a blog post with tips and infos about Puppet, DevOps, Automation and what we do with it.
+We've decided, starting today, to publish every week a blog post with tips and infos about Puppet, DevOps, Automation and what we do with it.
 
-Since the 31st of December 2016 Puppet 3 has reached its End Of Life, so we think it's a good occasion to begin our journey with how to install or upgrade Puppet 4.
+Since the 31st of December 2016 Puppet 3 has reached its End Of Life, so we think it's a good occasion to begin the new year and our journey with how to install or upgrade Puppet 4.
 
 If you want it on Linux you can follow the [official documentation](https://docs.puppet.com/puppet/latest/install_linux.html) or you can just run this command:
 
@@ -25,6 +25,6 @@ It runs totally unattended, so it can be used during automated provisioning of s
 
 If you don't like the idea of running as root scripts from the Internet, even worse via an url shortener, you are right and you already know what do do: download the script, analyze it, place it in a safe location and run it from there.
 
-Or just fire the above one-liner and forget.
+Or just fire the above one-liner and forget: it will work in the same way ;-)
 
 Alessandro Franceschi
