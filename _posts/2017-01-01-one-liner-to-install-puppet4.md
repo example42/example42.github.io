@@ -1,4 +1,4 @@
---
+---
 layout: blog
 title: Tip of the Week [1] - One-liner to install Puppet 4
 ---
