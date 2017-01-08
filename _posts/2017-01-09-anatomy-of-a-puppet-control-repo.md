@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [2] - Anatomy of a Puppet control-repo
+title: Tip of the Week 2 - Anatomy of a Puppet control-repo
 ---
 
 For years Puppeteers have struggled to find a way to organize their Puppet code to manage their infrastructures in an optimal way, following the evolution of Puppet itself and its ecosystem.
@@ -11,7 +11,7 @@ Now things are different. There are established tools to manage Puppet data ([Hi
 
 A Puppet control-repo is a [git] repository that contains the files you expect to have in your directory environment which provide whatever you need to manage your infrastructure, that is:
 
-  - The ```manifests``` directory where are placed the first files that the Puppet server parses when compiling catalogs for clients. Here you typically have the ```site.pp``` file (but other manifests with different names can be seamlessly added) where you can set top scope variables, resource defaults, and eventually have node statements to define what classes should be included in your nodes (nodes classification can be done in several different ways, using ```node``` is just one of them).
+  - The ```manifests``` directory where are placed the first files that the Puppet server parses when compiling catalogs for clients. Here you typically have the ```site.pp``` file (but other manifests with different names can be seamlessly added) where you can set top scope variables, resource defaults, and eventually have node statements to define what classes should be included in your nodes (nodes classification can be done in several different ways, using the ```node``` statement is just one of them).
 
   - The ```hieradata``` directory which contains Hiera data files. The name of the directory is completely arbitrary, even if this is a sort of standard de facto. This same directory could not even exists in the unlikely case you are not using Hiera, or if you use Hiera with backends which don't store data in normal (typically yaml or json) files. Some people, not me, prefer to place Hiera data in a separated dedicated repository, so you might have it outside the control-repo.
 

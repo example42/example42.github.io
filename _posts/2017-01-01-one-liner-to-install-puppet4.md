@@ -25,6 +25,6 @@ It runs totally unattended, so it can be used during automated provisioning of s
 
 If you don't like the idea of running as root scripts from the Internet, even worse via an url shortener, you are right and you already know what do do: download the script, analyze it, place it in a safe location and run it from there.
 
-Or just fire the above one-liner and forget: it will work in the same way ;-) 
+Or just fire the above one-liner and forget: it will work in the same way ;-)
 
 Alessandro Franceschi
