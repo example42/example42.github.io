@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [1] - One-liner to install Puppet 4
+title: Tip of the Week 1 - One-liner to install Puppet 4
 ---
 
 New year, new challenges. At example42 we continuously develop Puppet solutions but we seldomly take the occasion to talk about them.
