@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [4] - Existing code and Puppet 4
+title: Tip of the Week 4 - Existing code and Puppet 4
 ---
 
 Starting with Puppet 4 on greenfield is easy.

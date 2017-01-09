@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [8] - Using Puppet Resource References the right way
+title: Tip of the Week 8 - Using Puppet Resource References the right way
 ---
 
     class phpmyadmin {

@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [5] - RSpec Testing on existing Puppet code
+title: Tip of the Week 5 - RSpec Testing on existing Puppet code
 ---
 
 Many Puppet code bases are pure Puppet code without unit or integration testing.

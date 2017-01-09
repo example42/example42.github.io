@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [6] - Resources from Hash Data in Puppet 4
+title: Tip of the Week 6 - Resources from Hash Data in Puppet 4
 ---
 
 Puppet is always about abstraction. But please never forget maintainability, readability and simplicity [(K.I.S.S)](https://en.wikipedia.org/wiki/KISS_principle).

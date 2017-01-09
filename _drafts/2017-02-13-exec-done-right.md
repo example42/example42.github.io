@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [7] - Using Exec resource the right way
+title: Tip of the Week 7 - Using Exec resource the right way
 ---
 
 exec { 'touch /tmp/foo': }

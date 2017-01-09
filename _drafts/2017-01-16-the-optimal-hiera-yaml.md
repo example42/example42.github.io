@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [3] - The optimal hiera.yaml
+title: Tip of the Week 3 - The optimal hiera.yaml
 ---
 
 Yes, we are cheating. There's not a single optimal hiera.yaml file to configure [Hiera](https://docs.puppet.com/hiera/) in the perfect way for any infrastructure.

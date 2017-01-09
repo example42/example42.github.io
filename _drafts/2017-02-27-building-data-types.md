@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week [9] - Building your own Puppet 4 Data Types
+title: Tip of the Week 9 - Building your own Puppet 4 Data Types
 ---
 
 Puppet comes with a set of core data types like Integer, Float, String, Boolean.
