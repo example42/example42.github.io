@@ -9,9 +9,9 @@ But how to upgrade from Puppet 3 to Puppet 4 with an existing codebase?
 
 To be honest: it depends.
 
-When you have a really old code base (e.g. you started using Puppet 2.6 or older) and you never adopted to new best practices you might reconcider a full rewrite from scratch. Don't mess you new Puppet 4 infrastructure with old practices Puppet code.
+When you have a really old code base (e.g. you started using Puppet 2.6 or older) and you never adopted to new best practices you might reconsider a full rewrite from scratch. Don't mess you new Puppet 4 infrastructure with old practices Puppet code.
 
-When you have constantly adopted to best practices and removed deprecations from your Puppet code base you are in the comfortable situation to use tools which help ypu ensuring that your code is working on Pupprt 4, too.
+When you have constantly adopted to best practices and removed deprecations from your Puppet code base you are in the comfortable situation to use tools which help you ensuring that your code is working on Puppet 4, too.
 
 First you want to ensure that you are running the latest Puppet 3 Master version (3.8.x) and that your Agents are upgraded to the same version, too.
 

@@ -19,7 +19,7 @@ Nowadays we often see code like the following:
 
 Great abstraction, but what happens really?
 
-How abaout using Puppet 4 capability of dealing with data?
+How about using Puppet 4 capability of dealing with data?
 
     class my_great_class (
       Hash $data = {}

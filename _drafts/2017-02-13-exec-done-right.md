@@ -11,11 +11,11 @@ Consider an Exec resource being an emergency exit. It is a powerful resource typ
 
 But please keep in mind that with great power comes great responsibility.
 
-You (as the author of the Exec resource type declaration) are reponsible for idempotency and error handling.
+You (as the author of the Exec resource type declaration) are responsible for idempotency and error handling.
 
 Best practice is to have an Exec resource for one-time commands only. This does not refer to a single puppet run, but throughout the life cycle of the system.
 
-Don't forget to make use of the exec resource type paramaters for idempotency:
+Don't forget to make use of the exec resource type parameters for idempotency:
 
   - onlyif
   - unless
