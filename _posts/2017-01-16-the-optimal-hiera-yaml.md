@@ -7,19 +7,19 @@ Yes, we are cheating. There's not a single optimal hiera.yaml file to configure 
 
 As usual different infrastructures may need different approaches and have different preferences on how and where to store data.
 
-Here we are going a few suggestions on what could be common use cases.
+Here we are going to give a few suggestions on what could be common use cases.
 
 ## The backend
 
-Hiera supports several [different backends](https://www.packtpub.com/mapt/book/networking-and-servers/9781783981441/2/ch02lvl1sec16/additional-hiera-backends) where to store data. Unless you don't have specific needs or preferences, you will generally use a file based backend, as yaml and json.
+Hiera supports several [different backends](https://www.packtpub.com/mapt/book/networking-and-servers/9781783981441/2/ch02lvl1sec16/additional-hiera-backends) (here is a more complete [list](https://voxpupuli.org/plugins/#hiera)) where to store data. Unless you don't have specific needs or preferences, you will generally use a file based backend, as yaml and json.
 
-Also, you will probably need to encrypt some of your data so you'll likely move your eyes on the [hiera-eyaml](https://github.com/TomPoulton/hiera-eyaml) backend, which allows to easily encrypt some hiera keys in plain yaml files. In such a case, use ONLY the hiera-eyaml backend, there's really no sense in have both it and the normal yaml backend. So your hiera.yaml file would begin with:
+Also, you will probably need to encrypt some of your data so you'll likely move your eyes on the [hiera-eyaml](https://github.com/TomPoulton/hiera-eyaml) backend, which allows to easily encrypt some hiera keys in plain yaml files. In such a case, use ONLY the hiera-eyaml backend, there's really no sense in having both it and the normal yaml backend. So your hiera.yaml file would begin with:
 
     ---
     :backends:
       - eyaml
 
-Then you have to configure hiera-eyaml. You have to provide the paths where keys used for encryption are stored. They are needed wherever a catalog, that uses encrypted data, is compiled, typically on the Puppet Server, but also in your development and testing stations (unless you take care to avoid to encrypt keys in such environments).
+Then you have to configure hiera-eyaml. You have to provide the paths where keys used for encryption are stored. They are needed wherever a catalog, that uses encrypted data, is compiled, typically on the Puppet Server, but also in your development and testing stations (unless you take care to avoid to use encrypted keys in such environments).
 
     :eyaml:
       :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
@@ -28,6 +28,9 @@ Then you have to configure hiera-eyaml. You have to provide the paths where keys
       :extension: 'yaml'
 
 Note that in the above configuration we place the keys in a dedicated directory outside the Puppet environment: we don't want to store in the same repo where we encrypt data the keys to decrypt it.
+
+You may want to add a link called ```keys``` in your control-repo pointing to ```/etc/puppetlabs/keys``` in order to seamlessly be able to use a command like ```eyaml edit hieradata/common.yaml``` (eymal looks for its keys in a directory called ```keys``` in the cwd if their path is not defined in the ```/etc/eyam/config.yaml``` file).
+
 
 ### The hierarchy
 
@@ -60,8 +63,8 @@ Should we place ALL our data there? It depends.
 
 I personally prefer to leave inside my profile and local classes the company defaults and the OS related infos to avoid too much data in Hiera yaml files.
 Also, when a ENC is used, I avoid to use it to store data, so that infrastructure data is not present in multiple places.
-The only exception is when the ENC is used to set global parameters in the hierarchy.
+The only exception is when the ENC is used to set global parameters used in the hierarchy.
 
-Still, your mileage may vary and you might find better or more fitting solutions for your use case. Maybe you want to check [VoxPupuli Website](https://voxpupuli.org/) for other [Hiera data backends](https://voxpupuli.org/plugins/#hiera).
+Still, your mileage may vary and you might find better or more fitting solutions for your use case.
 
 Alessandro Franceschi

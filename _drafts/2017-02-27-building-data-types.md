@@ -20,7 +20,7 @@ Puppet allows you to place your own build data types into a modules type directo
          \- types
             \- ipv4address.pp
 
-Inside the types directory you can specify a new data type. This new data type is available in your m odule namespace:
+Inside the types directory you can specify a new data type. This new data type is available in your module namespace:
 
     # firewall/types/ipv4address.pp
     type firewall::ipv4address = Pattern[/^((([0-9](?!\d)|[1-9][0-9](?!\d)|1[0-9]{2}(?!\d)|2[0-4][0-9](?!\d)|25[0-5](?!\d))[.]){3}([0-9](?!\d)|[1-9][0-9](?!\d)|1[0-9]{2}(?!\d)|2[0-4][0-9](?!\d)|25[0-5](?!\d)))(\/((([0-9](?!\d)|[1-9][0-9](?!\d)|1[0-9]{2}(?!\d)|2[0-4][0-9](?!\d)|25[0-5](?!\d))[.]){3}([0-9](?!\d)|[1-9][0-9](?!\d)|1[0-9]{2}(?!\d)|2[0-4][0-9](?!\d)|25[0-5](?!\d))|[0-9]+))?$/]

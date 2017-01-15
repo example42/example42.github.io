@@ -7,10 +7,11 @@
 2017-02-06-resources-from-hash-in-puppet4.md
 2017-02-13-exec-done-right.md
 2017-02-20-local-references.md
-2017-02-27 - extending data types
+2017-02-27-building-data-types.md
 
 # open - suggestions
-Noop mode
+
 2017-03-06 - hiera in modules
 2017-03-13 - data files at second mount point
-2017-03-20 -
+2017-03-20 - Noop mode
+2017-03-27 - Environment caching
