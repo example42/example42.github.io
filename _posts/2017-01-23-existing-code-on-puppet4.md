@@ -16,6 +16,7 @@ When you have constantly adopted to best practices and removed deprecations from
 First you want to ensure that you are running the latest Puppet 3 Master version (3.8.x) and that your Agents are upgraded to the same version, too.
 
 There are several ways to identify whether your code works in the same way on Puppet 4:
+
   - check identical catalogs with Puppet 3 and 4
   - test by enabling the Puppet 4 parser on a Puppet 3 Master
   - integration testing with different Puppet versions
