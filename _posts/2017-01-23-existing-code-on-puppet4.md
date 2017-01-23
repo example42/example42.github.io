@@ -21,9 +21,9 @@ There are several ways to identify whether your code works in the same way on Pu
   - test by enabling the Puppet 4 parser on a Puppet 3 Master
   - integration testing with different Puppet versions
 
-Checking identical catalogs needs a Puppet code extension. You can choose between [zack/catalog_diff](https://github.com/acidprime/puppet-catalog-diff) or [github/octocatalog_diff](https://github.com/github/octocatalog-diff).
+Checking identical catalogs needs a Puppet code extension. You can choose between [zack/catalog_diff](https://github.com/acidprime/puppet-catalog-diff) or [github/octocatalog_diff](https://github.com/github/octocatalog-diff) or [puppetlabs/puppetlabs-catalog_preview](https://github.com/puppetlabs/puppetlabs-catalog_preview).
 
-Both tools will generate an overview on where the catalog contains differences.
+All three tools will generate an overview on where the catalog contains differences.
 
 To make use of catalog_diff you might want to place a new Puppet 4 based Master in place. On your Puppet 3 Master you want to give access to facts and catalogs
 
@@ -62,5 +62,14 @@ e.g.
         content => dbb53f3699703c028483658773628452
       }
 
+
+If you want to use puppetlabs catalog-preview tool you need latest Puppet 3.8 with two environments: your production environment with your working puppet code and a copy of that where you enable the future parser.
+
+Then you can run the Puppet preview command:
+
+    puppet preview --preview-environment future_production <nodename>
+
+'future_production' is the copy of your environment with future parser enabled.
+Puppet preview not only shows catalog diff, but also shows code deprecation warnings and many more.
 
 Martin Alfke
