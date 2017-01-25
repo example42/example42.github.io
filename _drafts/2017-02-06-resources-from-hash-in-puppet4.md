@@ -12,12 +12,31 @@ Nowadays we often see code like the following:
     ){
       $default = {
         ensure   => present,
-        provider => 'foo',
       }
       create_resources('user', $data, $default)
     }
 
 Great abstraction, but what happens really?
+
+When declaring the class my_great_thing, puppet compiler will automatically do a hier alookup for the key ```my_great_thing::data```.
+
+Maybe the key-value looks like this:
+
+    my_great_thing::data:
+      'foo':
+        home: '/home/foo'
+        shell: '/bin/bash'
+        uid: '1044'
+        gid: '1044'
+      'bar':
+        home: '/home/bar'
+        shell: '/bin/bash'
+        uid: '1045'
+        gid: '1045'
+
+These data are not used with the ```create_resource``` function, which will generate two user resource types for the users foo and bar.
+
+This is a quite hidden approach of what is done.
 
 How about using Puppet 4 capability of dealing with data?
 
@@ -26,13 +45,14 @@ How about using Puppet 4 capability of dealing with data?
     ){
       $data.each |String $key, Hash $value| {
         $ensure = pick($value['ensure'], 'present')
-        $provider = pick($value['provider'], 'foo')
         user { $key:
           ensure   => $ensure,
-          provider => $provider,
           *        => $value,
         }
       }
     }
+
+The most beautiful thing here is the splat operator ```* => $value,```.
+This expands the $value subhash. Each key becomes the parameter and the according value becomes the parameter value.
 
 Martin Alfke
