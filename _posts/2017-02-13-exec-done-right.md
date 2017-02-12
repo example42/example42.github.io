@@ -20,6 +20,7 @@ Don't forget to make use of the exec resource type parameters for idempotency:
   - onlyif
   - unless
   - refreshonly
+  - creates
 
 And don't forget to set the path parameter.
 
