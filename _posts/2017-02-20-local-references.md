@@ -38,6 +38,6 @@ Use local Resource References.
       Class['apache'] -> Class['phpmyadmin']
     }
 
-You can check your code for non-local Resource References by using our lint extension [reference_on_declaration_outside_of_class-check](https://github.com/voxpupuli/puppet-lint-reference_on_declaration_outside_of_class-check).
+You can check your code for non-local Resource References by using the lint extension [reference_on_declaration_outside_of_class-check](https://github.com/voxpupuli/puppet-lint-reference_on_declaration_outside_of_class-check).
 
 Martin Alfke
