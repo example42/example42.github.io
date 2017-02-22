@@ -76,6 +76,10 @@ h6 {
         font-size: 3em;
     }
 
+    .intro-header {
+        background: url(../img/splash1.jpg) no-repeat center center;
+    }
+
     ul.intro-social-buttons > li {
         display: block;
         margin-bottom: 20px;
