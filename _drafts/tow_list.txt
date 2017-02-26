@@ -8,12 +8,11 @@
 2017-02-13-exec-done-right.md
 2017-02-20-local-references.md
 2017-02-27-building-data-types.md
+2017-03-06-noop_mode.md
 
 # open - suggestions
 
-2017-03-06 - hiera in modules
 2017-03-13 - data files at second mount point
-2017-03-20 - Noop mode
 2017-03-27 - Environment caching
 2017-04-03 - ENC node environment enforcement
 2017-04-10 - GitLab CI
