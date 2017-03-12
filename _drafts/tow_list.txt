@@ -13,7 +13,8 @@
 
 # open - suggestions
 
-2017-03-27 - Environment caching
-2017-04-03 - ENC node environment enforcement
-2017-04-10 - GitLab CI
-2017-04-17 - KISS Puppet
+ - Environment caching
+ - ENC node environment enforcement
+ - GitLab CI
+ - KISS Puppet
+ - Roles, profiles and tools
