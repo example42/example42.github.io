@@ -27,13 +27,17 @@ Starting from Puppet 4.9 Hiera functions in Puppet DSL are deprecated, so the ab
       name          => 'profiles',
       merge         => 'unique',
       default_value => [],
-      value_type    => Array[Data],
+      value_type    => Array[String],
     })
     $profiles.each | $p | {
       contain $p
     }
 
 This alternative may look more complex but it's actually much more powerful. Check [this](https://www.devco.net/archives/2016/03/13/the-puppet-4-lookup-function.php) blog post for R.I.Pienaar for more details.
+
+For a smarter alternative of the above, you can simply have something like:
+
+      lookup('profiles', Array[String], 'unique').contain
 
 One of the benefit in defining what profiles to include via Hiera is that we have much more flexibility on where to include them.
 
