@@ -10,6 +10,7 @@
 2017-02-27-building-data-types.md
 2017-03-06-noop_mode.md
 2017-03-13-second_mount_point.md
+2017-03-20-roles_profiles_and_tools.md
 
 # open - suggestions
 
@@ -17,4 +18,3 @@
  - ENC node environment enforcement
  - GitLab CI
  - KISS Puppet
- - Roles, profiles and tools
