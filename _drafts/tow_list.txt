@@ -11,10 +11,14 @@
 2017-03-06-noop_mode.md
 2017-03-13-second_mount_point.md
 2017-03-20-roles_profiles_and_tools.md
+2017-03-27-environment_caching.md
 
 # open - suggestions
 
- - Environment caching
  - ENC node environment enforcement
  - GitLab CI
  - KISS Puppet
+ - getting started with PSICK - a documentation on content and ways how to use PSICK
+ - using PSICK with vagrant
+ - using PSICK on infrastructure
+
