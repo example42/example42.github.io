@@ -23,7 +23,7 @@ The environment_timeout option can have one of the following values:
 
  - 0 - never cache catalogs
  - unlimited - always use catalog cache
- - <number> - duration to keep a catalog in cache
+ - 'number' - duration to keep a catalog in cache
 
 Mostly one does not like to set environment_timout as a global setting.
 In production environment . where changes are less often - you want to have an environment cache, whereas in development environment - where you push changes very often - you want to disable the cache.
