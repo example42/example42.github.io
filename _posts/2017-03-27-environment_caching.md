@@ -6,6 +6,7 @@ title: Tip of the Week 13 - Environment caches
 Usually a Puppet Server as a monolithic installation can handle up to 4000 nodes. In larger environments one can easily scale this by adding compile servers placed behind a load balancer.
 
 But prior you throw additional hardware on your load issue, Puppet server allows you for some scaling.
+
 One of the ways to prevent scaling issues is to make use of Puppet environment cache.
 
 When activating the environment cache, the Puppet master process compiles catalogs for a node once only and keeps the generated catalog in memory.
@@ -36,8 +37,20 @@ Now let's set environment in the production environment:
 
 But how can I let Puppet know that new code is available so the compiler uses the new code instead of the cached catalog?
 
-Puppet server provides an [environment API](https://docs.puppet.com/puppetserver/latest/admin-api/v1/environment-cache.html) where you can delete specific environments. Usually you want to run this API call on r10k postrun.
+Puppet server provides an [admin API](https://docs.puppet.com/puppetserver/latest/admin-api/v1/environment-cache.html) where you can delete the caches of specific environments. Usually you want to run this API call on r10k postrun or whenever you deploy Puppet code on your Puppet master.
+
 This also solves another side effect: race-condition when updating an environment while the compiler is in progress of generating a catalog for a node.
+
+A sample script that flushes the environment cache is available on [PSICK](https://github.com/example42/psick/blob/production/bin/puppet_flush_environment_cache.sh), you can run it, as root, on the Puppet server to flush the cache of all the environments or the one passed as argument.
+
+It runs basically a command like this:
+
+    curl -i --cert $(puppet config print hostcert) \
+    --key $(puppet config print hostprivkey) \
+    --cacert $(puppet config print cacert) \
+    -X DELETE \
+    https://$(puppet config print server):8140/puppet-admin-api/v1/environment-cache
+
 
 Martin Alfke
 
