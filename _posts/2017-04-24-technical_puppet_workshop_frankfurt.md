@@ -9,7 +9,7 @@ Could be our best tip so far :-)
 
 example42 announces the first german speaking **Technical Puppet Workshop**.
 
-The event takes place at **Sheraton Frankfurt Airport Hotel & Conference Center**, located directly at Frankfurt International airport, on **Wednesday, May 17th** and is combined effort from Puppet Inc. and example42 GmbH.
+The event takes place at **Sheraton Frankfurt Airport Hotel & Conference Center**, located directly at Frankfurt International airport, on **Wednesday, May 17th**.
 
 This workshop is aimed at systems administrators who use Puppet to manage their infrastructure and want to learn more about Puppet.
 
@@ -54,5 +54,6 @@ We will cover reporting backends and Puppet API for certificate and node managem
 Further information:
 
 The event itself is for free. Neither example42 nor Puppet will cover travel and/or hotel expenses.
+Event organizer: example42 GmbH
 
 We are looking forward to seeing you in Frankfurt on May 17th.
