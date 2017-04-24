@@ -3,7 +3,7 @@ layout: blog
 title: Tip of the Week 17 - Technical Puppet Workshop, May 17th, Frankfurt
 ---
 
-This week the tip is for an real world event about Puppet.
+This week the tip is for a real world event about Puppet.
 
 Could be our best tip so far :-)
 
