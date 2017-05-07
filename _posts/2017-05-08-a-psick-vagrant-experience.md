@@ -3,17 +3,23 @@ layout: blog
 title: Tip of the Week 19 - A PSICK Vagrant experience
 ---
 
-[PSICK](http://github.com/example42/psick) is an opinionated Puppet control-repo with a lot of integrations and tooling supposed to help the Puppetter during development, testing and operations.
+[PSICK](http://github.com/example42/psick) is an opinionated Puppet control-repo with a lot of integrations and tooling to support the Puppeteer during development, testing and operations.
 
-One of the most useful integration is the one with Vagrant.
+One of the most useful integration is the one with **Vagrant**.
 
-We can test the current Puppet code and data we have in our control-repo in several different Vagrant environments and VMs, for example on Puppet Enterprise, OSS Puppet or Foreman setups, or on test machines of different Operating Systems.
+We can **test our current local changes** to Puppet code and data in several different Vagrant environments and VMs.
+
+There are environments where to test Puppet on different Operating Systems and in different modes. With puppet apply or with agents pointing to Puppet Enterprise, OSS Puppet or The Foreman masters.
 
 Under ```vagrant/environments``` we have various Vagrant environments, fully customisable, where Puppet can be run in agent or apply mode testing directly the effect of our changes on the repo.
 
+But first, we need to setup things.
+
+## Our new control-repo
+
 PSICK is both a control-repo by itself and a generator (at the moment very rough) of control-repos.
 
-To create a new control-repo for our new, wonderful, green field **acme** project we can:
+To create a control-repo for our new, wonderful, green field **acme** project we can:
 
     git clone https://github.com/example42/psick
     cd psick
@@ -30,18 +36,20 @@ This command allows us to create a new control-repo. It asks some questions:
 Output is something like:
 
     ### PSICK is going to create a brand new control-repo ###
-    
+
     # Specify the path where you want to create your new Puppet control-repo
     Provide the full absolute path or the name of a dir that will be created under /Users/al/tmp
     Press [ENTER] when done.
-    **acme**
+
+**acme**
 
     # Choose how you want to create your new control-repo
     1- Create a full featured control-repo based on current PSICK
     2- Create a minimal control-repo with only the bare minimal files
     Note that you will be able to add or remove components later.
     Make your choice:
-    *1*
+
+ **1**
 
     # Copying all files from psick to /Users/al/tmp/acme
 
@@ -49,12 +57,12 @@ Output is something like:
     Initialized empty Git repository in /Users/al/tmp/acme/.git/
     # Showing current status of the new git repo
     On branch production
-    
+
     Initial commit
-    
+
     Untracked files:
       (use "git add <file>..." to include in what will be committed)
-    
+
             .codacy.yaml
             .gitignore
             .gitlab-ci.yml
@@ -82,21 +90,22 @@ Output is something like:
             site/
             skeleton/
             vagrant/
-    
+
     nothing added to commit but untracked files present (use "git add" to track)
     # NOTE: master branch has been renamed to production for Puppet compliance
-    
+
     # Do you want to make a first commit on the new repo?
     Press 'y' to commit all the existing files so to have a snapshot of the current repo
     Press anything else to skip this and take your time to review and cleanup files before your first commit
-    *y*
-    
+
+**y**
+
     [production (root-commit) 1c7c6c8] First commit: Snapshot of origin     https://github.com/example42/psick (fetch) originhttps://github.com/example42/psick (push)
      607 files changed, 107764 insertions(+)
      create mode 100644 .codacy.yaml
      create mode 100644 .gitlab-ci.yml
      [...]
- 
+
     ### Congratulations! Setup of the new control-repo finished ###
     # To start to work on it: cd /Users/al/tmp/acme
     # Keep updated the psick repo, and use the psick command to update or add componenent to your control-repo
@@ -131,8 +140,18 @@ We need Vagrant, Virtual Box and some plugins. We can install them all (with the
 
     bin/vagrant_setup.sh
 
-Or just:
+We can install the recommended vagrant plugins with:
 
+    vagrant plugin install vagrant-cachier
+    vagrant plugin install vagrant-vbguest
+    vagrant plugin install vagrant-hostmanager
+    vagrant plugin install vagrant-triggers
+
+And, if we want to test a Puppet Enterprise based environment (such as ```pe```, ```demo```, ```lab```)
+
+    vagrant plugin install pe_build
+
+Once Vagrant is setup with the needed dependencies, we can create some VM.
 
     cd vagrant/environments/ostest
     vagrant status
@@ -163,13 +182,13 @@ We try a Centos 7 vm:
 
     vagrant up centos7.ostest.psick.io
 
-The ostest environment uses **puppet apply** to test our local code, mounted on the selected VM.
+The ```ostest``` environment uses **puppet apply** to test our local code, mounted on the selected VM.
 
 Puppet run can be triggered either via a command like:
 
     vagrant provision centos7.ostest.psick.io
 
-Or, from withing the VM, as root:
+Or, from within the VM, as root:
 
     vagrant ssh centos7.ostest.psick.io
     vm $ sudo su -
@@ -179,8 +198,8 @@ The same concept applies for other VMs and for the other environments under ```v
 
 In some cases, further steps may be required, local documentation should help.
 
-Also it's useful to give a look to [this document](https://github.com/example42/psick/blob/production/docs/vagrant.md) for  details on how to customise the Vagrant environments.
+Also it's useful to give a look to [this document](https://github.com/example42/psick/blob/production/docs/vagrant.md) for  details on how to tune the Vagrant environments.
 
+Now we can enjoy our Puppet environment, start to develop and customise our control repo starting from the data in ```hieradata```, the local code under ```site``` the external modules to add to ```Puppetfile```, the classification logic in ```manifests/site.pp``` and ```hiera.yaml```.
 
 Alessandro Franceschi
-
