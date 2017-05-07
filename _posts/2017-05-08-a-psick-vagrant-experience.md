@@ -9,11 +9,11 @@ One of the most useful integration is the one with **Vagrant**.
 
 We can **test our current local changes** to Puppet code and data in several different Vagrant environments and VMs.
 
-There are environments where to test Puppet on different Operating Systems and in different modes. With puppet apply or with agents pointing to Puppet Enterprise, OSS Puppet or The Foreman masters.
-
 Under ```vagrant/environments``` we have various Vagrant environments, fully customisable, where Puppet can be run in agent or apply mode testing directly the effect of our changes on the repo.
 
-But first, we need to setup things.
+Here we can test different Operating Systems and Puppet setups, with Puppet Enterprise (PE), OSS Puppet or The Foreman masters.
+
+But first, we need to setup a few things.
 
 ## Our new control-repo
 
@@ -25,11 +25,11 @@ To create a control-repo for our new, wonderful, green field **acme** project we
     cd psick
     ./psick create
 
-This command allows us to create a new control-repo. It asks some questions:
+This command allows us to create a new control-repo in a new directory. It asks some questions:
 
 - the path (absolute or relative to the dir containing psick) where we want to create it
 
-- if we want to create a bare minimal control-repo or a full featured one, whis is the exact copy of the current psick files.
+- if we want to create a bare minimal control-repo or a full featured one, which is the exact copy of the current psick files.
 
 - if we want to automatically make the first commit on the brand new control-repo with all the added files.
 
@@ -66,29 +66,7 @@ Output is something like:
             .codacy.yaml
             .gitignore
             .gitlab-ci.yml
-            .travis.yml
-            CHANGELOG.md
-            Dangerfile
-            Gemfile
-            Gemfile.puppetlint
-            LICENSE
-            Puppetfile
-            README.md
-            bin/
-            docker/
-            docs/
-            environment.conf
-            fabfile/
-            gitlab/
-            hiera.yaml
-            hiera3.yaml
-            hieradata/
-            html/
-            keys/
-            manifests/
-            psick
-            site/
-            skeleton/
+            [...]
             vagrant/
 
     nothing added to commit but untracked files present (use "git add" to track)
@@ -117,6 +95,8 @@ So now we can move in the created dir, in my test case:
     git status
 
 and setup our control repo following the instructions.
+
+### Prerequisites installation
 
 If we still haven't Puppet installed, we can install it (more or less on any Linux) with:
 
@@ -151,6 +131,9 @@ And, if we want to test a Puppet Enterprise based environment (such as ```pe```,
 
     vagrant plugin install pe_build
 
+
+## Time to play
+
 Once Vagrant is setup with the needed dependencies, we can create some VM.
 
     cd vagrant/environments/ostest
@@ -158,7 +141,7 @@ Once Vagrant is setup with the needed dependencies, we can create some VM.
 
 Output here is quite interesting, note all OS work flawlessly out of the box, though.
 
-al@mule ostest [production] $ vagrant status
+    al@mule ostest [production] $ vagrant status
 Current machine states:
 
     centos7.ostest.psick.io             not created (virtualbox)
@@ -198,8 +181,16 @@ The same concept applies for other VMs and for the other environments under ```v
 
 In some cases, further steps may be required, local documentation should help.
 
-Also it's useful to give a look to [this document](https://github.com/example42/psick/blob/production/docs/vagrant.md) for  details on how to tune the Vagrant environments.
+Don't expect everything to work out of the box flawlessly, combinations of OS, roles and data are many and not all tested.
+Please report bugs and eventually Pull Requests on Github.
+
+## Customising
+
+The existing Vagrant environments can be customised, by editing the ```config.yaml``` file in each dir.
+Give a look to [this document](https://github.com/example42/psick/blob/production/docs/vagrant.md) for  details on how to tune the Vagrant environments.
 
 Now we can enjoy our Puppet environment, start to develop and customise our control repo starting from the data in ```hieradata```, the local code under ```site``` the external modules to add to ```Puppetfile```, the classification logic in ```manifests/site.pp``` and ```hiera.yaml```.
+
+And, most of all, we can immediately test our code in several different systems which may emulate our infrastructure servers.
 
 Alessandro Franceschi
