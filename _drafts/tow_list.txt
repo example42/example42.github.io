@@ -13,10 +13,13 @@
 2017-03-20-roles_profiles_and_tools.md
 2017-03-27-environment_caching.md
 2017-04-03-puppet-ci-with-gitlab.md
+2017-04-10-environment-enforcement.md
+2017-04-17-hiera-5.md
+2017-04-24-technical_puppet_workshop_frankfurt.md
+2017-05-01-puppet-debugger.md
 
 # open - suggestions
 
- - ENC node environment enforcement
  - KISS Puppet
  - getting started with PSICK - a documentation on content and ways how to use PSICK
  - using PSICK with vagrant
