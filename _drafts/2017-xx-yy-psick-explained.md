@@ -10,6 +10,7 @@ Getting started with PSICK:
     mkdir -p /etc/puppetlabs/code/environment/
     git clone https://github.com/example42/psick /etc/puppetlabs/code/environments/production
     cd /etc/puppetlabs/code/environments/production
+    git checkout development
 
 1. If you have no Puppet 4 already installed:
 
