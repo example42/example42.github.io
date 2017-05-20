@@ -65,6 +65,19 @@ Adopt settings from hieradata/nodes/puppet.pos.psick.io.yaml
 
         bin/papply.sh
 
+This builds you a fully operational monolithic Puppet master with PuppetDB, storeconfigs and reporting enabled.
+
+But how to get your code improvements onto your fresh Puppet master?
+
+This is where the profile parameters come into place:
+
+The FOSS Puppet master profile allows you to set r10k configurations. At the moment we only support a single r10k repository.
+Just add proper namespace keys to hiera:
+
+    # hieradata/nodes/<master fqdn>.yaml
+    profile::puppet::foss_master::r10k_remote_repo: 'git@gitlab.pos.psick.io:/repos/psick.git'
+
+You can either specify this setting prior running step 5 or add the setting later and run puppet agent.
 
 Summary for automated Puppet Open Source installation
 
