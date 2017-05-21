@@ -58,8 +58,10 @@ Adopt settings from hieradata/nodes/puppet.foss.psick.io.yaml
 
     # hieradata/nodes/<master fqdn>.yaml
     ---
-      profiles:
-          - profile::puppet::foss_server
+    profiles:
+      - profile::puppet::gems
+      - profile::puppet::foss_server
+    profile::puppet::gems::install_puppetserver_gems: true
 
 5. run puppet to automate the Master setup
 
