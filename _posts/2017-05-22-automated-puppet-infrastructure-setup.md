@@ -14,7 +14,7 @@ We believe that automating your automation allows you:
  - to manage your Puppet infrastructure by using Puppet
  - gain confidence that you can easily spin up everything from scratch after major outage
 
-The example 42 PSICK control-repo now allows you to spin up either Puppet Enterprise or Puppet Open Source infrastructures in a fully automated way.
+The example42 PSICK control-repo now allows you to spin up either Puppet Enterprise or Puppet Open Source infrastructures in a fully automated way.
 
 Getting started with PSICK to automate your Puppet Open Source Server setup on a bare OS installation
 
@@ -23,7 +23,6 @@ Getting started with PSICK to automate your Puppet Open Source Server setup on a
     mkdir -p /etc/puppetlabs/code/environment/
     git clone https://github.com/example42/psick /etc/puppetlabs/code/environments/production
     cd /etc/puppetlabs/code/environments/production
-    git checkout development
 
 1. Install Puppet 4:
 
@@ -73,7 +72,7 @@ But how to get your code improvements onto your fresh Puppet master?
 
 This is where the profile parameters come into place:
 
-The FOSS Puppet master profile allows you to set r10k configurations. At the moment we only support a single r10k refossitory.
+The FOSS Puppet master profile allows you to set r10k configurations. At the moment we only support a single r10k repository.
 Just add proper namespace keys to hiera:
 
     # hieradata/nodes/<master fqdn>.yaml
