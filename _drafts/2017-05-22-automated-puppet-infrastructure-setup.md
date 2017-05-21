@@ -9,7 +9,7 @@ How often do you upgrade your Puppet master and the agents?
 Usually people set up the heart of their Puppet infrastructure in a manual way.
 
 From our perspective this is an anti pattern when you manually manage the core of your automation.
-We believe that autmating your automation allows you:
+We believe that automating your automation allows you:
  - to better re-deploy your Puppet infrastructure
  - to manage your Puppet infrastructure by using Puppet
  - gain confidence that you can easily spin up everything from scratch after major outage
@@ -49,12 +49,12 @@ Option 1 is enabled in ```manifests/site.pp``` per default.
 Option 2 is available, but deactivated
 
 Our intention is to make use of profiles within hiera for node classification.
-Adding roles on top of profiles adds another layer of complexitiy which mostly is not required.
+Adding roles on top of profiles adds another layer of complexity which mostly is not required.
 Profiles usually are parameterized classes which can fetch data from hiera using automatic data binding.
 
 4. Classify your master
 
-Adopt settings from hieradata/nodes/puppet.pos.psick.io.yaml
+Adopt settings from hieradata/nodes/puppet.foss.psick.io.yaml
 
     # hieradata/nodes/<master fqdn>.yaml
     ---
@@ -71,11 +71,11 @@ But how to get your code improvements onto your fresh Puppet master?
 
 This is where the profile parameters come into place:
 
-The FOSS Puppet master profile allows you to set r10k configurations. At the moment we only support a single r10k repository.
+The FOSS Puppet master profile allows you to set r10k configurations. At the moment we only support a single r10k refossitory.
 Just add proper namespace keys to hiera:
 
     # hieradata/nodes/<master fqdn>.yaml
-    profile::puppet::foss_master::r10k_remote_repo: 'git@gitlab.pos.psick.io:/repos/psick.git'
+    profile::puppet::foss_master::r10k_remote_repo: 'git@gitlab.foss.psick.io:/repos/psick.git'
 
 You can either specify this setting prior running step 5 or add the setting later and run puppet agent.
 
