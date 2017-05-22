@@ -20,19 +20,19 @@ Getting started with PSICK to automate your Puppet Open Source Server setup on a
 
 0. Get the code base:
 
-    mkdir -p /etc/puppetlabs/code/environment/
-    git clone https://github.com/example42/psick /etc/puppetlabs/code/environments/production
-    cd /etc/puppetlabs/code/environments/production
+        mkdir -p /etc/puppetlabs/code/environment/
+        git clone https://github.com/example42/psick /etc/puppetlabs/code/environments/production
+        cd /etc/puppetlabs/code/environments/production
 
 1. Install Puppet 4:
 
-    bin/puppet_install.sh
+        bin/puppet_install.sh
 
 This installs Puppet 4 from Puppet Inc. repositories.
 
 2. Prepare your Puppet
 
-    bin/puppet_setup.sh
+        bin/puppet_setup.sh
 
 Installs required gems and fetches remote modules with r10k.
 The list of modules can be modified in ```Puppetfile```.
