@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week XX - Puppet internal status analysis
+title: Tip of the Week 23 - Puppet reports and metrics
 ---
 
 Any Puppet infrastructure must be monitored and needs log checking.
@@ -111,7 +111,7 @@ The following settings must be activated:
         }
     }
 
-Now you can follow the description from PE site regarding installation of grafana dashbord.
+Now you can follow the description from PE site regarding (installation of grafana dashbord)[https://docs.puppet.com/pe/latest/puppet_server_metrics.html].
 
 Martin Alfke
 
