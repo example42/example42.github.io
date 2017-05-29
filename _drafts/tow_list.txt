@@ -17,6 +17,11 @@
 2017-04-17-hiera-5.md
 2017-04-24-technical_puppet_workshop_frankfurt.md
 2017-05-01-puppet-debugger.md
+2017-05-08-a-psick-vagrant-experience.md
+2017-05-15-self-contained-classification.md
+2017-05-22-automated-puppet-infrastructure-setup.md
+2017-05-29-hiera-5-globs-and-mapped-paths.md
+2017-06-05-puppet-reports-and-metrics.md
 
 # open - suggestions
 
