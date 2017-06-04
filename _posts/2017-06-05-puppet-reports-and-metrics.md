@@ -4,7 +4,7 @@ title: Tip of the Week 23 - Puppet reports and metrics
 ---
 
 Any Puppet infrastructure must be monitored and needs log checking.  
-For monitoring we can re-use existing solutions like cacti, checkmk, icinga, monit, munin, nagios, sensu, zabbix (see also Wikipedia)[https://en.wikipedia.org/wiki/Comparison_of_network_monitoring_systems].
+For monitoring we can re-use existing solutions like cacti, checkmk, icinga, monit, munin, nagios, sensu, zabbix [see also Wikipedia](https://en.wikipedia.org/wiki/Comparison_of_network_monitoring_systems).
 
 Every puppet agent has locally stored important information for your puppet infrastructure. Most of these informations are stored inside the ```statedir```.
 
@@ -53,8 +53,8 @@ As Puppet Enterprise user you will get the Puppet Enterprise Console installed a
 
 For both platforms it is possible to make use of other open source developments:
 
-  - (Puppet Board)[https://github.com/voxpupuli/puppetboard]
-  - (Puppet Explorer)[https://github.com/dalen/puppet-explorer]
+  - [Puppet Board](https://github.com/voxpupuli/puppetboard)
+  - [Puppet Explorer](https://github.com/dalen/puppet-explorer)
 
 Both webinterfaces require PuppetDB configured as reporting backend. This is easily possible by setting the reports setting in puppet.conf for the puppet server to 'puppetdb'
 
@@ -111,6 +111,6 @@ The following settings must be activated:
         }
     }
 
-Now you can follow the description from PE site regarding (installation of grafana dashbord)[https://docs.puppet.com/pe/latest/puppet_server_metrics.html].
+Now you can follow the description from PE site regarding [installation of grafana dashbord](https://docs.puppet.com/pe/latest/puppet_server_metrics.html).
 
 Martin Alfke
