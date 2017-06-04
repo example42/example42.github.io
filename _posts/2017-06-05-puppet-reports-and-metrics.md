@@ -3,10 +3,10 @@ layout: blog
 title: Tip of the Week 23 - Puppet reports and metrics
 ---
 
-Any Puppet infrastructure must be monitored and needs log checking.
+Any Puppet infrastructure must be monitored and needs log checking.  
 For monitoring we can re-use existing solutions like cacti, checkmk, icinga, monit, munin, nagios, sensu, zabbix (see also Wikipedia)[https://en.wikipedia.org/wiki/Comparison_of_network_monitoring_systems].
 
-Every puppet agent has locally stored important information for your puppet infrastructure. Most of these informations are stored inside the statedir.
+Every puppet agent has locally stored important information for your puppet infrastructure. Most of these informations are stored inside the ```statedir```.
 
     puppet agent --configprint statedir
     /opt/puppetlabs/puppet/cache/state
@@ -21,9 +21,9 @@ Every puppet agent has locally stored important information for your puppet infr
     |- state.yaml
     \- transactionstore.yaml
 
-One wants to check not only for running puppet agent, but also for proper catalog retrieval. This can be achieved by analyzing the last_run_summary.yaml file.
+One wants to check not only for running puppet agent, but also for proper catalog retrieval. This can be achieved by analyzing the ````last_run_summary.yaml``` file.
 
-For logchecking it is possible to re-use your exiting log infrastructure like syslog-ng, elasticsearch or splunk. Within a basic puppet installation logfiles are written to the logdir setting.
+For logchecking it is possible to re-use your exiting log infrastructure like syslog-ng, elasticsearch or splunk. Within a basic puppet installation logfiles are written to the ```logdir``` setting.
 
     puppet master --configprint logdir
     /var/log/puppetlabs/puppetserver
@@ -34,7 +34,7 @@ For logchecking it is possible to re-use your exiting log infrastructure like sy
     |- puppetserver-access.log
     \- puppetserver.log
 
-Most important is the puppetserver.log files deprecation messages. These messages inform you of upcomong incompatibilities with your puppet code.
+Most important is the ```puppetserver.log``` files **deprecation messages**. These messages inform you of upcoming incompatibilities with your puppet code.
 
     grep deprecated /var/log/puppetlabs/puppetserver/puppetserver.log
     2017-05-28 13:29:30,563 WARN  [clojure-agent-send-pool-0] [puppetserver] Puppet Support for ruby version 1.9.3 is deprecated and will be removed in a future release. See https://docs.puppet.com/puppet/latest/system_requirements.html#ruby for a list of supported ruby versions.
@@ -45,7 +45,7 @@ Most important is the puppetserver.log files deprecation messages. These message
     2017-05-28 13:31:07,767 WARN  [qtp1631527616-56] [puppetserver] Puppet The function 'hiera_hash' is deprecated in favor of using 'lookup'. See https://docs.puppet.com/puppet/5.0/reference/deprecated_language.html
 
 
-But most of these tools don't give you an insight on Puppet internal status or provide information about all changes of your infrastructure. This is where the Puppet reporting frontends come into place.
+Still most of these tools don't give you an insight on Puppet internal status or provide information about all changes of your infrastructure. This is where the Puppet reporting frontends come into place.
 
 There are several possible solutions available:
 
@@ -63,7 +63,7 @@ Both webinterfaces require PuppetDB configured as reporting backend. This is eas
 
 There is one major difference between PuppetBoard/PuppetExplorer and the Puppet Entrprise Console: PuppetBoard/PuppetExplorer only have read access to PuppetDB. They are not designed to be able to work as External Nodes Classifier.
 
-With Puppet 5 there is another possible source of information where you can receive insights of your Puppet server status: the Puppet server metrics backend.
+With Puppet 5 there is another possible source of information where you can receive insights of your Puppet server status: the Puppet server **metrics backend**.
 
 This backend was originally available on Puppet Enterprise only and has been ported to Puppet Open Source.
 
@@ -98,7 +98,7 @@ The following settings must be activated:
 
         }
     }
-        # this section is used to configure settings for reporters that will send
+    # this section is used to configure settings for reporters that will send
     # the metrics to various destinations for external viewing
     reporters: {
         graphite: {
@@ -114,4 +114,3 @@ The following settings must be activated:
 Now you can follow the description from PE site regarding (installation of grafana dashbord)[https://docs.puppet.com/pe/latest/puppet_server_metrics.html].
 
 Martin Alfke
-
