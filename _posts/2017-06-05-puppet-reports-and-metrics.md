@@ -21,7 +21,7 @@ Every puppet agent has locally stored important information for your puppet infr
     |- state.yaml
     \- transactionstore.yaml
 
-One wants to check not only for running puppet agent, but also for proper catalog retrieval. This can be achieved by analyzing the ````last_run_summary.yaml``` file.
+One wants to check not only for running puppet agent, but also for proper catalog retrieval. This can be achieved by analyzing the ```last_run_summary.yaml``` file.
 
 For logchecking it is possible to re-use your exiting log infrastructure like syslog-ng, elasticsearch or splunk. Within a basic puppet installation logfiles are written to the ```logdir``` setting.
 
@@ -75,7 +75,7 @@ The following settings must be activated:
       metrics-enabled: true
     }
 
-    #/etc/puppetlabs/puppetserver/confd/metrics.conf
+    #/etc/puppetlabs/puppetserver/conf.d/metrics.conf
     metrics: {
     # a server id that will be used as part of the namespace for metrics produced
     # by this server
