@@ -19,7 +19,7 @@ There are two possible solutions:
 
  - [rvm](https://rvm.io)
  - [rbenv](https://github.com/rbenv/rbenv)
- 
+
 Within this posting we will use rbenv.
 
 # System preparation
@@ -84,11 +84,11 @@ Just run the following git command will place the code into proper location:
 
     git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 
-Remeber to refresh your shell:
+Remember to refresh your shell:
 
     exec bash
 
-Verify functinality of rbenv:
+Verify functionality of rbenv:
 
     rbenv version
 
@@ -146,7 +146,7 @@ For git bash prompt the following steps are required:
     git clone https://github.com/magicmonty/bash-git-prompt.git .bash-git-prompt --depth=1
 
 Now enable the git bash prompt in your shell:
-    
+
     # RedHat/CentOS/OS X/macOS:
     cat <<- EOF >> ~/.bash_profile
     # git bash prompt
@@ -197,4 +197,3 @@ Next you can run tests. Tests are not yet complete but under development.
 Happy testing, developing and puppetizing.
 
 Martin Alfke
-
