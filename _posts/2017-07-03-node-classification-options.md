@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 26 - Puppet node classificatoin options
+title: Tip of the Week 26 - Puppet node classification options
 ---
 
 When using a Puppet Agent - Puppet Master setup it is required that the Puppet Master has information about classes which a node should receive.
