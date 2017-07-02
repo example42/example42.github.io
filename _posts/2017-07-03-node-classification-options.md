@@ -28,7 +28,7 @@ It uses the manifests directory structure which is located on the root of a Pupp
        |     \- servers.pp
        \- modules/
 
-The site.pp file is parsed first. Any other files and directory are parsed in directory globbing odrder.
+The site.pp file is parsed first. Any other files and directory are parsed in directory globbing order.
 Usually the site.pp file is used to declare resource defaults and has a fallback default node classification.
 
     # /etc/puppetlabs/code/environments/production/manifests/site.pp
@@ -102,7 +102,8 @@ An ENC needs some configuration on Puppet Server:
 
 Don't forget to restart your Puppet Server process to activate the new settings.
 The external node script can be anything (perl, ruby, python, compiled C++ code) and must be executable by the user running the Puppet Server (puppet on Open Source, pe-puppet on Puppet Enterprise).
-Please be careful when using remote data sources like databases, webservers, CMDB. The Puppet Server will access the remote systems everytime a node requests a catalog. On larger installations this can lead to many requests against remote systems. It is best practice to use local stored data only.
+
+Please be careful when using remote data sources like databases, webservers, CMDB. The Puppet Server will access the remote systems every time a node requests a catalog. On larger installations this can lead to many requests against remote systems. It is best practice to use local stored data only.
 
 The ENC script must produce YAML or JSON or empty output.
 
@@ -113,6 +114,7 @@ The ENC script must produce YAML or JSON or empty output.
        - profile::mail::cyrus
 
 There is one more thing which an ENC is capable of: environment enforcement.
+
 Different to the manifests based node classification - which already takes part inside the Puppet compiler - the ENC is running prior the compiler.
 Additional information on this topic can be found at [TOW 15](http://www.example42.com/2017/04/10/environment-enforcement/).
 
