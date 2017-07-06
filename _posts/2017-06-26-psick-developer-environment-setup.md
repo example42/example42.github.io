@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 25 - The PSICK Developer Environment Setup - PDES
+title: Tip of the Week 25 - The PSICK Developer Environment Setup
 ---
 
 Working on Puppet code with least possible effort requires a properly setup of a suitable workstation environment.
