@@ -26,6 +26,7 @@
 2017-06-19-control-repo-documentation.md
 2017-06-26-psick-developer-environment-setup.md
 2017-07-03-node-classification-options.md
+2017-07-10-puppet-and-fabric.md
 
 # open - suggestions
 
