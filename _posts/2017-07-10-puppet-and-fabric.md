@@ -79,7 +79,7 @@ We mentioned PSICK and its integration with Puppet, the list of available comman
         puppet.module_publish      [local] Publish on GitHub and the Forge the local version of a module
         puppet.remote_setup        [remote] Installs on a remote node the packages needed for a puppet apply run on the control-repo
         puppet.setup               [local] Setup the contro-repo, installs r10k and external modules
-        puppet.sync_and_apply      [remote] Run puppet apply on a synced copy of the local git repo (syncs and uses control-repo in the environments/fabr...
+        puppet.sync_and_apply      [remote] Run puppet apply on a synced copy of the local git repo (syncs and uses control-repo)
         tp.clone_data              [local] Add a new app name data directory under modules/tinydata, based on the specified source
         tp.install                 [local] Install locally any tinydata knows app via tp
         tp.remote_test             [remote] WIP Run tp tests on remote node
