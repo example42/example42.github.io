@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 27 - Puppet and Fabric
+title: Tip of the Week 28 - Puppet and Fabric
 ---
 
 [Fabric](http://www.fabfile.org) is a remote execution tool, written in Python, which ease parallel execution and orchestration of commands on different nodes.
