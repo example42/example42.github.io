@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 27 - PSICK explained
+title: Tip of the Week 29 - PSICK explained
 ---
 
 Using PSICK for the very first time confuses people as they are confronted with a highly flexible approach for managing and configuring their infrastructure.
