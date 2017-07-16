@@ -107,7 +107,7 @@ Usually people start writing an implementation by themselves:
 [TinyPuppet](https://github.com/example42/tp.git) is a module from example42 which allows you to easily manage installation of applications and their configuration files.
  With TinyPuppet it is possible to tell Puppet to just install the application we want, then it's up to us to provide templates and data for our configuration files.
 
-This is currently the default profile used in PSICK to manage OpenSSH, using only defines for Tiny Puppet module are used to manage OpenSSH installation, eventual template to use for sshd_configuration and eventual source for the whole main configuration directory.
+This is currently the default profile used in PSICK to manage OpenSSH. It only uses defines for Tiny Puppet OpenSSH installation, optionally uses a template to use for sshd_configuration or even a static source for the whole main configuration directory.
 
     class profile::ssh::openssh (
       Enum['present','absent'] $ensure                     = 'present',
@@ -151,7 +151,7 @@ And the eventual hash of data, which might be used in the template:
       PrintLastLog: yes
       UseLogin: no
 
-In our template, to be written in profile/templates/ssh/sshd_config.erb, in this case in erb format, we would have something like:
+In our template, to be placed in profile/templates/ssh/sshd_config.erb, in this case in erb format, we would have something like:
 
     PermitRootLogin <%= @options['PermitRootLogin'] >
     PrintLastLog <%= @options['PrintLastLog'] >
