@@ -9,7 +9,7 @@ This posting will give you a guidance on how to read, understand and use PSICK.
 Normally system administrators strictly follow the approach of writing roles and profiles which consist of lots of Puppet code, describing the infrastructure.
 With PSICK one has the possibility of using or adopt a predefined role/profile pattern.
 
-Let's get to the content::
+Let's get to the content:
 
 1. why PSICK
 1. set up NTP
@@ -51,13 +51,35 @@ It is always up to you to provide proper suited profiles for all of your infrast
 
 ## The PSICK way
 
-Within PSICK we provide a profile for time settings (profile::time). This profile uses facter variables to identify which OS should get configuration and uses parameters for flexible usage either regarding the desired tools (chrony, ntpd, ntpdate).
+Within PSICK there's a default profile for time settings (profile::time). This profile uses facter variables to identify which OS should get configuration and uses parameters for flexible usage either regarding the desired tools (chrony, ntpd, ntpdate).
 The PSICK profile::time class already is an implementation class which uses upstream modules, like puppetlabs ntp.
 
 There is no need for you to write code, you just need to provide data in hiera:
 
     profile::time::servers:
-      - '8.8.8.8'
+      - '1.2.3.4'
+
+## Your PSICK way
+
+The above is PSICK default profile for time management, configured on Hiera with:
+
+    profile::base::linux::time_class: '::profile::time'
+    profile::base::windows::time_class: '::profile::time'
+
+but PSICK is about choice and customisation, you can can use any other class to manage ntp settings in your OS, both component modules or profiles, for example:
+
+    profile::base::linux::time_class: '::ntp'
+    profile::base::windows::time_class: '::profile::time::windows'
+
+Additional parameters to configure time depend on the used class. So, for example, with puppetlabs/ntp module we can configure on Hiera:
+
+    ntp::servers:
+      - '1.2.3.4'
+    ntp::restrict:
+      - 'default ignore'
+      - '-6 default ignore'
+      - '127.0.0.1'
+
 
 #  Configure SSH
 
@@ -82,33 +104,72 @@ Usually people start writing an implementation by themselves:
 
 ## The PSICK way
 
-[TinyPuppet](https://github.com/example42/tp.git) is a module from example42 which allows you to do "tiny" things with Puppet. With TinyPuppet it is possible to tell Puppet to just install the package, provide an own configuratoin file or template with your own sets of data.
+[TinyPuppet](https://github.com/example42/tp.git) is a module from example42 which allows you to easily manage installation of applications and their configuration files.
+ With TinyPuppet it is possible to tell Puppet to just install the application we want, then it's up to us to provide templates and data for our configuration files.
+
+This is currently the default profile used in PSICK to manage OpenSSH, using only defines for Tiny Puppet module are used to manage OpenSSH installation, eventual template to use for sshd_configuration and eventual source for the whole main configuration directory.
 
     class profile::ssh::openssh (
-      $config_file_epp,
-    ){
-      ::tp::install { 'openssh':
-        ensure => present,
-      }
-      ::tp::conf { 'openssh':
-        ensure => file,
-        epp    => $config_file_epp,
-      }
-    }
+      Enum['present','absent'] $ensure                     = 'present',
 
-The code shown above is an abstract from code which is already available in PSICK.
+      Variant[String[1],Undef] $config_dir_source          = undef,
+      String                   $config_file_template       = '',
+    ) {
+
+      $options_default = {
+      }
+      $options_user=hiera_hash('profile::ssh::openssh::options', {} )
+      $options=merge($options_default,$options_user)
+
+      ::tp::install { 'openssh':
+        ensure => $ensure,
+      }
+
+      if $config_file_template != '' {
+        ::tp::conf { 'openssh':
+          ensure       => $ensure,
+          template     => $config_file_template,
+          options_hash => $options,
+        }
+      }
+
+      ::tp::dir { 'openssh':
+        ensure => $ensure,
+        source => $config_dir_source,
+      }
+
+    }
 
 Within your profile hiera data one only needs to specify which template should be used:
 
-    profile::ssh::openssh::config_file_epp: 'profile/ssh/sshd_config.epp'
+    profile::ssh::openssh::config_file_template: 'profile/ssh/sshd_config.erb'
 
-Now you only have to add your template to the profile module.
+And the eventual hash of data, which might be used in the template:
+
+    profile::ssh::openssh::options:
+      PermitRootLogin: prohibit-password
+      PrintLastLog: yes
+      UseLogin: no
+
+In our template, to be written in profile/templates/ssh/sshd_config.erb, in this case in erb format, we would have something like:
+
+    PermitRootLogin <%= @options['PermitRootLogin'] >
+    PrintLastLog <%= @options['PrintLastLog'] >
+    UseLogin <%= @options['UseLogin'] >
+
+
+## Your PSICK way
+
+If such freedom and flexibility to manage the content of sshd_config does not satisfy us, we as usual can provide alternative approaches, specifying alternative modules or profiles to manage SSH:
+
+    profile::base::linux::ssh_class: '::ssh'
+
 
 # Manage users
 
 ## The classical way
 
-We still see platforms where users are not kept inside a central usermanagement but are configured locally.
+We still see platforms where users are not kept inside a central user management but are configured locally.
 What you usually learn in every training is that you use a self defined resource type for wrapping several resources together:
 
     define profile::usermanagement (
@@ -154,9 +215,20 @@ Adding users with PSICK just requires to read and adopt our tools::user::managed
         id_rsa_source    : 'puppet:///modules/profile/users/ben/id_rsa'
         id_rsa_pub_source: 'puppet:///modules/profile/users/ben/id_rsa.pub'
 
-The users profile even allaws you to use other user management implementations like puppetlabs/accounts module or the pure user resource tpye. Selection on which solution to use is based on hiera data.
+## Your PSICK way
 
-We wishes everybody fun with adopting and using PSICK.
+Users are always a sensitive thing. Everybody manages them in their own way.
+
+The sample default, static, use management profile won't fit the needs of many, but as usual we have choice: Hiera driven choice of what class to use to manage Users:
+
+    profile::base::linux::users_class: '::sssd'
+    profile::base::windows::users_class: '::domain_membership'
+
+Being managed via Hiera the same name of the class to use, we can exploit to nicely manage exceptions (some servers or a specific one might need a totally different way to manage users), or we can test different modules each one with its own set of  parameters:
+
+    profile::base::linux::users_class: '::accounts'
+
+
+We wish everybody fun with adopting and using PSICK.
 
 Martin Alfke
-
