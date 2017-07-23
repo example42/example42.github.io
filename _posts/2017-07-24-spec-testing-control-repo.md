@@ -108,7 +108,7 @@ But within a control-repository the files to test are not inside the modules dir
     end
 
 Unit tests need to know where to find the upstream modules which we have in Puppetfile within the control-repo.
-We don't fetch these from upstream source as this would need to have Puppetfile and -fixtures.yml files synced or either one automaticlly generated.
+We don't fetch these from upstream source as this would need to have Puppetfile and .fixtures.yml files synced or either one automaticlly generated.
 
 Instead we have chosen to re-use the modules which must be installed using r10k:
 
@@ -125,6 +125,13 @@ Within the spec/spec_helper.rb file we set the modulepath to 'site' and 'modules
       c.hiera_config = File.join(fixture_path, '../../hiera.yaml')
       c.fail_fast = true
     end
+
+The .fixtures.yml just ensures that all directories are in place:
+
+    fixtures:
+      symlinks:
+          site: "#{source_dir}/site"
+          r10k: "#{source_dir}/modules"
 
 Now rspec-puppet needs a test. The most simple one just checks if a catalog is successfully created:
 
