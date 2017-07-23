@@ -11,7 +11,7 @@ Usually spec tests are done at different levels:
 1. Acceptance Testing
 
 Lint tests check if the Puppet code follows the Puppet [style guide](https://docs.puppet.com/puppet/5.0/style_guide.html).
-Within unit tests we use [rspec-puppet](https://rspec-puppet.com). Rspec-puppet compiles a Pupept catalog in a sandbox and checks if the catalog is compiled successfully and contains all required resources.
+Within unit tests we use [rspec-puppet](https://rspec-puppet.com). Rspec-puppet compiles a Puppet catalog in a sandbox and checks if the catalog is compiled successfully and contains all required resources.
 Acceptance tests are used to deploy a machine, apply the Puppet code and verify system settings. For acceptance testing we use [beaker](https://github.com/puppetlabs/beaker/wiki) which is a wrapper around [vagrant](https://www.vagrantup.com/) or [docker](https://www.vagrantup.com/) and [serverspec](http://serverspec.org/).
 
 Lint tests are easy to deploy and run. All you need is the following files:
@@ -76,7 +76,7 @@ In the spec/spec_helper.rb file we enable the puppetlabs_spec_helper module spec
     require 'puppetlabs_spec_helper/module_spec_helper'
 
 
-Puppet-lint will check for a mnifests and modules directory to read puppet manifests and checks for style guide.
+Puppet-lint will check for a manifests and modules directory to read puppet manifests and checks for style guide.
 
 But within a control-repository the files to test are not inside the modules directory, but inside the site directory. As we can not overwrite this default behavior we generate a new lint rake task in the Rakefile:
 
@@ -108,7 +108,7 @@ But within a control-repository the files to test are not inside the modules dir
     end
 
 Unit tests need to know where to find the upstream modules which we have in Puppetfile within the control-repo.
-We don't fetch these from upstream source as this would need to have Puppetfile and .fixtures.yml files synced or either one automaticlly generated.
+We don't fetch these from upstream source as this would need to have Puppetfile and .fixtures.yml files synced or either one automatically generated.
 
 Instead we have chosen to re-use the modules which must be installed using r10k:
 
@@ -143,9 +143,9 @@ Now rspec-puppet needs a test. The most simple one just checks if a catalog is s
     end
 
 Next we want acceptance tests. Usually beaker was created to run acceptance tests on modules.
-Modules have a multiple tests running on supported operatingsystems. Beaker reuses a VM it has created for all tests.
+Modules have a multiple tests running on supported operating systems. Beaker reuses a VM it has created for all tests.
 
-Within a control-repo we want a fresh state on every test, as we have single tests which should run on a fresh os everytime.
+Within a control-repo we want a fresh state on every test, as we have single tests which should run on a fresh os every time.
 
 First we need the beaker gem:
 
