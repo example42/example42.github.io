@@ -3,7 +3,8 @@ layout: blog
 title: Tip of the Week 31 - Request for Feedback - sort_merged_arrays fix and problems with older Puppet versions
 ---
 
-With Puppet 4.10.5 and 5.0.2 a fix for a missing functionality was released: sort_merged_arrays lookup option.
+With Puppet 4.10.5 and 5.0.2 a fix for a missing functionality was released: [sort_merged_arrays lookup option](https://docs.puppet.com/puppet/5.0/hiera_merging.html#deep).
+
 In earlier versions of Puppet this was named 'sort_merge_arrays' but lacked the functionality.
 
 Unluckily Puppet did not build the fix with backward compatibility.
@@ -20,7 +21,7 @@ When using 'sort_merged_arrays' the following will happen:
 
 How to work around this version dependent functionality when providing code for multiple Puppet versions?
 
-We have a merge request with a really ugly hack:
+We have a [pull request](https://github.com/example42/psick/pull/133) on GitHub with a really ugly hack:
 
 1. identify version of Puppet and set a variable
 1. use this variable as a hierarchy in hiera.yaml
