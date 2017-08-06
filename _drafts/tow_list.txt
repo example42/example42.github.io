@@ -27,6 +27,10 @@
 2017-06-26-psick-developer-environment-setup.md
 2017-07-03-node-classification-options.md
 2017-07-10-puppet-and-fabric.md
+2017-07-17-psick-explained.md
+2017-07-24-spec-testing-control-repo.md
+2017-07-31-sort_merged_array-fix.md
+2017-08-07-class-indirection.md
 
 # open - suggestions
 
