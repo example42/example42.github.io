@@ -31,6 +31,7 @@
 2017-07-24-spec-testing-control-repo.md
 2017-07-31-sort_merged_array-fix.md
 2017-08-07-class-indirection.md
+2017-08-14-testing-a-control-repo-with-vagrant.md
 
 # open - suggestions
 
