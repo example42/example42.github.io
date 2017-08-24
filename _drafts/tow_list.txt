@@ -1,37 +1,39 @@
 # done
-2017-01-02-one-liner-to-install-puppet4.md
-2017-01-09-anatomy-of-a-puppet-control-repo.md
-2017-01-16-the-optimal-hiera-yaml.md
-2017-01-23-existing-code-on-puppet4.md
-2017-01-30-rspec-on-existing-code.md
-2017-02-06-resources-from-hash-in-puppet4.md
-2017-02-13-exec-done-right.md
-2017-02-20-local-references.md
-2017-02-27-building-data-types.md
-2017-03-06-noop_mode.md
-2017-03-13-second_mount_point.md
-2017-03-20-roles_profiles_and_tools.md
-2017-03-27-environment_caching.md
-2017-04-03-puppet-ci-with-gitlab.md
-2017-04-10-environment-enforcement.md
-2017-04-17-hiera-5.md
-2017-04-24-technical_puppet_workshop_frankfurt.md
-2017-05-01-puppet-debugger.md
-2017-05-08-a-psick-vagrant-experience.md
-2017-05-15-self-contained-classification.md
-2017-05-22-automated-puppet-infrastructure-setup.md
-2017-05-29-hiera-5-globs-and-mapped-paths.md
-2017-06-05-puppet-reports-and-metrics.md
-2017-06-12-puppet5.md
-2017-06-19-control-repo-documentation.md
-2017-06-26-psick-developer-environment-setup.md
-2017-07-03-node-classification-options.md
-2017-07-10-puppet-and-fabric.md
-2017-07-17-psick-explained.md
-2017-07-24-spec-testing-control-repo.md
-2017-07-31-sort_merged_array-fix.md
-2017-08-07-class-indirection.md
-2017-08-14-testing-a-control-repo-with-vagrant.md
+01 - 2017-01-02-one-liner-to-install-puppet4.md
+02 - 2017-01-09-anatomy-of-a-puppet-control-repo.md
+03 - 2017-01-16-the-optimal-hiera-yaml.md
+04 - 2017-01-23-existing-code-on-puppet4.md
+05 - 2017-01-30-rspec-on-existing-code.md
+06 - 2017-02-06-resources-from-hash-in-puppet4.md
+07 - 2017-02-13-exec-done-right.md
+08 - 2017-02-20-local-references.md
+09 - 2017-02-27-building-data-types.md
+10 - 2017-03-06-noop_mode.md
+11 - 2017-03-13-second_mount_point.md
+12 - 2017-03-20-roles_profiles_and_tools.md
+13 - 2017-03-27-environment_caching.md
+14 - 2017-04-03-puppet-ci-with-gitlab.md
+15 - 2017-04-10-environment-enforcement.md
+16 - 2017-04-17-hiera-5.md
+17 - 2017-04-24-technical_puppet_workshop_frankfurt.md
+18 - 2017-05-01-puppet-debugger.md
+19 - 2017-05-08-a-psick-vagrant-experience.md
+20 - 2017-05-15-self-contained-classification.md
+21 - 2017-05-22-automated-puppet-infrastructure-setup.md
+22 - 2017-05-29-hiera-5-globs-and-mapped-paths.md
+23 - 2017-06-05-puppet-reports-and-metrics.md
+24 - 2017-06-12-puppet5.md
+25 - 2017-06-19-control-repo-documentation.md
+26 - 2017-06-26-psick-developer-environment-setup.md
+27 - 2017-07-03-node-classification-options.md
+28 - 2017-07-10-puppet-and-fabric.md
+29 - 2017-07-17-psick-explained.md
+30 - 2017-07-24-spec-testing-control-repo.md
+31 - 2017-07-31-sort_merged_array-fix.md
+32 - 2017-08-07-class-indirection.md
+33 - 2017-08-14-testing-a-control-repo-with-vagrant.md
+34 - 2017-08-21-encrypt-your-secrets-with-hiera-eyaml.md
+35 - 2017-08-28-git-workflow-on-control-repo.md
 
 # open - suggestions
 
