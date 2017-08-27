@@ -4,12 +4,12 @@ title: Tip of the Week 35 - GIT workflow for Puppet control-repositories
 ---
 
 Modern best practices for management of Puppet Code suggest to make use of a control-repository.
-Within a control-repository one manages the whole Puppet Code in a distributed pattern:
+Within a control-repository one manages the whole Puppet Code in a centralized pattern but istill allowing flexibility and code staging:
 - upstream modules are referenced in Puppetfile
 - Profiles and Roles are managed directly inside the repository
 - Hiera configuration and data are also part of the control-repository
 
-Usually it is recommended to rename master branch to production as Puppet might behave irratical when using master as an environment name.
+Usually it is recommended to rename master branch to production. Older versions of Puppet might behave irratical when using a puppet.conf section name (master, main, agent) as an environment name.
 Most people use an additional branch for development and staging purpose.
 
 This will result in the following branches:
