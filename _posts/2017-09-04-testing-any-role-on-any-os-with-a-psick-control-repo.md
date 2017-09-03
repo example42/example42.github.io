@@ -58,39 +58,28 @@ We may set the top scope variables used in hierarchy paths in different ways:
   - As global variables set via an ENC (Puppet Enterprise, Foreman)
   - Directly in the main manifest, in the top scope, outside any class
 
-PSICK's default expects the variables used in the hierarchy as trusted or normal facts, this implemented in ```manifest/site.pp``` with lines like:
-
-    if $trusted['extensions']['pp_role'] and !has_key($facts,'role') {
-      $role = $trusted['extensions']['pp_role']
-    }
-
-which assign values to $role and other top scope variables if a trusted or normal fact is set (when using ). To avoid the possibility to override trusted facts, we could replace the above with:
-
-  $role = $trusted['extensions']['pp_role']
-
-and force an error in case a $role fact is set via other methods.
+PSICK's default expects the variables used in the hierarchy as trusted or normal facts, this implemented in ```manifest/site.pp``` where everything happens.
 
 ## Nodes classification
 
-Nodes classification is Hiera based following the following principles.
+Here we also manage nodes classification with following the following principles.
 
-In the main manifest we include on each node:
+We always include, in all the nodes, a settings profiles, used only as entry point for (Hiera driven) variables shared across profiles.
 
-    # Profile::settings does not provide resources.
-    # It's esclusively used to set variables (Hiera driven) available to
-    # all profile classes
     contain '::profile::settings'
 
-    # This class is evaluated first and must always be present
-    # Should contain the minimal prerequisites for the base setup
+Then we include a prerequisites class, which provides the prerequisites resources we want to to evalutate first
+
     contain '::profile::pre'
 
-    # General baseline classes are distinct for each OS kernel
-    # With multi kernel clients better include dedicated base profiles.
+Finallt a general baseline class is included, distinct for each OS kernel:
+
     $kernel_down=downcase($::kernel)
     contain "::profile::base::${kernel_down}"
 
-Every group of resources managed by the base profile is declared inside a class, whose name is managed via hiera, so we can set, in ```common.yaml``` or anywhere in the hierarchy, params like the following to fine tune what common classes, local profiles or directly public module we want:
+Every group of resources managed by the pre and base profiles is declared inside a class, whose name is managed via hiera.
+
+So we can set, in ```common.yaml``` or anywhere in the hierarchy, params like the following to fine tune what common classes, local profiles or directly public module we want:
 
     profile::base::linux::mail_class: '::profile::mail::postfix'
     profile::base::linux::puppet_class: '::puppet'
@@ -100,7 +89,8 @@ Every group of resources managed by the base profile is declared inside a class,
     profile::base::linux::monitor_class: '::profile::monitor'
     [...]
 
-    # Base profile settings Windows
+For windows, many resources are different and it makes sense to manage them in a separated base profile:
+
     profile::base::windows::puppet_class: ''
     profile::base::windows::features_class: '::profile::windows::features'
     profile::base::windows::registry_class: '::profile::windows::registry'
@@ -130,6 +120,23 @@ There are no role classes, they function is replaced by the profiles included vi
         - profile::gitlab::runner
         - profile::gitlab::ci
         - docker
+
+This would be the same of having a class like ```site/role/manifests/cirunner.pp``` with:
+
+    class role::cirunner {
+      include profile::git
+      include profile::puppet::gems
+      include profile::ci::octocatalog
+      include profile::ci::danger
+      include profile::gitlab::runner
+      include profile::gitlab::ci
+      include docker
+    }
+
+But here we have the flexibility of Hiera and the possibility to manage exceptions, or add new roles, just working with yaml files.
+
+
+
 
 ## Vagrant to test multiple OS
 
