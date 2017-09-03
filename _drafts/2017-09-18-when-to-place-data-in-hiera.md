@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 36 - When to place data in hiera
+title: Tip of the Week 38 - When to place data in hiera
 ---
 
 When Puppet Inc. released hiera, we gained the possibility to separate data from code.

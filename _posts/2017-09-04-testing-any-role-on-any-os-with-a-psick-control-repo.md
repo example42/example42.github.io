@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 36 - Testing any role on any OS with PSICK control repo
+title: Tip of the Week 36 - Testing any role on any OS with a PSICK control repo
 ---
 
 Short version of the post:
@@ -107,12 +107,17 @@ Every group of resources managed by the base profile is declared inside a class,
     profile::base::windows::network_class: ''
 
 
-Additional profile classes, which are specific and different in nodes, are looked via Hiera (using the ```profiles``` key)
+Additional profile classes, which are specific for [group of] nodes, are looked via Hiera (using the ```profiles``` key) and included:
 
     lookup('profiles', Array[String], 'unique', [] ).contain
+
+We also ensure they are applied after all the base profiles.
+
     lookup('profiles', Array[String], 'unique', [] ).each | $p | {
       Class["::profile::base::${kernel_down}"] -> Class[$p]
     }
+
+## No roles (classes)
 
 There are no role classes, they function is replaced by the profiles included via hiera: we can reproduce the tipical roles and profiles pattern by defining under ```hieradata/role/$::role.yaml``` something like:
 
@@ -126,13 +131,11 @@ There are no role classes, they function is replaced by the profiles included vi
         - profile::gitlab::ci
         - docker
 
-## Vagrant for all
+## Vagrant to test multiple OS
 
-One of the parts where it shines, is the Vagrant integration.
+PSICK includes several Vagrant multi VM environments that can be used to test the code and the data of the control repo itself.
 
-We have several Vagrant multi VM environments that can be used to test the code and the data of the control repo.
-
-We have made them easily configurable (check the [Vagrant docs] for details) by editing a single ```config.yaml``` where it's possible to test role, operating systems both in Puppet agent and apply mode.
+We have made them easily configurable (check the [Vagrant docs](https://github.com/example42/psick/blob/production/docs/vagrant.md) for details) by editing a single ```config.yaml``` where it's possible to test role, operating systems both in Puppet agent and apply mode.
 
 We have a vagrant environment called ostest, when we can test our control repo on the following machines:
 
