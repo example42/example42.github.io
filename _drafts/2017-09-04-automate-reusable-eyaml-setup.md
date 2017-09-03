@@ -12,13 +12,13 @@ After botstrapping your Puppet server and installing eyaml you usually run the `
 Now you start encrypting your data using ```eyaml decrypt```.
 
 Normally you will work with a larger group of people on your configuration automation and management. So you will not directly work on the puppet server.
-Additionally you want eerybody to decrypt data, but only dedicated users or systems should be able to encrypt data.
+Additionally you want everybody to decrypt data, but only dedicated users or systems should be able to encrypt data.
 
 To allow everybody encrypting data, you can easily place the public key into your control-repository.
 
 The private key must be protected and kept safe. So you will not put it into the control-repo.
 
-When rebotstrapping your Puppet server, you mustr ensure that you are re-using the old keys which already have been used to decrypt data.
+When rebostrapping your Puppet server, you must ensure that you are re-using the old keys which already have been used to decrypt data.
 
 Which systems must have the private key? First it is your Puppet server(s) so data lookups can be decrypted. Depending on your spec tests you want your ci systems to also have the key at hand.
 On the CI systems you can easily place the key via Puppet, using another file serving mount point (see post [Using a second mount point for files](https://www.example42.com/2017/03/13/second_mount_point/)).
@@ -49,4 +49,3 @@ Your hiera.yaml file can now use the public key in the control-repository and th
 example42 wishes everybody fun and success at encrypting data.
 
 Martin Alfke
-

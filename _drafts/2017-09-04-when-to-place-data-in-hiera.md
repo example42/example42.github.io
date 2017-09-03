@@ -3,7 +3,7 @@ layout: blog
 title: Tip of the Week 36 - When to place data in hiera
 ---
 
-When Puppet Inc. released hiera, we gained the possibility to seaprate data from code.
+When Puppet Inc. released hiera, we gained the possibility to separate data from code.
 
 Prior hiera we used logic patterns like ```if``` and ```case``` to identify differences in our platform and configurations.
 With hiera we started using the hiera lookup function to fetch data based on a hierarchy where we specify differences of our platform. This lead to cleaner, better maintainable code.
@@ -30,7 +30,7 @@ If you must use the variable from multiple places, it is recommended to assign t
 
     # site/profile/manifests/data.pp
     class profile::data {
-      $delete_unmanaged_accouts_and_keys = true,
+      $delete_unmanaged_accounts_and_keys = true,
     }
 
 
@@ -75,7 +75,7 @@ No comes the point where I differ from Gary's posting:
 
 In all other cases make your profile a parameterized profile. Whether you want to specify a sane default value is up to you.
 
-    
+
     # site/profile/manifests/login/ssh.pp
     class profile::login::ssh (
       Integer $port = 22,
