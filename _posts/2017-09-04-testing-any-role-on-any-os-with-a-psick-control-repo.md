@@ -23,7 +23,7 @@ It has all, by default, we need to manage and provision an infrastructure with P
 
 ## Entirely Hiera driven
 
-PSICK, for the user perspective, can be entirely Hiera driven, based on hierarchies containing concepts like roles, environments (tiers) and zones (datacenters).
+PSICK, for the user perspective, can be entirely Hiera driven, based on hierarchies containing concepts like roles, operational environments (envs, tiers) and zones (datacenters).
 
 The default ```hiera.yaml``` looks like:
 
@@ -45,39 +45,64 @@ The default ```hiera.yaml``` looks like:
 
 Names, layers and logic may differ, as the same way we assign these variables.
 
-The basic principle should be: In the environment Hiera we use hierarchies which reflect how configurations change in the nodes of our infrastructure.
+The basic principle should be: In our environment/control-repo ```hiera.yaml``` we use hierarchies which reflect and map how our configurations change in the nodes of our infrastructure.
 
-We don't care about Operating Systems (profiles and modules care of them), we care about our infrastructure, and how data can adapt to it.
+We don't generally care about changes in Operating Systems (data in profiles and modules care of them), we focus on our infrastructure, and how data can adapt to it.
 
 ## Setting top scope variables used in hierarchy
 
 We may set the top scope variables used in hierarchy paths in different ways:
 
   - As trusted facts defined during server provisioning, before Puppet's first run
-  - As external facts or normal facts
+  - As external facts set during provisioning
+  - As normal facts pluginsynced from our site modules
   - As global variables set via an ENC (Puppet Enterprise, Foreman)
   - Directly in the main manifest, in the top scope, outside any class
 
-PSICK's default expects the variables used in the hierarchy as trusted or normal facts, this implemented in ```manifest/site.pp``` where everything happens.
+PSICK's default expects the variables used in the hierarchy as trusted or normal facts, this implemented in ```manifest/site.pp```, where everything happens, with something like:
+
+    if $trusted['extensions']['pp_role'] {
+      $role = $trusted['extensions']['pp_role']
+    }
+
+To give the idea, [these](https://github.com/example42/psick/blob/production/bin/ec2_userdata/) are sample user-data files to set such trusted facts on ec2 instances.
 
 ## Nodes classification
 
-Here we also manage nodes classification with following the following principles.
+By default, in the main manifest we manage also nodes classification, as follows.
 
-We always include, in all the nodes, a settings profiles, used only as entry point for (Hiera driven) variables shared across profiles.
+First, we include, in all the nodes, a settings profile, used only as entry point for (Hiera driven) variables shared across profiles.
 
     contain '::profile::settings'
 
-Then we include a prerequisites class, which provides the prerequisites resources we want to to evalutate first
+Variables like $::profile::settings::proxy_server may be used by different profiles and this should be the default value for their own proxy settings.
+
+Then we include a prerequisites class, which provides the prerequisites resources we want to to evalutate first (typically package repositories and proxy settings)
 
     contain '::profile::pre'
 
-Finallt a general baseline class is included, distinct for each OS kernel:
+Finally a general baseline class is included, distinct for each OS kernel:
 
     $kernel_down=downcase($::kernel)
     contain "::profile::base::${kernel_down}"
 
-Every group of resources managed by the pre and base profiles is declared inside a class, whose name is managed via hiera.
+Every group of resources managed by the pre and base profiles is declared inside a class, using a class name exposed as a parameter, manageable via Hiera:
+
+    class profile::base::linux (
+      # General switch. If false nothing is done.
+      # Set to false to skip base classes management.
+      Boolean $manage         = true,
+      String $network_class = '',
+      String $mail_class    = '',
+      String $puppet_class  = '',
+      [...]
+      ) {
+       if $network_class != '' and $manage {
+         contain $network_class
+         }
+      [...]
+     }
+
 
 So we can set, in ```common.yaml``` or anywhere in the hierarchy, params like the following to fine tune what common classes, local profiles or directly public module we want:
 
@@ -134,8 +159,6 @@ This would be the same of having a class like ```site/role/manifests/cirunner.pp
     }
 
 But here we have the flexibility of Hiera and the possibility to manage exceptions, or add new roles, just working with yaml files.
-
-
 
 
 ## Vagrant to test multiple OS
