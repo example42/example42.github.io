@@ -3,10 +3,10 @@ layout: blog
 title: Tip of the Week 39 - Secure data anagement with multiple eyaml keys
 ---
 
-With improved security implementations it is often required that SSl keys must be seaprate among different infrastructure stages.
-This means that we have to deal with multiple eyaml keys for production stage, integration stage, ci stage and development stage.
+With improved security implementations it is often required that keys must be seaprate among different infrastructure stages.
+This means that we have to deal with multiple eyaml keys for production-stage and ci- and development-stage.
 
-Nobody may have the private production key. Everybody should have access to the productoin public key (which is used for encryption).
+Nobody may have the private production key. Everybody should have access to the production public key (which is used for encryption).
 All other keys can be made available to everybody.
 
 First let's set some top scope variable by analyzing facts:
@@ -46,8 +46,14 @@ Now let's adopt our hiera yaml:
           - common.yaml
         options:
           pkcs7_private_key: "%{::eyaml_private_base_path}/private_key.pkcs7_%{::eyaml_selector}.pem"
-          pkcs7_public_key: "eyaml/keys/public_key.pkcs7_%{::eyaml_selector}.pem"
+          pkcs7_public_key: "/etc/puppetlabs/code/environments/%{::environment}/eyaml/keys/public_key.pkcs7_%{::eyaml_selector}.pem"
 
 
+This will lead to a quite complex hierarchy, with the benefit of separating encryptions done with different keys.
+
+All *_secrets_production.yaml files contain secrets encrypted with the production key.
+All *_secrets_development.yaml files contain secrets encrypted with the development key.
+
+On the other hand it is easy to find missing encrypted production keys by coparig the hiera data keys in both yaml files.
 
 Martin Alfke
