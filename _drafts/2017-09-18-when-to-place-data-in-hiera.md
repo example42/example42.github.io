@@ -73,7 +73,7 @@ Next question is whether data can be calculated on a simple logic. In this case 
 
 No comes the point where I differ from Gary's posting:
 
-In all other cases make your profile a parameterized profile. Whether you want to specify a sane default value is up to you.
+In all other cases make your profile a parametrised profile. Whether you want to specify a sane default value is up to you.
 
 
     # site/profile/manifests/login/ssh.pp
