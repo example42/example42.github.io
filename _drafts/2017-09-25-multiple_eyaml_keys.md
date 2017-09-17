@@ -1,18 +1,18 @@
 ---
 layout: blog
-title: Tip of the Week 39 - Secure data anagement with multiple eyaml keys
+title: Tip of the Week 39 - Secure data management with multiple eyaml keys
 ---
 
-With improved security implementations it is often required that keys must be seaprate among different infrastructure stages.
+With improved security implementations it is often required that keys must be separate among different infrastructure stages.
 This means that we have to deal with multiple eyaml keys for production-stage and ci- and development-stage.
 
 Nobody may have the private production key. Everybody should have access to the production public key (which is used for encryption).
 All other keys can be made available to everybody.
 
-First let's set some top scope variable by analyzing facts:
+First let's set some top scope variable by analysing facts:
 
     # Set top scope variables
-    # eyaml key selection based on existance of an external fact:
+    # eyaml key selection based on existence of an external fact:
     #  'eyaml_private_base_path'
     # when fact is set, then we run on spec tests keys
     # otherwise we use production keys
@@ -54,6 +54,6 @@ This will lead to a quite complex hierarchy, with the benefit of separating encr
 All *_secrets_production.yaml files contain secrets encrypted with the production key.
 All *_secrets_development.yaml files contain secrets encrypted with the development key.
 
-On the other hand it is easy to find missing encrypted production keys by coparig the hiera data keys in both yaml files.
+On the other hand it is easy to find missing encrypted production keys by comparing the hiera data keys in both yaml files.
 
 Martin Alfke
