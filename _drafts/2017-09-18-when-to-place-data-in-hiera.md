@@ -104,6 +104,6 @@ Within hiera one can now use the profile namespace to place data:
       - 'admin'
       - 'backup'
 
-example42 wished everybody fun and success with Puppet and hiera.
+example42 wishes everybody fun and success with Puppet and hiera.
 
 Martin Alfke
