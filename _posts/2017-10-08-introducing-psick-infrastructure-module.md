@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 41 - Introducing PSICK - The Puppet infrastrucutre module
+title: Tip of the Week 41 - Introducing PSICK - The Infrastructure Puppet module
 ---
 
 We have talked in the past about [PSICK](https://github.com/example42/psick), example42's Puppet control-repo which provides an integrated, powerful and customisable Puppet setup.
