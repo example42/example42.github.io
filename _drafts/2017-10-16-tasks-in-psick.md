@@ -42,7 +42,50 @@ Bolt is able to use a local script, copy it to the mentioned nodes and run it th
 
 ## Writing and running tasks
 
+Tasks are something different. Tasks are part of modules and are placed into the ```tasks``` directory. When running tasks with bolt, one must specify the task and the module name space and the module path:
+
+    bolt task run <modulename>::<taskname> --nodes <node list> --modules <modulepath>
+
+Additionally tasks may use parameters to switch action or behavior or to provde any kind of data.
+
+e.g.
+
+    bolt task run mysql::update_app_sql database=app --nodes db.domain.com --modules ~/workspace/modules
+
+The mentiones task ```mysql::update_app_sql``` can be found within the mysql modules task directory in the update_app_sql file.
+
+    modules/
+      \- mysql/
+        \- tasks/
+          \- update_app_sql
+
+A task must have an according .json file which documents the tasks and uses Puppet 4 data types on parameters:
+
+    # modules/mysql/tasks/update_app_sql.json
+    {
+      "description": "Update application database schema",
+      "supports_noop": false,
+      "input_method": "environment",
+      "parameters": {
+        "databse": {
+          "description": "Which database to rune the update sql statement",
+          "type": "String"
+        }
+      }
+    }
+
+Within the task the parameter is used as environment variable with PT_ prefix:
+
+    # modules/mysql/tasks/update_app_sql
+    #!/usr/bin/env bash
+    $database=$PT_database
+    mysql $database < /opt/app/config/update_sql.sql
+
+Hint: the provided example does not check for a parameter for database. This should be done within the task.
+
 ## Writing und running plans
+
+## Bolt integration in PSICK
 
 Martin Alfke
 
