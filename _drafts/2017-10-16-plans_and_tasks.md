@@ -58,7 +58,7 @@ Additionally tasks may use parameters to switch action or behavior or to provde 
 
 e.g.
 
-    bolt task run application::update_app --nodes db.domain.com --modules ~/workspace/modules
+    bolt task run application::update_app apppath=/opt/app --nodes db.domain.com --modules ~/workspace/modules
 
 The mentiones task (```application::update_app```) can be found within the application modules task directory in the update_app file.
 
