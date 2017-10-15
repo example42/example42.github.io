@@ -11,7 +11,7 @@ Puppet itself uses the declarative state configuration model, describing the fin
 
 With bolt one can run any kind of:
 
-  - copying files to a system
+  - upload files to a system
   - run any remote command
   - run any script
   - run a Puppet task
@@ -24,21 +24,29 @@ Credentials for ssh can be placed in ```~/.ssh/config```. Credentials for Window
 
 Which systems bolt should connect to must be provided on cli with ```--nodes``` parameter. As of now, no node groups can be specified.
 
+## Upload files
+
+Uploading files to a number of systems is easy:
+
+    bolt file upload /local/file /remote/file --nodes www.domain.com,mail.domain.com
+
+For Windows system the nodes must be given using the winrm URI:
+
+    bolt file upload /local/file /remote/file --nodes winrm://win.domain.com,server.domain.com --user Administrator --password <password>
+
 ## Running remote commands
 
 Running remote commands is easy. Just tell bolt which remote command to execute:
 
     bolt command run 'yum -y update' --nodes www.domain.com,mail.domain.com
 
-For Windows system the nodes must be given using the winrm URI:
-
-    bolt command run 'puppet resource service puppet-agent ensure=running' --nodes winrm://win.domain.com,server.domain.com --user Administrator --password <password>
-
 ## Running scripts
 
 Bolt is able to use a local script, copy it to the mentioned nodes and run it there:
 
     bolt script run ~/update_system.sh --nodes www.domain.com,mail.domain.com
+
+Please note that there is a difference to file upload: the script will be removed after execution.
 
 ## Writing and running tasks
 
@@ -50,51 +58,65 @@ Additionally tasks may use parameters to switch action or behavior or to provde 
 
 e.g.
 
-    bolt task run mysql::update_app_sql database=app --nodes db.domain.com --modules ~/workspace/modules
+    bolt task run application::update_app --nodes db.domain.com --modules ~/workspace/modules
 
-The mentiones task ```mysql::update_app_sql``` can be found within the mysql modules task directory in the update_app_sql file.
+The mentiones task ```application::update_app``` can be found within the application modules task directory in the update_app file.
 
     modules/
-      \- mysql/
+      \- application/
         \- tasks/
-          \- update_app_sql
+          \- update_app
 
 A task must have an according .json file which documents the tasks and uses Puppet 4 data types on parameters:
 
-    # modules/mysql/tasks/update_app_sql.json
+    # modules/application/tasks/update_app.json
     {
-      "description": "Update application database schema",
+      "description": "Update application",
       "supports_noop": false,
       "input_method": "environment",
       "parameters": {
-        "databse": {
-          "description": "Which database to rune the update sql statement",
-          "type": "String"
+        "apppath": {
+          "description": "Path to application",
+          "type": "Optional[String[1]]"
         }
       }
     }
 
 Within the task the parameter is used as environment variable with PT_ prefix:
 
-    # modules/mysql/tasks/update_app_sql
+    # modules/application/tasks/update_app
     #!/usr/bin/env bash
-    $database=$PT_database
-    mysql $database < /opt/app/config/update_sql.sql
+    if [ -z "$PT_apppath" ]; then
+      apppath=$PT_apppath
+    else
+      apppath='/opt/app'
+    fi
+    pushd $apppath
+      git reset hard --master
+      git fetch --all
+      git pull origin master
+    popd
 
-Hint: the provided example does not check for a parameter for database. This should be done within the task.
+When setting a parameter is mandatory, one can just use the task variable:
+
+    #!/usr/bin/env bash
+    updurl=$PT_updurl # will fail if no data was given
+    pushd $apppath
+      /opt/app/update.sh $updurl
+    popd
+
 
 When having many parameters it will become a nightmare to provide all on command line. One can place parameters and their valies to a .json file;
 
     # params.json
     {
-      "database": "application",
-      "user": "appuser",
-      "password": "apppwd"
+      "updurl": "git@git.domain.com/application.git",
+      "apppath": "/opt/app"
     }
 
 Now you just must tell bolt that it should use the params.json file:
 
-    bolt task run mysql::update_app_sql --nodes db.domain.com --modules ~/workspace/modules --params @params.json
+    bolt task run application::update_app --nodes db.domain.com --modules ~/workspace/modules --params @params.json
 
 ## Writing und running plans
 
@@ -109,6 +131,48 @@ Update of an application requires you to do the following steps:
   - check functionality
   - re-enable node on loadbalancer
 
+Plans are - similar to tasks - part of a module and located in the ```plans``` directory.
+
+    modules/
+      \- application/
+        \- plans/
+          \- update.pp
+
+we use the above mentioned example and generate a puppet plan:
+
+    # modules/application/plans/update.pp
+    plan application::update (
+      String $lbserver  = 'lb.domain.com',
+      String $maxtime   = '60',
+      String $updurl    = 'ssh://git@git.domain.com/application.git',
+      String $apppath   = '/opt/app',
+      String $chkscript = '/opt/app/bin/check',
+    ){
+      # 'execute' tasks
+      run_task('application::disable_node', $lbserver)
+      run_task('application::wait_last_conn', $maxtime)
+      run_task('application::update_app', $updurl, $apppath)
+      run_task('application::restart_app', $maxtime)
+      run_task('application::check_app', $chkscript)
+      run_task('application::enable_node', $lbserver)
+    }
+
+Usually we want error handling in plans. Please check [writing plans](https://puppet.com/docs/bolt/0.5/writing_plans.html#handling-plan-function-results) for details.
+
+Now the bolt plan command can be used:
+
+    bolt plan run application::update --modules <modulepath> 
+
+Check the [task docs](https://puppet.com/docs/bolt/0.5/writing_tasks.html) and [plan docs](https://puppet.com/docs/bolt/0.5/writing_plans.html) on additional topics like
+
+  - enable no-op mode on tasks
+  - use different plan execution functions:
+    - commands, scripts or other plans, uploading files
+  - input and output of tasks
+  - using tasks input and output from and to plans
+  - converting scripts to tasks
+
+Happy hacking on bolt and its workflows.
 
 Martin Alfke
 
