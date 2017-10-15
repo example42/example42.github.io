@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 42 - Puppet Tasks in PSICK
+title: Tip of the Week 42 - Puppet plans and tasks
 ---
 
 At [PuppetConf2017](https://puppet.com/community/events/puppetconf/puppetconf-2017) the [bolt](https://puppet.com/products/puppet-bolt) task runner was released and made public.
@@ -83,9 +83,32 @@ Within the task the parameter is used as environment variable with PT_ prefix:
 
 Hint: the provided example does not check for a parameter for database. This should be done within the task.
 
+When having many parameters it will become a nightmare to provide all on command line. One can place parameters and their valies to a .json file;
+
+    # params.json
+    {
+      "database": "application",
+      "user": "appuser",
+      "password": "apppwd"
+    }
+
+Now you just must tell bolt that it should use the params.json file:
+
+    bolt task run mysql::update_app_sql --nodes db.domain.com --modules ~/workspace/modules --params @params.json
+
 ## Writing und running plans
 
-## Bolt integration in PSICK
+Plans combine multiple plans. Think about the following problem:
+
+Update of an application requires you to do the following steps:
+
+  - disable node on loadbalancer
+  - wait for last request to be served
+  - update application
+  - restart web server
+  - check functionality
+  - re-enable node on loadbalancer
+
 
 Martin Alfke
 
