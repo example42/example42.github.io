@@ -20,9 +20,9 @@ With bolt one can run any kind of:
 Connection to remote systems is done either via ssh or WinRM. Other connectors can be added to bolt upstream development. At the moment there is no API available to add additional connectors to bolt via some kind of bolt plugin.
 The ssh access must be configured in advance prior being able to make use of bolt. Access can be configured as unprivileged user using sudo commands. Bolt just needs to know which credentials to use.
 
-Credentials for ssh can be placed in ```~/.ssh/config```. Credentials for Windows systems are provided on command line using the ```--user``` and the ```--password``` parameter.
+Credentials for ssh can be placed in (```~/.ssh/config```). Credentials for Windows systems are provided on command line using the (```--user```) and the (```--password```) parameter.
 
-Which systems bolt should connect to must be provided on cli with ```--nodes``` parameter. As of now, no node groups can be specified.
+Which systems bolt should connect to must be provided on cli with (```--nodes```) parameter. As of now, no node groups can be specified.
 
 ## Upload files
 
@@ -50,7 +50,7 @@ Please note that there is a difference to file upload: the script will be remove
 
 ## Writing and running tasks
 
-Tasks are something different. Tasks are part of modules and are placed into the ```tasks``` directory. When running tasks with bolt, one must specify the task and the module name space and the module path:
+Tasks are something different. Tasks are part of modules and are placed into the (```tasks```) directory. When running tasks with bolt, one must specify the task and the module name space and the module path:
 
     bolt task run <modulename>::<taskname> --nodes <node list> --modules <modulepath>
 
@@ -60,7 +60,7 @@ e.g.
 
     bolt task run application::update_app --nodes db.domain.com --modules ~/workspace/modules
 
-The mentiones task ```application::update_app``` can be found within the application modules task directory in the update_app file.
+The mentiones task (```application::update_app```) can be found within the application modules task directory in the update_app file.
 
     modules/
       \- application/
@@ -131,7 +131,7 @@ Update of an application requires you to do the following steps:
   - check functionality
   - re-enable node on loadbalancer
 
-Plans are - similar to tasks - part of a module and located in the ```plans``` directory.
+Plans are - similar to tasks - part of a module and located in the (```plans```) directory.
 
     modules/
       \- application/
@@ -172,7 +172,7 @@ Check the [task docs](https://puppet.com/docs/bolt/0.5/writing_tasks.html) and [
   - using tasks input and output from and to plans
   - converting scripts to tasks
 
-Happy hacking on bolt and its workflows.
+Happy hacking on bolt.
 
 Martin Alfke
 
