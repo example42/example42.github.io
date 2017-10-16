@@ -20,9 +20,9 @@ With bolt one can run any kind of:
 Connection to remote systems is done either via ssh or WinRM. Other connectors can be added to bolt upstream development. At the moment there is no API available to add additional connectors to bolt via some kind of bolt plugin.
 The ssh access must be configured in advance prior being able to make use of bolt. Access can be configured as unprivileged user using sudo commands. Bolt just needs to know which credentials to use.
 
-Credentials for ssh can be placed in (```~/.ssh/config```). Credentials for Windows systems are provided on command line using the (```--user```) and the (```--password```) parameter.
+Credentials for ssh can be placed in your ssh config file (```~/.ssh/config```). Credentials for Windows systems are provided on command line using the user (```--user```) and the password (```--password```) parameter.
 
-Which systems bolt should connect to must be provided on cli with (```--nodes```) parameter. As of now, no node groups can be specified.
+Which systems bolt should connect to must be provided on cli with nodes (```--nodes```) parameter. As of now, no node groups can be specified.
 
 ## Upload files
 
@@ -175,4 +175,3 @@ Check the [task docs](https://puppet.com/docs/bolt/0.5/writing_tasks.html) and [
 Happy hacking on bolt.
 
 Martin Alfke
-
