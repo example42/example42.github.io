@@ -60,14 +60,14 @@ e.g.
 
     bolt task run application::update_app apppath=/opt/app --nodes db.domain.com --modules ~/workspace/modules
 
-The mentiones task (```application::update_app```) can be found within the application modules task directory in the update_app file.
+The mentioned task (```application::update_app```) can be found within the application modules task directory in the update_app file.
 
     modules/
       \- application/
         \- tasks/
           \- update_app
 
-A task must have an according .json file which documents the tasks and uses Puppet 4 data types on parameters:
+A task must have an according .json file which documents the task and uses Puppet 4 data types on parameters:
 
     # modules/application/tasks/update_app.json
     {
@@ -120,7 +120,7 @@ Now you just must tell bolt that it should use the params.json file:
 
 ## Writing und running plans
 
-Plans combine multiple plans. Think about the following problem:
+Plans combine multiple tasks. Think about the following problem:
 
 Update of an application requires you to do the following steps:
 
