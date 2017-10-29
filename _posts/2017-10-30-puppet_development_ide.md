@@ -16,21 +16,37 @@ But how to develop code on larger projects with multiple repositories? When aski
 
 In the above mentioned case, we use vim as IDE.
 
-But whet if you don't know vim? What other solutions are available? Let's check for existing IDE's:
+But whet if you don't know vim? What other solutions are available? Let's check for some existing IDE's
+
+### IDE's
+
+Disclaimer: I am totally aware that this list is incomplete. It is a list of tools I had a look at.
+
+#### Eclipse
 
 The most common used IDE is [Eclipse](https://en.wikipedia.org/wiki/Eclipse_(software)). It is well known especially for Java development and has a huge set of extensions to be also useful on any other programming language.
 
+#### Geppetto
+
 Based on Eclipse the [Geppetto](https://github.com/puppetlabs/geppetto/wiki) IDE was put together. But Geppetto lacks all the new, modern Puppet features like lambdas, data types and tasks.
+
+#### RubyMine
 
 [JetBrains](https://www.jetbrains.com/) has multiple IDE's - partly Open Source, partly paid software - for different development purposes. The most known one is [IntelliJ IDEA](https://www.jetbrains.com/idea/). For Ruby based development [RubyMine](https://www.jetbrains.com/ruby/) is available. For Open Source development JetBrains grants [free licenses](https://www.jetbrains.com/community/support/#section=open-source) for Open Source projects.
 
+#### XCode
+
 When running OS X or MacOS it is also possible to use [XCode](https://en.wikipedia.org/wiki/Xcode). But XCode lacks full featured Puppet support.
 
-My personal favorite at the moment - next to vim - is [Visual Studio Code](https://en.wikipedia.org/wiki/Visual_Studio_Code) available for Linux, OS X, MacOS, Windows. VSCode has plenty of plugins for different development pruposes and multiple Version Control Systems. The mos tnice thing is that Puppet has officially released the [Puppet plugin for VSCode](https://puppet.com/blog/announcing-puppet-visual-studio-code).
+#### Visual Studio Code
+
+My personal favorite at the moment - next to vim - is [Visual Studio Code](https://en.wikipedia.org/wiki/Visual_Studio_Code) available for Linux, OS X, MacOS, Windows. VSCode has plenty of plugins for different development pruposes and multiple Version Control Systems. The most nice thing is that Puppet has officially released the [Puppet plugin for VSCode](https://puppet.com/blog/announcing-puppet-visual-studio-code).
+
+#### Atom
 
 Another IDE to use is [Atom](https://atom.io/) - an IDE developed by the people at [GitHub](https://github.com). Atom also has plenty of plugins which allow you to easily write code in many programming languages.
 
-Which one to use?
+### Which one to use?
 
 This basically depends on the Operating System which you have running. Most of the above mentioned IDE's work on Linux, macOS and Windows.
 When people at customers ask us for a recommendation, we usually ask them whether their developers already have a license for a specific IDE or whether they have a preferred one. In this case we ask the Puppet developers to also make use of the same tool as there is already knowledge available.
