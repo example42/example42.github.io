@@ -42,20 +42,23 @@ When running OS X or MacOS it is also possible to use [XCode](https://en.wikiped
 
 #### Visual Studio Code
 
-My personal favorite at the moment - next to vim - is [Visual Studio Code](https://en.wikipedia.org/wiki/Visual_Studio_Code) available for Linux, OS X, MacOS, Windows. VSCode has plenty of plugins for different development pruposes and multiple Version Control Systems. The most nice thing is that Puppet has officially released the [Puppet plugin for VSCode](https://puppet.com/blog/announcing-puppet-visual-studio-code).
+My personal favorite at the moment - next to vim - is [Visual Studio Code](https://en.wikipedia.org/wiki/Visual_Studio_Code) available for Linux, OS X, MacOS, Windows. VSCode has plenty of plugins for different development purposes and multiple Version Control Systems. The most nice thing is that Puppet has officially released the [Puppet plugin for VSCode](https://puppet.com/blog/announcing-puppet-visual-studio-code).
 
 #### Atom
 
-Another IDE to use is [Atom](https://atom.io/) - an IDE developed by the people at [GitHub](https://github.com). Atom also has plenty of plugins which allow you to easily write code in many programming languages.
+Another IDE to use is [Atom](https://atom.io/) - an IDE developed by the people at [GitHub](https://github.com). Atom also has plenty of plugins which allow you to easily write code in many programming languages. Atom has a very active community which also provide puppet support.
 
 ### Which one to use?
 
 This basically depends on the Operating System which you have running. Most of the above mentioned IDE's work on Linux, macOS and Windows.
-When people at customers ask us for a recommendation, we usually ask them whether their developers already have a license for a specific IDE or whether they have a preferred one. In this case we ask the Puppet developers to also make use of the same tool as there is already knowledge available.
+
+When people at customers ask us for a recommendation, we usually ask them whether their developers already have a license for a specific IDE or whether they have a preferred one. 
+
+In this case we ask the Puppet developers to also make use of the same tool as there is already knowledge available.
 
 When there is no common usage, one should check the [Wikipedia IDE](https://en.wikipedia.org/wiki/Integrated_development_environment#References) list or the [Comparison of integrated development environments](https://en.wikipedia.org/wiki/Comparison_of_integrated_development_environments).
 
-Always check for usage conditions and licenses, get the download link and try which one you are most comfortable with.
+Always verify for usage conditions and licenses, get the download link and try which one you are most comfortable with.
 
 Happy hacking on Puppet and [PSICK](https://github.com/example42/psick).
 
