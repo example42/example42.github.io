@@ -24,11 +24,13 @@ Disclaimer: I am totally aware that this list is incomplete. It is a list of too
 
 #### Eclipse
 
-The most common used IDE is [Eclipse](https://en.wikipedia.org/wiki/Eclipse_(software)). It is well known especially for Java development and has a huge set of extensions to be also useful on any other programming language.
+The most common used IDE is [Eclipse](https://en.wikipedia.org/wiki/Eclipse_(software)). It is developed in Java and has a huge set of extensions to be also useful on any other programming language.
+Puppet support is possible by installing many different extensions. Mostly you will find "Geppetto".
 
 #### Geppetto
 
-Based on Eclipse the [Geppetto](https://github.com/puppetlabs/geppetto/wiki) IDE was put together. But Geppetto lacks all the new, modern Puppet features like lambdas, data types and tasks.
+Based on Eclipse the [Geppetto](https://github.com/puppetlabs/geppetto/wiki) IDE was put together. One can either install Eclipse and add the Geppetto extensions or one can directly download a bundled version.
+But Geppetto lacks all the new, modern Puppet features like lambdas, data types and tasks.
 
 #### RubyMine
 
