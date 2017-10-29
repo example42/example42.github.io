@@ -34,6 +34,15 @@
 33 - 2017-08-14-testing-a-control-repo-with-vagrant.md
 34 - 2017-08-21-encrypt-your-secrets-with-hiera-eyaml.md
 35 - 2017-08-28-git-workflow-on-control-repo.md
+36 - 2017-09-04-testing-any-role-on-any-os-with-a-psick-control-repo.md
+37 - 2017-09-11-automate-reusable-eyaml-setup.md
+38 - 2017-09-18-when-to-place-data-in-hiera.md
+39 - 2017-09-25-multiple_eyaml_keys.md
+40 - 2017-10-02-tenant-modules.md
+41 - 2017-10-08-introducing-psick-infrastructure-module.md
+42 - 2017-10-16-plans_and_tasks.md
+43 - 2017-10-23-bolt_and_tasks_with_psick.md
+44 - 2017-10-30-puppet_development_ide.md
 
 # open - suggestions
 
