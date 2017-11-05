@@ -17,7 +17,7 @@ Location is yet to be defined, Stay tuned for updates.
 
 At the other days we are travelling around Germany, visiting customers.
 
-Please git us a note, if you like to get an on-site demo and learn about automating infrastructure.
+Please [give us a note](mailto:info@example42.com?subject=Puppet Roadshow), if you like to get an on-site demo and learn about automating infrastructure.
 
 # February 5th to 7th - [CfgMgmtCamp](http://cfgmgmtcamp.eu/), Ghent, Belgium
 We are happy to again attend and sponsor THE European automation event.
