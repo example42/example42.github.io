@@ -1,23 +1,23 @@
 ---
 layout: blog
-title: Tip of the Week 47 - DevOps - why and how?
+title: Tip of the Week 47 - HowTo DevOps
 ---
 
 # How DevOps started
 
-In the past times system administrators mostly managed their infrastructure in a manual pattern: provisioning systems using USB sticks (if you were already lucky to have larger infrastructures you might have used a provisioning system like [FAI](https://fai-project.org/) or [Cobbler]((http://cobbler.github.io/)). Afterwards people logged into the system using SSH and configured them according to some documentation or tickets.
+In the past times system administrators mostly managed their infrastructure in a manual pattern: provisioning systems using USB sticks (if you were already lucky to have larger infrastructures you might have used a provisioning system like [FAI](https://fai-project.org/) or [Cobbler]((http://cobbler.github.io/)). Afterwards people logged into the system using SSH and configured them according to some documentation or tickets or they had some shell or perl scripts which did the initial configuration.
 
-When developers changed from waterfall to agile methods, we as system administrators were facing new issues: we needed to build systems faster as developers were pushing out code faster.
+When developers changed from waterfall to agile methods, system administrators were facing new issues: they needed to build systems faster as developers were pushing out code faster.
 
-That was the point where DevOps started. We learned that communication and collaboration with developers gave us insight on upcoming developmnent. As a nice side effect we were able to prevent having the need for hard to maintain systems already during development phase. We learned about developer methods and adopted them to our needs (e.g. using a version control system). On the other hand developers got an understanding of system engineers needs and frustrations.
+That was the point where DevOps started. Ops people learned that communication and collaboration with developers gave them insight in upcoming developmnent. As a nice side effect they were able to prevent having the need for hard to maintain systems already during development phase. They learned about developer methods like version control system and adopted them to their needs. On the other hand developers got an understanding of system engineers needs and frustrations.
 
-This collaboration of developer sand system engineering is since then called `DevOps`.
+This collaboration of development and system engineering is since then called `DevOps`.
 
 But what does DevOps do? How does it work? What else did it change?
 
 # What is DevOps?
 
-Some companies still try to seel their 'DevOps products'. You can find evidence especially at enterprise level as one can see at the landing pages from [IBM](https://www.ibm.com/ibm/devops/us/en/products/) or [CA](https://www.ca.com/us/why-ca/devops.html). Others have understood that there are [no DevOps products](https://techbeacon.com/no-there-no-such-thing-devops-product) like the [Atlassian description of DevOps](https://www.atlassian.com/devops).
+Some companies still try to sell their 'DevOps products'. You can find evidence especially at enterprise level as one can see at the landing pages from [IBM](https://www.ibm.com/ibm/devops/us/en/products/) or [CA](https://www.ca.com/us/why-ca/devops.html). Others have understood that there are [no DevOps products](https://techbeacon.com/no-there-no-such-thing-devops-product) like the [Atlassian description of DevOps](https://www.atlassian.com/devops).
 
 There already is a description on what DevOps is since 2010 when [Daemon Edwards](http://devopsdictionary.com/wiki/Damon_Edwards) and [John Willis](http://devopsdictionary.com/index.php?title=John_Willis&action=edit&redlink=1) gave a talk at DevOpsDays Mountain View. They describe DevOps using the [CAMS](http://devopsdictionary.com/wiki/CAMS)  acronym. These are:
 
@@ -29,8 +29,10 @@ There already is a description on what DevOps is since 2010 when [Daemon Edwards
 Another summary of terms would be:
 - People
 - Processes
-- Platforms and
+- Platforms
 - Participation
+
+# HowTo DevOps?
 
 Automation and Measurement are the parts which you can easily make available to you and your teams by searching for products.
 For [Configuration Management](https://en.wikipedia.org/wiki/Configuration_management) we can choose between tools like [Puppet](https://puppet.com/), [Chef](https://www.chef.io/chef/) or [Ansible](https://www.ansible.com/). All mentioned tools are aimed at teams managing IT infrastructures like servers, routers, storages and mostly use a declarative system description.
@@ -43,12 +45,11 @@ But how to implement 'Culture' and 'Sharing'? This is not something which you ca
 The most important task is to tear down any barrier which exists between developers and operations. Usually we see that these two departments are part of different C-Level stakeholders, especially at large companies: Development usually is located within Product, whereas Operation is handled within Technology. You will always fight battles between the CPO (Chief Product Officer) and the CTO (Chief Technology Officer). Both have different goals: the CPO wants new features and products to be available for customers as soon as possible, whereas the CTO sees a desire for stable platforms.
 In this case the whole DevOps approach must be fully supported by the whole C-Level team.
 
-The next barriers which build up are mid-level managers. Usually these are former technology people (either from development or operations) which have been given a team or even department lead. As team lead they are responsible to C-Level management for performance and results. Now these people have to adopt to a new role as team coach or leader. Their new main responsibility will be to remove any kind of issue their team has, they have to coach their staff to learn new technologies. This will take some time, as they first have to gain knowledge on how to fullfil the new role.
+The next barrier which shows up are mid-level managers. Usually these are former technology people (either from development or operations) which have been given a team or even department lead. As team lead they are responsible to C-Level management for performance and results. Now these people have to adopt to a new role as team coach or leader. Their new main responsibility will be to remove any kind of issue their team has, they have to coach their staff to learn new technologies. This will take some time, as they first have to gain knowledge on how to fullfil the new role.
 
-The above mentioned case is quite simple to solve for C-Level management: just get the right people and support them directly while your mod management is on training courses. Make the technicians a team which is directly under your control. If you haven't talked directly to your employees for a while you might want to change that now.
+During this pahes, C-Level management gets an extra task. They have to prove to their technical team members that they fully support the company and culture change. THis can be achieved by finding or getting the right people and support them directly while your mid management is on training courses. Make the technicians a team which is directly under your control. If you haven't talked directly to your employees for a while you might want to change that now.
 
-Ensure that you have smart people. Not the ones which are the loudest. Listen to the silent ones. Everybody in your team is your favorite player. Onlyworking as a team will bring you success in implementing DevOps.
-
+Ensure that you have smart people. Not the ones which are the loudest. Listen to the silent ones. Everybody in your team is your favorite player. Only working together as a team will bring you success in implementing DevOps.
 
 # We don't need DevOps?
 
@@ -65,7 +66,6 @@ Even when using any kind of cloud you will have the need to manage (operate) you
 
 Both still require to have people with good knowledge on network, storage and application management around. The only difference is that we just don't have hardware in our own datacenter. The need for operations and therefor for collaboration between developers and system administrators is still there. So is the DevOps idea.
 
-
 # The future of DevOps
 
 As we are mostly within different customers, we see different stages of DevOps implementation. Some companies are already deep into DevOps whereas others are starting or evaluating DevOps principles.
@@ -77,7 +77,6 @@ Within the past months several other implementations of DevOps already came up:
 - BizOps - Shared responsibility between product management or other business units and other teams
 
 Even though that these re-use the DevOps naming conventions these enablements are not just a 1-1 correlation. The best term describing what we see as the future of DevOps might be something like: **SecNetDevBizOps**
-
 
 Martin Alfke
 
