@@ -5,7 +5,7 @@ title: Tip of the Week 47 - HowTo DevOps
 
 ### How DevOps started
 
-In the past times system administrators mostly managed their infrastructure in a manual pattern: provisioning systems using CDROMs or USB sticks or - if you were already lucky to have larger infrastructure - you might have used a provisioning system like [FAI](https://fai-project.org/) or [Cobbler]((http://cobbler.github.io/). Afterwards people logged into the system using SSH and configured them according to some documentation or tickets or they had some shell or perl scripts which did the initial configuration.
+In the past times system administrators mostly managed their infrastructure in a manual pattern: provisioning systems using CDROMs or USB sticks or - if you were already lucky to have larger infrastructure - you might have used a provisioning system like [FAI](https://fai-project.org/) or [Cobbler](http://cobbler.github.io/). Afterwards people logged into the system using SSH and configured them according to some documentation or tickets or they had some shell or perl scripts which did the initial configuration.
 
 When developers changed from waterfall to agile methods, system administrators were facing new issues: they needed to build systems faster as developers were pushing out code faster.
 
