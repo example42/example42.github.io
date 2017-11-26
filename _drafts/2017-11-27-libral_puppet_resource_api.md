@@ -15,6 +15,12 @@ This posting will dig into libral and the new proposed Puppet resource API.
 
 # LibRAL
 
+LibRAL is described as "a systems management library that makes it possible to query and modify system resources [...] through a desired-state API".
+The aim is to not only query and modify built in resources like files, packages and services, but to also add a new API for managing new kind of resources. It follows Puppet concept of idempotency, only changing a resource when desired state does not match actual state and keep the resource untouched if it is in sync.
+Besides this, LibRAL was developed for low performance systems like devices or containers.
+
+
+
 # Puppet Resource API
 
 Martin Alfke
