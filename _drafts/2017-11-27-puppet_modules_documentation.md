@@ -3,11 +3,11 @@ layout: blog
 title: Tip of the Week 48 - Puppet modules documentation
 ---
 
-Modules' documentation is useful to understand what a module does and how it does it. We can access to it usually by reading the README, directly on the Forge or GitHub page, and eventually looking directly at the inline documentation in manifests.
+Modules' documentation is useful to understand what a module does and how it does it and how to make use of it. Usually we can access these information by reading the README, directly on the Forge or GitHub page, and eventually looking directly at the inline documentation in manifests.
 
 ### Puppet Strings
 
-As you are probably aware there a tool, [**Puppet strings**](https://github.com/puppetlabs/puppet-strings) which is able to automatically generate documentation for a module.
+As you are probably aware there is a tool, [**Puppet strings**](https://github.com/puppetlabs/puppet-strings) which is able to automatically generate documentation for a module based on in code documentation.
 
 It's based on the [Yard](http://yardoc.org/) tool and can generate docs in various formats.
 
@@ -20,23 +20,23 @@ To generate the documentation for a module, move inside the module main director
 
     /opt/puppetlabs/puppet/bin/puppet strings generate **/*{.pp\,.rb} **/**/*{.pp\,.rb}
 
-This will parse all the .rb and .pp files in the module and generate html documentation under the ```doc``` directory of the module.
+This will parse all the .rb and .pp files in the module and generate html documentation under the `doc` directory of the module.
 
 ### Puppet documentation server
 
-Instead of running the ```puppet strings``` command on every change, it is also possible to have the strings server checking for changes and rendering documentation upon file changes.
+Instead of running the `puppet strings` command on every change in every module, it is also possible to have the strings server checking for changes and rendering documentation upon file changes.
 
-Just change to your control repository and run the strings server:
+Just change to your control repository, install all modules from Puppetfile by running `r10k puppetfile install` and run the strings server:
 
     /opt/puppetlabs/puppet/bin/puppet strings server --modulepath=./modules:./site
 
-This will spin up a webservice which is accessible on port 8808: ```http://localhost:8808```
+This will spin up a webservice which is accessible on port 8808: `http://localhost:8808`
 
 We recommend to **not** have this web server running on the puppet master. Spin up a new server which will get code updates via git hooks or CI pipelines.
 
 ### puppetmodule.info
 
-Yard can act as a server and show directly the html pages generated. There's a web site which relies on this and show Puppet strings based documentation for most of the Puppet public modules on the Forge and GitLab.
+As we know now, Yard can act as a server and show directly the html pages generated. There's a web site which relies on this and show Puppet strings based documentation for most of the Puppet public modules on the Forge and GitLab.
 
 Give a visit to [www.puppetmodule.info](http://www.puppetmodule.info), site created by Dominic Cleal from The Foreman team.
 
@@ -60,7 +60,7 @@ Every class and define must start with the documentation prior class or define d
     #
     # This is an example of using documentation in a class or define
     #
-    # @summary this is the redered summary of the class or define
+    # @summary this is rendered as summary of the class or define
     #
     # @example Show how people can make use of the class
     #   include demo_setup
