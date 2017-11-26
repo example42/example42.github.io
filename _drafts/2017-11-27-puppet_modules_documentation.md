@@ -97,3 +97,4 @@ Strings can also render documentation from types and providers:
 
 
 Alessandro Franceschi
+Martin Alfke
