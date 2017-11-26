@@ -43,11 +43,8 @@
 42 - 2017-10-16-plans_and_tasks.md
 43 - 2017-10-23-bolt_and_tasks_with_psick.md
 44 - 2017-10-30-puppet_development_ide.md
-
-# open - suggestions
-
- - KISS Puppet
- - getting started with PSICK - a documentation on content and ways how to use PSICK
- - using PSICK with vagrant
- - using PSICK on infrastructure
+45 - 2017-11-06-example42_events.md
+46 - 2017-11-13-checking-config-files-before-applying-them.md
+47 - 2017-11-20-how_devops_changes_infrastructure.md
+48 - 2017-11-27-puppet_modules_documentation.md
 
