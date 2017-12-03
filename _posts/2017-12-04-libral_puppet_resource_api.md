@@ -3,7 +3,7 @@ layout: blog
 title: Tip of the Week 49 - LibRAL and a proposal for the new Puppet Resource API
 ---
 
-Puppet has always run on fast development cycles. Even though only a very few releases required people to refacter their existing Puppet code (e.g. the migration from Puppet 3 to Puppet 4).
+Puppet has always run on fast development cycles. Even though only a very few releases required people to refactor their existing Puppet code (e.g. the migration from Puppet 3 to Puppet 4).
 
 Puppet still has lots of upcoming changes and still follows the Open Source idea. All discussion on upcoming development or new features take place in the [Puppet Specification](https://github.com/puppetlabs/puppet-specifications) repository.
 
@@ -22,7 +22,7 @@ Besides this, LibRAL was developed for low performance systems like devices or c
 
 # Puppet Resource API
 
-The resource API is at a very early state. There is not even a finalized document describing the new API. At the moment this is more a discussion base and Puppet developers are eager to get feedback on the new Resource API.
+The resource API is at a very early state. There is not even a finalised document describing the new API. At the moment this is more a discussion base and Puppet developers are eager to get feedback on the new Resource API.
 
 An interesting way for new resource API can be found within the PR at the [simple_apt.rb](https://github.com/puppetlabs/puppet-specifications/pull/93/files#diff-7dfcf5a8b2b0d5cecfe0a804c5d92eb0) example.
 Here David uses a SimpleResource concept which is a generic concept for any new resource type (see line 98 and following in [Module::SimpleResource](https://github.com/puppetlabs/puppet-specifications/pull/93/files#diff-af7afe9cfb6cd905213628f357c0629bR102-R90).
@@ -31,4 +31,3 @@ We are looking forward to seeing more examples and ways on how to make use of a 
 Feel free to comment within the PR or contact the developers via Slack or IRC.
 
 Martin Alfke
-
