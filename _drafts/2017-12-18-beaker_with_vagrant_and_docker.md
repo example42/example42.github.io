@@ -7,13 +7,13 @@ Beaker has become the de-facto standard utility for Puppet code acceptance testi
 
 Like the figure from [The Muppet Show](https://en.wikipedia.org/wiki/Beaker_(Muppet)) the Puppet tooling "...is a magnet for disaster".
 In this specifc case we want to find out whether a catalog can be applied to a system successfully.
-In additiona to that the Muppet figure has even more qualification for breaking things: "he routinely experiences mishaps such as being blown up, electrocuted, eaten by large monsters, or afflicted with awkward side effects caused by Dr. Bunsen Honeydew's experiments. Beaker communicates in a nervous, high-pitched squeak that sounds like "Mee-mee-mee mee"" (quotes taken from Wikipedia Beaker Muppet - see link above).
+In additiona to that the Muppet figure has even more qualification for breaking things: "he routinely experiences mishaps such as being blown up, electrocuted, eaten by large monsters, or afflicted with awkward side effects caused by Dr. Bunsen Honeydew's experiments. Beaker communicates in a nervous, high-pitched squeak that sounds like "Mee-mee-mee mee"" (quote taken from Wikipedia Beaker Muppet - see link above).
 
-I also like the name for the tool, as we sometimes re-use the "Mee-mee-mee" to a person telling you that something is not perfect.
+I also like the name for the tool, as we sometimes re-use the "Mee-mee-mee" to a person telling you that something is not working.
 
 ### Beaker installation
 
-Puppet beaker allows for unattanded CI based testing and acts as a frontend for Vagrant, AWS, Google Compute, VMware/Vsphere, Docker and others. Please see the [documentation on hypervisors](https://github.com/puppetlabs/beaker/tree/master/docs/how_to/hypervisors) for additional information.
+Puppet beaker allows for unattanded CI based testing and acts as a frontend for Vagrant, AWS, Google Compute, VMware/Vsphere, Docker and others. Please see the [beaker documentation on hypervisors](https://github.com/puppetlabs/beaker/tree/master/docs/how_to/hypervisors) for additional information.
 
 Within this posting I want to explain how we at example42 use beaker for acceptance testing in control-repositories like [PSICK](https://github.com/example42/psick).
 
@@ -27,7 +27,7 @@ Installing beaker is usually done by adding a few lines to your Gemfile:
       gem 'beaker-puppet_install_helper'
     end
 
-All standard beaker hypervisor extensions are added as dependency to the beaker gem. Please note that beaker uses the [fog libraries](https://github.com/fog/fog) for cloud access which causes a long list of dependencies.
+All standard beaker hypervisor extensions are a dependency to the beaker gem. Please note that beaker uses the [fog libraries](https://github.com/fog/fog) for cloud access which causes a long list of dependencies.
 
 ### Beaker nodesets
 
@@ -36,7 +36,7 @@ These are placed into the `spec/acceptance/nodesets/` folder.
 
 Here we usually see the first difference between acceptance tests on control-repositories versus acceptance testing on modules:
 
-Within modules one wants to test, whether the module is working as expected on all supported operating systems. For a control-repository one wants to test individual system roles on very specific operating systems.
+Within modules one wants to test, whether the single code base is working as expected on all supported operating systems. For a control-repository one wants to test multiple different system roles on a few operating systems.
 
 Let's continue testing control-repositories on CentOS 7. The nodeset configuration consists of the following two files:
 
@@ -62,7 +62,7 @@ First we generate the nodeset for testing on docker:
 
 Now we add the nodeset for testing on vagrant:
 
-    # spec/acceptance/noidesets/vagrant.yml
+    # spec/acceptance/nodesets/vagrant.yml
     HOSTS:
       centos-7-x64:
         roles:
@@ -72,7 +72,7 @@ Now we add the nodeset for testing on vagrant:
         hypervisor: vagrant
         mount_folders:
           controlrepo:
-            host_path: .
+            host_path: ../../../
             container_path: /tmp/production
             opts: ro
     CONFIG:
@@ -102,7 +102,7 @@ The images we are using do not have puppet agent package installed. Installation
         # re-create production environment directory
         on(host, '/usr/bin/test ! -d /etc/puppetlabs/code/environments/production && mkdir -p /etc/puppetlabs/code/environments/production || echo true')
         # copy control-repo
-        on(host, 'cp -r /tmp/production/{.git,environment.conf,hiera.yaml,hieradata,manifests,lib,modules}  /etc/puppetlabs/code/environments/production/')
+        on(host, 'cp -r /tmp/production/{.git,environment.conf,hiera.yaml,hieradata,manifests,site,modules}  /etc/puppetlabs/code/environments/production/')
       end
     end
 
@@ -161,14 +161,14 @@ Now we can run the acceptance tests:
     bundle exec rake beaker_roles:puppetmaster
 
 This command only uses the `default.yml` nodeset.
-If we want to use the `vagrant.yml`odeset we must tell beaker to do so by providing an environment variable:
+If we want to use the `vagrant.yml` nodeset we must tell beaker to do so by providing an environment variable:
 
     BEAKER_set=vagrant bundle exec rake beaker_roles:puppetmaster
 
 In addition to `BEAKER_set` there are some other useful environment variables:
 Usually beaker deletes the container/virtual machine after running tests (even after failed tests). To keep the instance alive just add `BEAKER_destroy=no` environment variable.
 
-If one needs more information on what os happening during beaker running, it is possible to enable debug mode by specifiying `BEAKER_debug=true`
+If one needs more information on what is happening during beaker running, it is possible to enable debug mode by specifiying `BEAKER_debug=true`
 
 Happy testing on your control-repository.
 
