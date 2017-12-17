@@ -1,19 +1,19 @@
 ---
 layout: blog
-title: Tip of the Week 51 - Acceptance testing on a control-repository using beaker in combination with vagrant and docker
+title: Tip of the Week 51 - Acceptance testing on a control-repository using beaker with vagrant and docker
 ---
 
 Beaker has become the de-facto standard utility for Puppet code acceptance testing.
 
 Like the figure from [The Muppet Show](https://en.wikipedia.org/wiki/Beaker_(Muppet)) the Puppet tooling "...is a magnet for disaster".
-In this specifc case we want to find out whether a catalog can be applied to a system successfully.
+In this specific case we want to find out whether a catalog can be applied to a system successfully.
 In addition to that the Muppet figure has even more qualification for breaking things: "he routinely experiences mishaps such as being blown up, electrocuted, eaten by large monsters, or afflicted with awkward side effects caused by Dr. Bunsen Honeydew's experiments. Beaker communicates in a nervous, high-pitched squeak that sounds like "Mee-mee-mee mee"" (quote taken from Wikipedia Beaker Muppet - see link above).
 
 I also like the name for the tool, as we sometimes re-use the "Mee-mee-mee" spelling to a person telling you that something is not working.
 
 ### Beaker installation
 
-Puppet beaker allows for unattanded CI based testing and acts as a frontend for Vagrant, AWS, Google Compute, VMware/Vsphere, Docker and others hypervisors and a `puppet apply` command. Please see the [beaker documentation on hypervisors](https://github.com/puppetlabs/beaker/tree/master/docs/how_to/hypervisors) for additional information on hypervisors.
+Puppet beaker allows for unattended CI based testing and acts as a frontend for Vagrant, AWS, Google Compute, VMware/Vsphere, Docker and others hypervisors and a `puppet apply` command. Please see the [beaker documentation on hypervisors](https://github.com/puppetlabs/beaker/tree/master/docs/how_to/hypervisors) for additional information on hypervisors.
 
 Within this posting I want to explain how we at example42 use beaker for acceptance testing in control-repositories like [PSICK](https://github.com/example42/psick).
 
@@ -86,10 +86,10 @@ The images we are using do not have puppet agent package installed. Installation
     # spec/spec_helper_acceptance.rb
     require 'beaker-rspec'
     require 'beaker/puppet_install_helper'
-    
+
     # Instal PC1 puppet 4 agent packages
     run_puppet_install_helper
-    
+
     RSpec.configure do |c|
       # Readable test descriptions
       c.formatter = :documentation
@@ -119,7 +119,7 @@ Next one can add serverspec tests for specific roles:
           include role::puppetmaster
         EOS
       }
-      it 'should run forst time with changes and without errors' do
+      it 'should run first time with changes and without errors' do
         result = apply_manifest(manifest, :catch_failures => true)
         expect(@result.exit_code).to eq 2
       end
@@ -134,7 +134,7 @@ Now we need to changes the default beaker acceptance testing rake task as we wan
 
     # Rakefile
     # beaker is designed to run all tests on multiple nodes
-    # we have another usecase: run single tests on one host, then next test on new fresh host
+    # we have another use case: run single tests on one host, then next test on new fresh host
     Rake::Task[:beaker].clear
     RSpec::Core::RakeTask.new(:beaker) do |config|
       puts 'dont use beaker, use beaker_roles:<role> or all_roles instead'
@@ -168,10 +168,10 @@ If we want to use the `vagrant.yml` nodeset we must tell beaker to do so by prov
 In addition to `BEAKER_set` there are some other useful environment variables:
 Usually beaker deletes the container/virtual machine after running tests (even after failed tests). To keep the instance alive just add `BEAKER_destroy=no` environment variable.
 
-If one needs more information on what is happening during beaker running, it is possible to enable debug mode by specifiying `BEAKER_debug=true`
+If one needs more information on what is happening during beaker running, it is possible to enable debug mode by specifying `BEAKER_debug=true`
 
 Happy testing on your control-repository.
 
-example42 wishes everybody a happy christmas.
+example42 wishes everybody a happy Christmas.
 
 Martin Alfke
