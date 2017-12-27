@@ -68,6 +68,7 @@ Welcome to 2018! We start this year with a categorized summary of all postings f
 [How to DevOps](https://www.example42.com/2017/11/20/how_devops_changes_infrastructure/)
 [Scheduling Puppet resources application](https://www.example42.com/2017/12/11/scheduling_puppet_resources_application/)
 [Building your own Puppet 4 Data Types](https://www.example42.com/2017/02/27/building-data-types/)
+[Puppet noop, no-noop and the path to safe Puppet deployments](https://www.example42.com/2017/12/27/noop-no-noop-and-the-path-to-safe-puppet-deployments/)
 
 ## Bolt, tasks, plans, LibRAL
 
