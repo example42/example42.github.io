@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 1 - Categorized summary of example42 2017 blog postings
+title: Tip of the Week 53 - Categorized summary of example42 2017 blog postings
 ---
 
 Welcome to 2018! We start this year with a categorized summary of all postings from 2017.
