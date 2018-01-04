@@ -1,13 +1,18 @@
 ---
 layout: blog
-title: Tip of the Week 54 - Einladung: DevOps und Automatisierung in der IT
+title: Tip of the Week 54 - Einladung: DevOps und Automatisierung Workshop - 25.01.2018 - Frankfurt/Main
 tags: events
 ---
 
-Einladung: DevOps und Automatisierung in der IT
+Einladung: DevOps und Automatisierung Workshop
+
 "IT is too important to leave to IT" (Mark Smalley)
 
-Goldman Sachs und Walmart, Otto und VW, bekannte Namen, bei denen man nicht sofort an IT denkt. Allen diesen Firmen ist gemeinsam, dass IT und Softwarebereitstellung einen kritischen Erfolgsfaktor bei der Erreichung und Bindung von Kunden spielen. Die dazugehörigen IT Infrastrukturen müssen effizient und zeitnah bereitgestellt und verwaltet werden.
+Wie setzt man DevOps um? Wo bekommt man DevOps her?
+
+Wenn man Deutsche Bank, Volkswagen oder Deutsche Telekom erwähnt werden, denkt man nicht sofort an IT...
+
+Allen diesen Firmen ist gemeinsam, dass IT und Softwarebereitstellung einen kritischen Erfolgsfaktor bei der Erreichung und Bindung von Kunden spielen. Die dazugehörigen IT Infrastrukturen müssen effizient und zeitnah bereitgestellt und verwaltet werden.
 Kostentransparenz und -effizienz sind hierbei wichtige Parameter für das Business.
 
 Das DevOps Konzept hat sich hierbei als eine Methodik etabliert, mit der man einen Informationsaustausch zwischen IT und Business in Hinsicht auf Zeit (Time to Market) und Monetarisierung (Return on Investment) erreicht.
