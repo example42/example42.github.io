@@ -25,7 +25,7 @@ Wir laden  Sie zu einem eintägigen Event am 25. Januar 2018 in Frankfurt ein, b
 
 Am Vormittag liegt der Schwerpunkt auf den eben beschriebenen Themen. Am Nachmittag werden praxisbezogene Lösungsszenarien für DevOps und CI/CD vorgestellt. Beide Teile des Events können jeweils separat, aber selbstverständlich auch als Gesamtüberblick besucht werden.
 
-Hier das Formular für die [http://info.puppet.com/Example42-Puppet-Workshop-Registration.html](Anmeldung)
+Hier das Formular für die [Anmeldung](http://info.puppet.com/Example42-Puppet-Workshop-Registration.html).
 
 Martin Alfke
 Alessandro Franceschi
