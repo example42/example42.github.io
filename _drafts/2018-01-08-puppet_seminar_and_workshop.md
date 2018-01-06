@@ -10,7 +10,7 @@ Einladung: DevOps und Automatisierung Workshop
 
 Wie setzt man DevOps um? Wo bekommt man DevOps her?
 
-Wenn man Deutsche Bank, Volkswagen oder Deutsche Telekom erwähnt werden, denkt man nicht sofort an IT...
+Wenn Deutsche Bank, Volkswagen oder Deutsche Telekom erwähnt werden, denkt man nicht sofort an IT...
 
 Allen diesen Firmen ist gemeinsam, dass IT und Softwarebereitstellung einen kritischen Erfolgsfaktor bei der Erreichung und Bindung von Kunden spielen. Die dazugehörigen IT Infrastrukturen müssen effizient und zeitnah bereitgestellt und verwaltet werden.
 Kostentransparenz und -effizienz sind hierbei wichtige Parameter für das Business.
