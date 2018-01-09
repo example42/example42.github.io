@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 54 - Einladung: DevOps und Automatisierung Workshop am 25.01.2018 in Frankfurt/Main
+title: Tip of the Week 54 - Einladung DevOps und Automatisierung Workshop
 ---
 
 Einladung: DevOps und Automatisierung Workshop
