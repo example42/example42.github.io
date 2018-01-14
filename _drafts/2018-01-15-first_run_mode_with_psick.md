@@ -5,7 +5,7 @@ title: Tip of the Week 55 - First run mode with PSICK
 
 Example42's [psick module](https://github.com/example42/puppet-psick) has several features which allows user to manage most of the typical infrastructure tasks with a single module.
 
-One of them is classification: we can use it to define, via Hiera data, which classes we want on each node.
+One of them is classification: we can use it to define which classes we want on each node via Hiera data.
 
 The module provides different parameters to manage in which phase of a Puppet run we want to include classes for different major families of operating systems (Linux, Windows, Solaris, Darwin...).
 
@@ -14,11 +14,11 @@ The module provides different parameters to manage in which phase of a Puppet ru
 
 Psick has a different subclass for each phase:
 
-  - **pre**, in this phase are included prerequisites classes, applied before all the other ones.
+  - **pre**, in this phase prerequisites classes are included, applied before all the other ones.
   - **base**, base classes, common to all the nodes (but exceptions can be applied), applied in normal catalog runs after the pre classes and before the profiles.
   - **profiles**, exactly as in the roles and profiles pattern. The profile classes that differentiate nodes by their role or function. Profiles are applied after the base classes are managed.
 
-In order to be able to access such features you just have to add the psick class to your catalog, this can be done, at top scope for each node, in the same main manifest (```manifests/site.pp```):
+In order to be able to access such features you just have to add the psick class to your catalog, this can be done, at top scope for each node, in the main manifest (```manifests/site.pp```):
 
     include psick
 
@@ -54,11 +54,11 @@ The classes to include in each phase can be managed via Hiera, for different OS,
    psick::profiles::windows_classes:
       webserver: iis
 
-Each key-pair of these ${kernel}_classes parameters contain an arbitrary tag or marker (users, time, services, but could be any string), and the name the class to include.
+Each key-pair of these ${kernel}_classes parameters contain an arbitrary tag or marker (users, time, services, but could be any string), and the name of the class to include.
 
 This name must be a valid class, which can be found in the Puppet Master modulepath (so probably defined in your control-repo ```Puppetfile```): you can use any of the existing Psick profiles, or your own local site profiles, or directly classes from public modules and configure them via Hiera in their own namespace.
 
-To manage exceptions and use a different class on different nodes is enough to specify the alternative class name as value for the used marker (here 'ssh'), in the appropriate Hiera file:
+To manage exceptions and use a different classes on different nodes you only have to specify the alternative class name as value for the used marker (here 'ssh'), in the appropriate Hiera file:
 
     psick::base::linux_classes:
       ssh: ::profile::ssh_bastion
@@ -74,18 +74,19 @@ The pre -> base -> profiles order is strictly enforced, so we sure to place your
 
 A special phase, disabled by default, is applied only at the very first time Puppet is executed.
 
-Its purpose is to give users the possibility to make configurations on a node via Puppet before actually making a full Puppet ru .
+Its purpose is to give users the possibility to make configurations on a node via Puppet before actually making a full Puppet run.
 
 Optionally, a reboot may be triggered at the end of this first Puppet run.
 
-The next Puppet executions will be normal and will use the normal configurations expected in each nodes.
+The next Puppet executions will use the normal configurations expected in each nodes.
 
 Possible use cases for Firstrun mode:
- - Set a desired hostname on Windows, reboot and join an AD domain
- - Install aws-sdk gem, reboot and have ec2_tags facts since the first real Puppet run
- - Set external facts with configurable content (not via pluginsync) and run a catalog
+
+- Set a desired hostname on Windows, reboot and join an AD domain
+- Install aws-sdk gem, reboot and have ec2_tags facts since the first real Puppet run
+- Set external facts with configurable content (not via pluginsync) and run a catalog
    only when they are loaded (after the first run)
- - Any case where a configuration or some installations have to be done
+- Any case where a configuration or some installations have to be done
    in a separated and never repeating first run. With or without a
    system reboot.
 
@@ -120,3 +121,4 @@ Set psick::firstrun::${kernel}_reboot to false to prevent undesired reboots.
 Phased, hiera data driven, classification and first run mode is just one of the features of the psick module, other are available (a rich set of profiles for common application, a standardised set of tp profiles, some common use cases defines...). The good news is that you can decide which of such features to use and you can integrate psick in existing infrastructures where traditional classification techniques are used.
 
 Alessandro Franceschi
+Martin Alfke
