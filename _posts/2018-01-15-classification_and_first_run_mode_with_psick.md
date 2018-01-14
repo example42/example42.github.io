@@ -1,24 +1,28 @@
 ---
 layout: blog
-title: Tip of the Week 55 - First run mode with PSICK
+title: Tip of the Week 55 - Classification and First Run mode with PSICK
 ---
 
-Example42's [psick module](https://github.com/example42/puppet-psick) has several features which allows user to manage most of the typical infrastructure tasks with a single module.
+Example42's [psick module](https://github.com/example42/puppet-psick) has several features which allows users to manage most of the typical infrastructure tasks with a single module.
 
 One of them is classification: we can use it to define which classes we want on each node via Hiera data.
 
 The module provides different parameters to manage in which phase of a Puppet run we want to include classes for different major families of operating systems (Linux, Windows, Solaris, Darwin...).
 
 
-### Classification via psick modules
+### Classification via psick module
 
 Psick has a different subclass for each phase:
 
-  - **pre**, in this phase prerequisites classes are included, applied before all the other ones.
-  - **base**, base classes, common to all the nodes (but exceptions can be applied), applied in normal catalog runs after the pre classes and before the profiles.
+  - **pre**, in this phase prerequisites classes are included, they are applied before all the other ones.
+  - **base**, classes common to all the nodes (but exceptions can be applied via Hiera), applied in normal catalog runs after the pre classes and before the profiles.
   - **profiles**, exactly as in the roles and profiles pattern. The profile classes that differentiate nodes by their role or function. Profiles are applied after the base classes are managed.
 
-In order to be able to access such features you just have to add the psick class to your catalog, this can be done, at top scope for each node, in the main manifest (```manifests/site.pp```):
+Installation of the psick module from the Forge can be done with:
+
+    puppet module install example42/PSICK
+
+In order to be able to access Psick's features you just have to add the psick class to your catalog, this can be done, at top scope for each node, in the main manifest (```manifests/site.pp```):
 
     include psick
 
@@ -26,7 +30,8 @@ This does nothing by default, every psick configuration is data driven.
 
 The classes to include in each phase can be managed via Hiera, for different OS, as follows:
 
-    # Pre and base classes, both on Linux and Windows
+    # Classes to include in pre, base and profiles phases on Linux
+    # (different distros are expected to be managed in the defined classes)
     psick::pre::linux_classes:
       puppet: ::puppet
       dns: psick::dns::resolver
@@ -43,6 +48,7 @@ The classes to include in each phase can be managed via Hiera, for different OS,
     psick::profiles::linux_classes:
       webserver: apache
 
+    # Classes to include in pre, base and profiles phases on Windows
     psick::pre::windows_classes:
       hosts: psick::hosts::resource
     psick::base::windows_classes:
@@ -51,7 +57,7 @@ The classes to include in each phase can be managed via Hiera, for different OS,
       services: psick::windows::services
       time: psick::time
       users: psick::users::ad
-   psick::profiles::windows_classes:
+    psick::profiles::windows_classes:
       webserver: iis
 
 Each key-pair of these ${kernel}_classes parameters contain an arbitrary tag or marker (users, time, services, but could be any string), and the name of the class to include.
@@ -68,7 +74,7 @@ To completely disable on specific nodes the usage of a class, included in a gene
     psick::base::linux_classes:
       ssh: ''
 
-The pre -> base -> profiles order is strictly enforced, so we sure to place your class in the most appropriate phase (even if functionally they all do the same work: include the specified classes) and, to prevent dependency cycles, avoid to set the same class in two different phases.
+The pre -> base -> profiles order is strictly enforced, so be sure to place your class in the most appropriate phase (even if functionally they all do the same work: include the specified classes) and, to prevent dependency cycles, avoid to set the same class in two different phases.
 
 ### First run phase
 
@@ -118,7 +124,11 @@ Set psick::firstrun::${kernel}_reboot to false to prevent undesired reboots.
 
 ### Conclusion
 
-Phased, hiera data driven, classification and first run mode is just one of the features of the psick module, other are available (a rich set of profiles for common application, a standardised set of tp profiles, some common use cases defines...). The good news is that you can decide which of such features to use and you can integrate psick in existing infrastructures where traditional classification techniques are used.
+Phased, hiera data driven, classification and first run mode is just one of the features of the psick module, among the others (a rich set of profiles for common system settings and applications, a standardised set of tp profiles, some common use cases defines...). The good news is that you can decide which of such features to use and you can integrate psick in existing infrastructures where traditional classification techniques are used.
+
+The bad news is that psick concept is so unusual that you might get some time to figure out its whole logic.
+
+Perseverance, here as everywhere, is key to success :-)
 
 Alessandro Franceschi
 Martin Alfke
