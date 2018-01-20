@@ -7,8 +7,10 @@ Example42's [psick control-repo](https://github.com/example42/psick) has several
 
 PSICK has a set of unit and acceptance tests already built in. Usually we want to test the Puppet version we have running in infrastructure and we want to test functionality with newer versions.
 
+### Unit Testing
+
 Handling different Puppet versions on unit testing is done by reading an environment variable from [Gemfile](https://github.com/example42/psick/blob/production/Gemfile#L39).
-[rspec.puppet](http://rspec-puppet.com/) uses the Puppet version installed by bundler to compile and check catalogs.
+[rspec puppet](http://rspec-puppet.com/) uses the Puppet version installed by bundler to compile and check catalogs.
 
 Running unit tests for different Puppet versions is easy:
 
@@ -23,6 +25,8 @@ Now let's test Puppet 5:
     bundle exec rake spec
 
 Unsetting the PUPPET_GEM_VERSION environment variable will use the latest Puppet version from rubygems.
+
+### Acceptance Testing
 
 Acceptance testing is different.
 
@@ -40,7 +44,7 @@ Now we want to test latest Puppet 5 version:
     bundle update puppet
     bundle exec rake beaker_roles:psick
 
-The magic is in [PSICK spec/spec_helper_acceptance.rb](https://github.com/example42/psick/blob/production/spec/spec_helper_acceptance.rb) where we check for the Puppet version installed by bundler and pass proper attributes to beaker's `install_puppet_agent_on` method.
+The magic is in [PSICK spec/spec_helper_acceptance.rb](https://github.com/example42/psick/blob/production/spec/spec_helper_acceptance.rb#L9) where we check for the Puppet version installed by bundler and pass proper attributes to beaker's `install_puppet_agent_on` method.
 
 Happy hacking,
 
