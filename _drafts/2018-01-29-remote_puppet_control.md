@@ -32,9 +32,10 @@ Enterprise only).
 Access to [Orchestrator API](https://puppet.com/docs/pe/2017.3/orchestrator/orchestrator_api_v1_endpoints.html) requires a [token](https://puppet.com/docs/pe/2017.3/rbac/rbac_token_auth_intro.html) and proper [RBAC permissions](https://puppet.com/docs/pe/2017.3/rbac/managing_access.html).
 
 The generated token can then be used in a https call to authorize at api using headers.
+Tasks have a specific API endpoint: the command endpoint.
 Task parameters are added to the payload of the request. Affected nodes can be listed as arry.
 
-The following exmaple shows how to build the `curl` command call:
+The following example shows how to build the `curl` command call:
 
     curl -k -X POST \
       -H "Content-Type: application/json" \
@@ -134,15 +135,15 @@ Output:
 
 ## Using PCP Broker and a PXP Module:
 
-ATTENTION: this solution is NOT working at the moment!
+ATTENTION: this solution is NOT working at the moment as the PCP broker is not yet opened and documented.
 
-First we need a pxp-agent module on the nodes:
+First we need a pxp-agent module on the nodes. An example can be found in the [pxp-agent repository](https://github.com/puppetlabs/pxp-agent/blob/master/modules/pxp-module-puppet.md).
 
 For development purpose the module can be executed locally:
 
     sudo echo "{\"input\":{\"flags\":[\"--noop\", \"--server=puppet.pe.psick.io\"]}, \"configuration\" : {\"puppet_bin\" : \"/opt/puppetlabs/bin/puppet\"}}" | /etc/puppetlabs/pxp-agent/modules/puppet_agent run
 
-Not working, as the API is unknown. Could be something simlar to the following:
+The following is not working, as the API is unknown. Could be something simlar to the following:
 
     curl -k -X POST \
       -H "Content-Type: application/json" \
@@ -161,6 +162,7 @@ Not working, as the API is unknown. Could be something simlar to the following:
         "additionalProperties" : false
       }'
 
+We have a [ticket at Puppet open](https://tickets.puppetlabs.com/browse/PCP-830) for opening PCP broker API.
 
 Happy hacking,
 
