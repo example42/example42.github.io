@@ -204,11 +204,11 @@ On PSICK for example, this is possible, if using Fabric, with:
 
     fab puppet.agent:host=git.lab.psick.io
 
-Finally it's potentially possible to trigger Puppet runs (and potentially other commands) directly via the PCP Broker and a custom PXP Module.
+Finally it's potentially possible to trigger Puppet runs (and potentially other commands) directly via the PCP Broker and eventually a custom PXP Module.
 
 ATTENTION: this solution is NOT working at the moment as the PCP broker is not yet opened and documented.
 
-First we need a pxp-agent module on the nodes. An example can be found in the [pxp-agent repository](https://github.com/puppetlabs/pxp-agent/blob/master/modules/pxp-module-puppet.md).
+First we need a pxp-agent module on the nodes. An example can be found in the [pxp-agent repository](https://github.com/puppetlabs/pxp-agent/blob/master/modules/pxp-module-puppet.md) and this is actually basically the only existing one (and the one currently used under the hood when remote Puppet run is triggered from the PE Console Web interface).
 
 For development purpose the module can be executed locally:
 
@@ -226,7 +226,7 @@ The following is not working, as the API is unknown. Could be something similar 
           "module" : "puppet_agent",
           "action" : "run",
           "params" : {
-            "flags" : [ "--noop", "--server=puppet.pe.psick.io" ]
+            "flags" : [ "--noop" ]
           }
         },
         "required" : ["transaction_id", "notify_outcome", module", "action"],
