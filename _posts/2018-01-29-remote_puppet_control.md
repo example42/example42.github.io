@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 57 - All the ways to remotely trigger Puppet runs (and other tasks)
+title: Tip of the Week 57 - All the ways to remotely trigger Puppet runs (with or without Puppet tasks)
 ---
 
 Example42's [psick control-repo](https://github.com/example42/psick) has several features which makes easier the life of the Puppet administrator.
