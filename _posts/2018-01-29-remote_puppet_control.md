@@ -13,15 +13,14 @@ Since the release of [Puppet Tasks](https://puppet.com/resources/solution-brief/
 - psick::puppet_enable_noop - Enable noop option in Puppet agent config
 - psick::puppet_agent - Run Puppet agent on a node
 
-In this post we review the different ways we can use to remotely trigger a puppet task (in this case psick::puppet_agent but can be any task from any [module](https://forge.puppet.com/modules?with_tasks=true)) both with OSS and Puppet Enterprise (PE) tools.
-
+In this post we review the different ways we can use to remotely trigger a Puppet task and (in this case psick::puppet_agent but can be any task from any [module](https://forge.puppet.com/modules?with_tasks=true)):
 
 1. Use the [bolt](https://github.com/puppetlabs/bolt) command (OSS)
 2. Use the [puppet task](https://puppet.com/docs/pe/2017.3/orchestrator/running_tasks_from_the_command_line.html) command (PE)
 3. Run Puppet tasks from Puppet Enterprise Web console
 4. Directly interact with PE Orchestrator APIs
 
-The above methods allow execution of any Puppet task, if we want to trigger Puppet agent execution on a remote node, we have some other additional options:
+The above methods allow execution of any Puppet task, if we "just" want to trigger Puppet agent execution on a remote node, we have some other, more or less classic, additional options:
 
 1. Run Puppet from PE Web Console for single nodes
 2. Use MCollective
@@ -85,7 +84,7 @@ For more details check the [official documentation](https://puppet.com/docs/pe/2
 
 ## Tasks via Orchestrator APIs
 
-Finally we can query direcly the PE[Orchestrator API](https://puppet.com/docs/pe/2017.3/orchestrator/orchestrator_api_v1_endpoints.html), which as with the puppet job command, requires a [token](https://puppet.com/docs/pe/2017.3/rbac/rbac_token_auth_intro.html) and proper [RBAC permissions](https://puppet.com/docs/pe/2017.3/rbac/managing_access.html).
+Finally we can query directly the PE[Orchestrator API](https://puppet.com/docs/pe/2017.3/orchestrator/orchestrator_api_v1_endpoints.html), which as with the puppet job command, requires a [token](https://puppet.com/docs/pe/2017.3/rbac/rbac_token_auth_intro.html) and proper [RBAC permissions](https://puppet.com/docs/pe/2017.3/rbac/managing_access.html).
 
 The generated token has to be added to the http headers of our API calls.
 
@@ -191,7 +190,7 @@ Output:
     }
 
 
-## Puppet agent run using other methods (not as tasks)
+## Remote Puppet agent run using other methods (not as tasks)
 
 All the above cases can be applied to any task, but if we just need to remotely trigger a Puppet agent execution, various other ways are available.
 
@@ -238,7 +237,7 @@ We have a [ticket at Puppet open](https://tickets.puppetlabs.com/browse/PCP-830)
 
 ## Conclusion
 
-As we have seen there are multiple ways to remotely trigger a Puppet agent execution on a central node and there are various ways to trigger a Puppet task to achieve the same result.
+As we have seen there are multiple ways to remotely trigger a Puppet agent execution from a central node and there are various ways to trigger a Puppet task to achieve the same result.
 
 The ability to orchestrate Puppet execution can affect our choices on how we decide to manage how infrastructure via Puppet, allowing many combination of options, such as:
 
@@ -247,6 +246,8 @@ The ability to orchestrate Puppet execution can affect our choices on how we dec
   - Puppet runs triggered on Canary nodes during CI
   - Puppet runs only on request, without always running agents
   - Staged rollouts of configurations via remotely orchestrated Puppet runs.
+
+Note that in most of the above examples we can see the result of the Puppet run only after it has ended and not in real-time.
 
 Happy Puppet orchestration, with or without PSICK,
 
