@@ -34,7 +34,7 @@ On Wendesday fringe events will start, covering
 - CFEngine and IoT hackaton
 - Ansible Lightbulb Workshop
 
-These are very tool specifc sessions which operate indipendently. Choose wiseley on where to head to.
+These are very tool specifc sessions which run parallel. Choose wiseley on where to head to.
 
 Happy System and COnfiguration Automation,
 
