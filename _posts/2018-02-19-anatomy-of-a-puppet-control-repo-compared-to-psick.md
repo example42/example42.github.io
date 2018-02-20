@@ -3,7 +3,7 @@ layout: blog
 title: Tip of the Week 60 - Anatomy of a Puppet control-repo compared to PSICK
 ---
 
-Note: This is an updated and improved version of the [Tip of the Week 2 - Anatomy of a Puppet control-repo](2017-01-09-anatomy-of-a-puppet-control-repo.md).
+Note: This is an updated and improved version of the [Tip of the Week 2 - Anatomy of a Puppet control-repo](https://www.example42.com/2017/01/09/anatomy-of-a-puppet-control-repo/).
 
 A Puppet control-repo is a [git] repository that contains the files you expect to have in your directory environment (for example ```/etc/puppetlabs/code/environments/production``` for the default production environment) which provides whatever you need to manage your infrastructure.
 
