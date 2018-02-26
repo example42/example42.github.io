@@ -17,7 +17,9 @@ But every IT technical job is not purely culture only. Next to learning how to c
 
 ## New toolings
 
-Over the past 10 years we saw a large amount of different technology getting adopted and used in platforms. There is now a large collection of different tooling e.g. for logging and reporting which needs understanding prior using in production.
+Over the past 10 years we saw a large amount of different technology getting adopted and used in platforms.
+There is now a large collection of different tooling e.g. for logging and reporting which needs understanding prior using in production.
+
 Some people leran by testing the new stack in a separate development environment, reading documentation and mailinglists.
 Others prefer to go to a workshop session e.g. within a specific meetup group or by attending a training course.
 
@@ -27,9 +29,12 @@ What we usually see at different customers is a huge need for training IT staff,
 
 There is a saying that in such situations always comes up:
 
-    CFO to CTO:
+CFO to CTO:
+
     "What if we send all staff to trainings and then they leave!
-    CTO to CFO:
+
+CTO to CFO:
+
     "What if we dont send them to trainings and the stay?"
 
 ## Culture and attitude
