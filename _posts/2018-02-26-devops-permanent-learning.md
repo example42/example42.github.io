@@ -4,6 +4,7 @@ title: Tip of the Week 61 - DevOps and the permanent learning pattern
 ---
 
 DevOps engineers, DevOps teams, DevOps academies.
+
 Everybody sees new stuff appearing reusing the same wording again and again.
 
 Do we really have DevOps engineers? What responsibilities, tasks, expertise does a DevOps engineer have?
@@ -11,6 +12,7 @@ Do we really have DevOps engineers? What responsibilities, tasks, expertise does
 ## DevOps engineers and academies
 
 First: there is no DevOps engineer, no DevOps teams, no DevOps academy.
+
 DevOps is a culture on how to build a community of trust and engagement, breaking silos by enabling cross team communication.
 
 But every IT technical job is not purely culture only. Next to learning how to communicate with others, it is highly important to also expand technology skills.
@@ -20,7 +22,7 @@ But every IT technical job is not purely culture only. Next to learning how to c
 Over the past 10 years we saw a large amount of different technology getting adopted and used in platforms.
 There is now a large collection of different tooling e.g. for logging and reporting which needs understanding prior using in production.
 
-Some people leran by testing the new stack in a separate development environment, reading documentation and mailinglists.
+Some people learn by testing the new stack in a separate development environment, reading documentation and mailinglists.
 Others prefer to go to a workshop session e.g. within a specific meetup group or by attending a training course.
 
 ## Learning is essential
@@ -35,11 +37,12 @@ CFO to CTO:
 
 CTO to CFO:
 
-    "What if we dont send them to trainings and the stay?"
+    "What if we dont send them to trainings and they stay?"
 
 ## Culture and attitude
 
 Sending people to trainings is not about paying for something where the company does not receive a benefit from.
+
 Sending people to trainings make them feel being taken care about, makes them feel being supported by their manager and HR department.
 
 ## Conclusion
@@ -51,8 +54,12 @@ Usually it is OK to send one or two only and let these then educate the remainin
 
 Don't only send the same two people, spread knowledge of a larger amount of people, reducing the risk of loosing knowledge when one or two people will leave.
 
+Support and cultivate knowledge sharing inside the company: organise internal workshops, presentations, hackatons, events where your same team members become trainers, of things they know better, and trainees, on the topics they don't master.
+
 Don't try to make people stop leaving. Try to show them a path to achieve when remaining with you.
+
 Even if the want to leave: don't stop supporting them.
+
 Build a trust relationship in your entire company, so people will always tell good things about the job and the company.
 
 Every invest in your people is an invest in your success.
@@ -60,4 +67,3 @@ Every invest in your people is an invest in your success.
 Happy training and hacking,
 
 Martin Alfke
-
