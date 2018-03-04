@@ -27,20 +27,20 @@ Both tools use a different approach. The puppetlabs-catalog_diff is installed as
 Installation can be done using the `puppet module install`command:
 
     puppet module install puppetlabs/puppetlabs-catalog_diff
-    
+
 After installation there is now a puppet cli command available:
 
     puppet catalog diff
-    
+
 The octocatalog-diff is delivered as a ruby gem. It needs ruby 2.0 or newer and can be installed using the `puppet gem` or - in case you have a sufficient ruby version - the `gem` command:
 
     /opt/puppetlabs/puppet/bin/gem install octocatalog-diff
-    
-The tool needs a loca Puppet agent installed and can be used on Linux and Mac OS. Windows is not supported.
+
+The tool needs a local Puppet agent installed and can be used on Linux and Mac OS. Windows is not supported.
 
 ## Configuration
 
-The octocatalog diff tool needs a configuration file  (.octocatalog-diff.cfg.rb) unless you want to specify all parameters as command line options.
+The octocatalog diff tool needs a configuration file  (```.octocatalog-diff.cfg.rb```) unless you want to specify all parameters as command line options.
 
 The configuration file can reside in different locations. Lookup for the file is done in the following order:
 
@@ -92,7 +92,7 @@ If you are using another ENC, you must pass the ENC file option:
 
 #### PuppetDB
 
-PuppetDB can be used to staore latest node facts, exported resources and node catalogs and their reports.
+PuppetDB can be used to store latest node facts, exported resources and node catalogs and their reports.
 
 In this specific case we are interested to receive the latest catalog from PuppetDB.
 
@@ -123,14 +123,14 @@ Last but least, octocatalog-diff must know about the Puppet installation which i
 
     settings[:puppet_binary] = '/opt/puppetlabs/puppet/bin/puppet'
 
-Please note, that octocatalog-diff must have the puppetdb-termini package installed in case that you also want to get exprted resources in a nodes catalog.
+Please note, that octocatalog-diff must have the puppetdb-termini package installed in case that you also want to get exported resources in a nodes catalog.
 
 ## Usage
 
 Now you are able to verify your settings by running
 
     octocatalog-diff --config-test
-    
+
 Read the output carefully and see whether all settings are correct for your installation.
 
 In normal (module) mode, octocatalog-diff will assume that the base for the catalog will be the origin/master branch on a git repository.

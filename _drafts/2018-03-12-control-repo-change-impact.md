@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 62 - Puppet Control Repo change impact scenarios
+title: Tip of the Week 63 - Puppet Control Repo change impact scenarios
 ---
 
 A Puppet control-repo is usually the place where most of the Puppetteer activities are done.
