@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Tip of the Week 4 - Existing code and Puppet 4
+update_url: https://www.example42.com/2018/03/05/catalog-diff-on-refactoring/
+update_post: Tip of the Week 62 - Using catalog diff to check refactoring
 ---
 
 Starting with Puppet 4 on greenfield is easy.

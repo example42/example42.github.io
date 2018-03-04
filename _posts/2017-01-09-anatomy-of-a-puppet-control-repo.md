@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Tip of the Week 2 - Anatomy of a Puppet control-repo
+update_url: https://www.example42.com/2018/02/19/anatomy-of-a-puppet-control-repo-compared-to-psick/
+update_post: Tip of the Week 60 - Anatomy of a Puppet control-repo compared to PSICK
 ---
 
 For years Puppeteers have struggled to find a way to organize their Puppet code to manage their infrastructures in an optimal way, following the evolution of Puppet itself and its ecosystem.
