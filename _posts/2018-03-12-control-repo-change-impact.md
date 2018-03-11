@@ -44,7 +44,7 @@ We assume to have hieradata in the ```data/``` directory and local profiles in `
 
 - [WARNING] ```site/profile/*``` here may stay local profiles, templates, files, facts, resource types, data types. Changes to our profiles in  ```site/profile/manifests``` impact all the nodes which classifies them. Changes to ```site/profile/files``` or ```site/profile/templates``` may actually change the contents of configuration files on our managed systems.
 
-We shoudl not be too much worried about the above dangers and warnings, though, it's normal in the life of Puppet admin to edit such files.
+We should not be too much worried about the above dangers and warnings, though, it's normal in the life of Puppet admin to edit such files.
 
 We have just be aware of the potential impact area of our change and, when we are not fully confident on what we are doing, we should always check our changes in noop mode before actually enforcing them.
 
