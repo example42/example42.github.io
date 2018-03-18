@@ -55,18 +55,20 @@ Finance for example differentiates between capital expenses (CAPEX) and operatio
 Even when IT says that public cloud costs can be more easily predicted upfront, Finance might ask for another solution. Why?
 
 On premise own hardware is usually billed as capital expenses, whereas public cloud is operational expenses.
-Moving all costs from CAPEX to OPEX might not be financially the best solution from tax perspective - especially when your cloud costs grow on a high volume (somewhere more than 100.000 EUR per month).
+Moving all costs from CAPEX to OPEX might not be financially the best solution from tax perspective - especially when your cloud costs grow to a high volume.
 
 Always try to explain Finance what you want to achieve and ask for their feedback on IT plannings.
+
+Besides this: Finance and procurement can even help you in negotiating better terms with your cloud provider. This is especially if you are high volume user.
 
 ### DevOps and Management
 
 The most difficult part is DevOps and their managers.
-In general there are two approaches on how to go DevOps for departments:
+In general there are two approaches on how to go for DevOps methods in departments:
 - top-down approach
 - grass-root approach
 
-Within the top-down approach, top leve management makes the decision that teams must work according to DevOps methods.
+Within the top-down approach, top level management makes the decision that teams must work according to DevOps methods.
 Now it is the top managers responsibility to find and support staff which would like to take part in the migration and to convince staff which objects to the upcoming changes.
 
 This is different from the grass-root based DevOps implementation, where teams decide for themselves to go on the DevOps journey. Here the teams must at least ask for clearance to run a test. The team is responsible to deliver results fast, usually by going for low hanging fruits and showing the management that the approach is worth to spend more time and money into.
@@ -81,7 +83,8 @@ They must start seeing themselves no longer as bosses, but as leaders. They must
 
 ### Conclusion
 
-DevOps is not purely a tewchnical way of collaboration. It affects a company organization as a whole.
+DevOps is not purely a technical way of collaboration. It affects a company organization as a whole.
+When going the DevOps approach it is highly recommended to ensure that every department has the data it needs to help building success without loosing money or resources.
 
 Martin Alfke
 
