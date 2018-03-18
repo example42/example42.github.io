@@ -44,13 +44,14 @@ This has changed drastically as more and more companies lack sufficient staffing
 This is where HR _MUST_ jump in and take over responsibilities.
 
 It is about teaching, training and talking which is of high value for HR to get more resumes so they are able to fill open positions faster.
+
 HR must allow (and insist in fullfillment) team members to attend conferences as speakers or even run local meetups where people with similar mindset gather.
 
 ### DevOps and Finance
 
-As IT now acts as a department based on DevOps principles they will try to move from slow to manage, self hosted systems to some cloud concepts. Especially when using public cloud providers, the collaboration with Finance is of high imprtance.
+As IT now acts as a department based on DevOps principles they will try to move from slow to manage, self hosted systems to some cloud concepts. Especially when using public cloud providers, the collaboration with Finance is of high importance.
 
-Finance for example differentiates between capital expenses (CAPEX) and operational expenses (OPEX). Ask any technichian regarding the differences and the will not know.
+Finance for example differentiates between capital expenses (CAPEX) and operational expenses (OPEX). Ask any technichian regarding the differences and he will not know.
 
 Even when IT says that public cloud costs can be more easily predicted upfront, Finance might ask for another solution. Why?
 
