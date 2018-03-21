@@ -8,7 +8,7 @@ title: Tip of the Week 64 - A wholistic DevOps approach
 This is a wording we usually hear from customers, technical staff and managers.
 But is this really everything?
 
-This posting will explain why DevOps does not only have a purely technical implification but also affects any other company departments.
+This posting will explain why DevOps does not only have a purely technical implication but also affects any other company departments.
 
 ### DevOps at technical level
 
@@ -21,7 +21,7 @@ As development was pushing out releases faster, there was a need for IT Ops to a
 Spectre, Meltdown, Heartbleed, zero-day exploits. Security is of high concern for every company with IT departments.
 Most security departments where usually seen as the "no-sayers". With every new request for security related review of platforms and code, usually IT security had some complaints.
 
-Nowadays IT Security gets envolved into the planning, implementation and deployment process far more early, allowing them to share knowledge on security topics and provide guidance on security implementations.
+Nowadays IT Security gets involved into the planning, implementation and deployment process far more early, allowing them to share knowledge on security topics and provide guidance on security implementations.
 
 Some people gave this new way of collaboration a new term: SecOps or DevSec or even DecSecOps.
 
@@ -31,12 +31,12 @@ But was has HR and Finance to do with DevOps?
 
 ### DevOps and HR
 
-Remeber the old times? Companies placed a job offering on their website, waiting for resumes to flow in, reviewing and pre-processing them and passing a few to the IT department lead for in detail review and conduting a job interview.
+Remember the old times? Companies placed a job offering on their website, waiting for resumes to flow in, reviewing and pre-processing them and passing a few to the IT department lead for in detail review and conducting a job interview.
 
 Now HR learned that IT is working as DevOps team. Due to a misunderstanding in wording and methods, they now start looking for DevOps engineers.
 But what should a DevOps engineer be capable of? Should it be more development skills or system engineering knowledge?
 
-In general an organization doing DevOps in IT has specific needs for specific specialized knowledge. Besides this - as the different IT sub departments now have to strongly communicate with each others a new skillset gained even more impartance: soft skills like communication and willingness to adopt.
+In general an organisation doing DevOps in IT has specific needs for specific specialised knowledge. Besides this - as the different IT sub departments now have to strongly communicate with each others a new skillset gained even more importance: soft skills like communication and willingness to adopt.
 
 Another item we saw in the past was IT department not allowing their team members to talk about the technical setup or their work.
 This has changed drastically as more and more companies lack sufficient staffing, leaving positions open for a very long time.
@@ -45,13 +45,13 @@ This is where HR _MUST_ jump in and take over responsibilities.
 
 It is about teaching, training and talking which is of high value for HR to get more resumes so they are able to fill open positions faster.
 
-HR must allow (and insist in fullfillment) team members to attend conferences as speakers or even run local meetups where people with similar mindset gather.
+HR must allow (and insist in fulfilment) team members to attend conferences as speakers or even run local meet-ups where people with similar mindset gather.
 
 ### DevOps and Finance
 
 As IT now acts as a department based on DevOps principles they will try to move from slow to manage, self hosted systems to some cloud concepts. Especially when using public cloud providers, the collaboration with Finance is of high importance.
 
-Finance for example differentiates between capital expenses (CAPEX) and operational expenses (OPEX). Ask any technichian regarding the differences and he will not know.
+Finance for example differentiates between capital expenses (CAPEX) and operational expenses (OPEX). Ask any technician regarding the differences and he will not know.
 
 Even when IT says that public cloud costs can be more easily predicted upfront, Finance might ask for another solution. Why?
 
@@ -76,15 +76,15 @@ This is different from the grass-root based DevOps implementation, where teams d
 
 But how about the mid management?
 
-In older times the mid management was reponsible to ensure top level management goals are achieved. They had to look carefully for proper KPI and sometimes needed to push pressure on teams when positive results where in danger.
+In older times the mid management was responsible to ensure top level management goals are achieved. They had to look carefully for proper KPI and sometimes needed to push pressure on teams when positive results where in danger.
 
-Within a DevOps organization the mid management gets a new focus. They are responsible to remove obstacles from the team, allowing the team to concentrate on their work and not do to many unplanned work.
+Within a DevOps organisation the mid management gets a new focus. They are responsible to remove obstacles from the team, allowing the team to concentrate on their work and not do to many unplanned work.
 
 They must start seeing themselves no longer as bosses, but as leaders. They must ensure high motivation within the team and take care on high learning process by coaching senior people to train junior staff.
 
 ### Conclusion
 
-DevOps is not purely a technical way of collaboration. It affects a company organization as a whole.
+DevOps is not purely a technical way of collaboration. It affects a company organisation as a whole.
 When going the DevOps approach it is highly recommended to ensure that every department has the data it needs to help building success without loosing money or resources.
 
 Martin Alfke
