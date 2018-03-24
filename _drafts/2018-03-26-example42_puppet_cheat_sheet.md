@@ -136,7 +136,22 @@ Iterating over a hash:
         * => $val,
     }
 
-### Puppet and Hiera
+### Puppet and Hiera 5
+
+Explicit lookup
+
+    class foo {
+      $data = lookup('key', DataType, <merge behavior>, <default value>)
+    }
+
+DataType, <merge behavior> and <default value> are optional
+
+merge behavior:
+
+    'first'   # returns the first occurence of 'key'
+    'unique'  # returns an array of all occurences of 'key' with duplicates removed
+    'hash'    # returns a hash of all occurences of 'key', duplicates hash keys are taken from highest priority
+    'deep'    # returns a hash of all occurences of 'key', duplicate hash keys are merged
 
 Happy hacking,
 
