@@ -21,7 +21,7 @@ Now I found the time to paste them into a blog posting and add information on co
     class <name> (
       DataType $param1,           # this parameter must be provided upon declaration
       DataType $param2 = 'value',
-    ){
+    ) {
       # Puppet DSL code
     }
 
@@ -53,7 +53,6 @@ Now I found the time to paste them into a blog posting and add information on co
     <name> { 'title':
       param1 => 'value',
     }
-
 
 
 ### Puppet DSL code logic
@@ -157,7 +156,7 @@ merge behavior:
 
     class foo (
       DataType $data = 'value' # identical to $data = lookup('foo::data', DataType, 'first', 'value')
-    ){
+    ) {
     }
 
 Puppet will automatically query hiera for the key `'foo::data'`
@@ -205,9 +204,9 @@ Variant 3: resource chaining
     service { 'foo':
       ensure => running,
     }
-    
+
     Package['foo'] -> File['/etc/foo/foo.conf'] ~> Service['foo']
-    
+
 or multiline:
 
     Package['foo']
@@ -250,9 +249,8 @@ A module is a directory structure inside the `$modulepath`.
            |             \- custom_type/
            |                 \- custom_provider.rb
            \- spec/
-           
+
 
 Happy hacking,
 
 Martin Alfke
-
