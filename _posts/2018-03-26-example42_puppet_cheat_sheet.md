@@ -220,14 +220,14 @@ A module is a directory structure inside the `$modulepath`.
     <modulepath>/
       \- <modulename>
            |- manifests/
-           |    |- init.pp                  # main class definition class <modulename> { ... }
-           |    |- subclass.pp              # subclass definition class <modulename>::subclass { ... }
+           |    |- init.pp                  # main class definition: class <modulename> { ... }
+           |    |- subclass.pp              # subclass definition: class <modulename>::subclass { ... }
            |    \- folder/
-           |        \- subclass.pp          # suclass in directory definition class <modulename>::folder::subclass { ... }
+           |        \- subclass.pp          # subclass in directory definition: class <modulename>::folder::subclass { ... }
            |- files/
-           |    \- staticfile.conf          # static file source => 'puppet:///modules/<modulename>/staticfile.conf',
+           |    \- staticfile.conf          # static file: source => 'puppet:///modules/<modulename>/staticfile.conf',
            |- templates/
-           |    \- dynamic_config_file.epp  # templated config file content => epp('<modulename>/dynamic_config_file.epp'),
+           |    \- dynamic_config_file.epp  # templated config file: content => epp('<modulename>/dynamic_config_file.epp'),
            |- facts.d/
            |    \- external_facts.yaml      # plugin synced
            |- types/
@@ -240,10 +240,10 @@ A module is a directory structure inside the `$modulepath`.
            |    \- puppet/
            |        |- functions/
            |        |    \- <modulename>/
-           |        |         \- puppet4function.rb  #  Puppet::Functiions.create('<modulename>/puppet4function) do ... end
+           |        |         \- puppet4function.rb  #  Puppet::Functions.create(':<modulename>/puppet4function) do ... end
            |        |- parser/
            |        |    \- functions/
-           |        |        \- puppetfunction.rb   # legacy functions - avoid : module Puppet::Parser::Functions.newfunction('puppetfunction) do ... end
+           |        |        \- puppetfunction.rb   # legacy functions - avoid : module Puppet::Parser::Functions.newfunction(':puppetfunction) do ... end
            |        |- type/
            |        |    \- custom_type.rb          # Puppet::Type.newtype(:custom_type) do ... end
            |        \- provider/
