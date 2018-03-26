@@ -27,7 +27,7 @@ Now I found the time to paste them into a blog posting and add information on co
 
 #### Class declaration using a function:
 
-    include <name>  # no ordering, the mentioned class will be somewhere ein the catalog
+    include <name>  # no ordering, the mentioned class will be somewhere in the catalog
     require <name>  # strict ordering, the class must be finished prior continuing
     contain <name>  # local ordering, the class must be finished within the class where the contain function is used
 
@@ -220,34 +220,35 @@ A module is a directory structure inside the `$modulepath`.
     <modulepath>/
       \- <modulename>
            |- manifests/
-           |    |- init.pp
-           |    |- subclass.pp
+           |    |- init.pp                  # main class definition class <modulename> { ... }
+           |    |- subclass.pp              # subclass definition class <modulename>::subclass { ... }
            |    \- folder/
-           |        \- subclass.pp
+           |        \- subclass.pp          # suclass in directory definition class <modulename>::folder::subclass { ... }
            |- files/
-           |    \- staticfile.conf
+           |    \- staticfile.conf          # static file source => 'puppet:///modules/<modulename>/staticfile.conf',
            |- templates/
-           |    \- dynamic_config_file.epp
+           |    \- dynamic_config_file.epp  # templated config file content => epp('<modulename>/dynamic_config_file.epp'),
            |- facts.d/
-           |    \- external_facts.yaml
+           |    \- external_facts.yaml      # plugin synced
            |- types/
-           |    \- datatype.pp
+           |    \- datatype.pp              # type <modulename>::datatype { ... }
            |- functions/
-           |    \- puppetfunction.pp
+           |    \- puppetfunction.pp        # function <modulename>::puppetfunction { ... }
            |- lib/
            |    |- facter/
-           |    |    \- custom_facts.rb
+           |    |    \- custom_fact.rb      # $facts['custom_fact']
            |    \- puppet/
            |        |- functions/
-           |        |    \- puppet4function.rb
+           |        |    \- <modulename>/
+           |        |         \- puppet4function.rb  #  Puppet::Functiions.create('<modulename>/puppet4function) do ... end
            |        |- parser/
            |        |    \- functions/
-           |        |        \- puppetfunction.rb
+           |        |        \- puppetfunction.rb   # legacy functions - avoid : module Puppet::Parser::Functions.newfunction('puppetfunction) do ... end
            |        |- type/
-           |        |    \- custom_type.rb
+           |        |    \- custom_type.rb          # Puppet::Type.newtype(:custom_type) do ... end
            |        \- provider/
            |             \- custom_type/
-           |                 \- custom_provider.rb
+           |                 \- custom_provider.rb  # Puppet::Type.type(:custom_type).provider(:custom_provider) do ... end
            \- spec/
 
 
