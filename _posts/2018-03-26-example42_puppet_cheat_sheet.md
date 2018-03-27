@@ -143,7 +143,7 @@ Please use selectors sparsely as they very fast lead to hard to read Puppet code
       $data = lookup('key', DataType, <merge behavior>, <default value>)
     }
 
-DataType, <merge behaviour> and <default value> are optional
+DataType, 'merge behavior' and 'default value' are optional
 
 merge behavior:
 
