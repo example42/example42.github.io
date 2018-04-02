@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 66 - Example42 Puppet modules status updatet
+title: Tip of the Week 66 - Example42 Puppet modules status update
 ---
 
 A quick update on the status of example42's Puppet works.
