@@ -92,7 +92,7 @@ Variant 2: test content of variable:
 
 Variant 3: test content on regular expression:
 
-    if $test_variable ~= /regexp/ {
+    if $test_variable =~ /regexp/ {
       # Puppet DSL
     }
 
