@@ -3,9 +3,13 @@ layout: blog
 title: Tip of the Week 66 - Example42 Puppet modules status update
 ---
 
-A quick update on the status of example42's Puppet works.
+### A quick update on the status of example42's Puppet works.
+
+#### Modules 2008
 
 We released our [first set](https://github.com/example42/control-repo-archive/tree/1.0) of Puppet modules ten years ago, in 2008, at Puppet 0.24 times, looking at them now I can't prevent from smiling slighly embarassed: they had some unique features for the times (decommissining support, multi OS support by design, first attempt to separate common code from local implementation) but look definitively naive now.
+
+#### Modules 2010
 
 Two years later, in 2010, when current Puppet version was 2.6, we released our [Next Gen](https://github.com/example42/puppet-modules-nextgen) set of modules, a completely rewritten army of modules with a somehow revolutionary feature: each class parameter value was looked up by the ```params_lookup``` function, which looks for values on Hiera and top scope variables. Note this was done before the release of Puppet 3 and automatic data binding on Hiera.
 
@@ -19,6 +23,8 @@ Also, most of them are currently deprecated: we are not actively working on them
 
 Even if they mostly do their work, we would not recommend them anymore: our suggestion for migration is either to choose a more updated module from other authors or enter the Tiny Puppet / PSICK world (more details later on this)
 
+##### Modules 2018
+
 Some of the modules designed at "NextGen" times (problems with names like this is wondering what comes after the "next" gen...) are still supported and maintained either directly by Example42 of by some other mainteiners. The most relevant ones are apt, yum, puppi and the network module.
 
 The latter is actually the reason I'm writing this post: my personal view on the module is somehow erratic, even if it's currently the only example42 Puppet module with the "Approved" label (when Puppet introduced Approved modules we were already deprecating most of our ones), I've given little attention and love to it for years, to the point that at some point I wanted to look for external maintainers and, in case no one were found, even deprecate it.
@@ -26,6 +32,8 @@ The latter is actually the reason I'm writing this post: my personal view on the
 Some comments and discussions ([here](https://github.com/example42/puppet-network/pull/214#issuecomment-377794933) and [here](https://github.com/example42/puppet-network/issues/222)) on GitHub have forced us to reconsider this decision.
 
 The network module might be the only reason you know example42 and maybe the only example42 module you are using, despite our past efforts on dozens of, now deprecated, modules and the current one on unconventional modules that most people probably don't understand or consider useful ([tp](https://github.com/example42/puppet-tp) and [psick](https://github.com/example42/puppet-psick)).
+
+#### Modules future
 
 So we decided to keep on maintaining the network module and actually dedicate it much more time and resources than in the past.
 
