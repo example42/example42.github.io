@@ -48,7 +48,7 @@ You will therefor use the Puppet repositories to install the agent using root us
 
 Now you can install the Puppet Agent package:
 
-    yum install puppet-agent
+    yum -y install puppet-agent
 
 The Puppet Agent package installs into `/opt/puppetlabs` directory and has everything the Puppet Agent needs bundled inside:
 
@@ -178,7 +178,7 @@ You are now writing your first Puppet manifest:
 
     # /root/puppetserver.pp
     # install puppetserver package
-    package { 'puppetserver':
+    package { 'puppetserver':
       ensure => present,
     }
     # ensure that puppetserver is running and started at reboot
@@ -187,7 +187,7 @@ You are now writing your first Puppet manifest:
       enable => true,
     }
     # put information into motd
-    file { '/etc/motd':
+    file { '/etc/motd':
       ensure  => file,
       content => "This is Puppet Server\n",
     }
@@ -206,13 +206,27 @@ No worries, this is not binary code, the Puppet compiler returns minified JSON t
 
 As you are not (yet) having a Puppet master you must run Puppet in masterless mode. This is possible by running `puppet apply` and providing the filename.
 
+Prior installing and starting Pupprt maste rprocess you need to ensure that the time is set correctly:
+
+    yum install -y ntpdate
+    ntpdate pool.ntp.org
+
+Now we can start the Puppet master installation:
+
     # puppet apply /root/puppetserver.pp
+    Notice: Compiled catalog for puppetmaster.example42.training in environment production in 0.69 seconds
+    Notice: /Stage[main]/Main/Package[puppetserver]/ensure: created
+    Notice: /Stage[main]/Main/Service[puppetserver]/ensure: ensure changed 'stopped' to 'running'
+    Notice: /Stage[main]/Main/File[/etc/motd]/content: content changed '{md5}d41d8cd98f00b204e9800998ecf8427e' to '{md5}c3f33391f7d0d397055190ac0c96cbf8'
+    Notice: Applied catalog in 75.65 seconds
 
 Now you have Puppet server process listening on Port 8140 and you can start adding other systems to your Puppet server.
 
 But there is one more thing: what happens if you run the puppet apply command again?
 
     # puppet apply /root/puppetserver.pp
+    Notice: Compiled catalog for puppetmaster.example42.training in environment production in 0.67 seconds
+    Notice: Applied catalog in 0.14 seconds
 
 As you can see, nothing happens. This concept is called [idempotence](https://en.wikipedia.org/wiki/Idempotence). Puppet will always first check the actual system state, compare it with the desired declarative state and only perform actions in case that there is a mismatch.
 
@@ -223,12 +237,14 @@ Puppet uses client SSL certificates to authenticate and authorize Puppet agent c
 Information about the Puppet CA can be read using the `puppet cert` command.
 
     # puppet cert list --all
+    + "puppetmaster.example42.training" (SHA256) D3:F3:44:8D:AE:13:CC:AB:FE:F0:DA:74:13:64:7A:44:09:92:23:CF:90:A4:73:17:5F:35:6C:70:14:64:9B:A8 (alt names: "DNS:puppet", "DNS:puppetmaster.example42.training")
 
 You can even read the CA by using the print parameter:
 
-    puppet cert print puppetmaster.domain.com
+    puppet cert print puppetmaster.example42.training
     [... output truncated ...]
 
 In the next posting we will dig deeper into Puppet DSL, how to write flexible Puppet code instead of writing per node Puppet code, how to make use of existing Puppet module libraries how to deal with slight differences between systems and how to store Puppet code and Puppet data.
 
 Martin Alfke
+
