@@ -206,8 +206,25 @@ No worries, this is not binary code, the Puppet compiler returns minified JSON t
 
 As you are not (yet) having a Puppet master you must run Puppet in masterless mode. This is possible by running `puppet apply` and providing the filename.
 
-Prior installing and starting Pupprt maste rprocess you need to ensure that the time is set correctly:
+Prior installing and starting Pupprt master process you need to ensure that the DNS settings are correct and that time is set correctly:
 
+You can use the `hostnamectl` utility to set a hostname ans add an entry to your puppetmaster /etc/hosts file:
+
+    hostnamectl set-hostname puppetmaster.example42.training
+    echo "127.0.0.1 puppetmaster.example42.training >> /etc/hosts
+
+Now you can verify DNS resolution:
+    
+    ping -c1 $(facter networking.fqdn)
+    PING puppetmaster.example42.training (127.0.0.1) 56(84) bytes of data.
+    64 bytes from localhost (127.0.0.1): icmp_seq=1 ttl=64 time=0.026 ms
+
+    --- puppetmaster.example42.training ping statistics ---
+    1 packets transmitted, 1 received, 0% packet loss, time 0ms
+    rtt min/avg/max/mdev = 0.026/0.026/0.026/0.000 ms
+
+Next you need to verify correct time setting:
+    
     yum install -y ntpdate
     ntpdate pool.ntp.org
 
@@ -243,6 +260,104 @@ You can even read the CA by using the print parameter:
 
     puppet cert print puppetmaster.example42.training
     [... output truncated ...]
+
+Now you are able to connect your first node to the Puppet master. There are some prerequisites that must be accomplished first which are the same as the ones you needed to ensure prior installing the puppetserver:
+
+1. Network setup
+2. DNS/Hostname
+3. Time settings
+
+We set the hostname:
+
+    hostnamectl set-hostname agent1.example42.training
+    echo "<your IP> agent1.example42.training" >> /etc/hosts
+
+And we set the time:
+
+    yum install -y ntpdate
+    ntpdate pool.ntp.org
+
+Now you must either have correct DNS setup or you can add the puppetmaster IP and hostname to /etc/hosts file:
+
+    echo "<master IP>  puppetmaster.example42.training >> /etc/hosts
+    ping -c1 puppetmaster.example42.training
+
+Now you are installing the puppet agent repository and package:
+
+    rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+    yum -y install puppet-agent
+
+Now you are able to use the `puppet agent`:
+
+    puppet agent --test
+    Info: Creating a new SSL key for agent1.example42.training
+    Error: Could not request certificate: Failed to open TCP connection to puppet:8140 (getaddrinfo: Name or service not known)
+    Exiting; failed to retrieve certificate and waitforcert is disabled
+
+Please note the `--test` parameter!! When running `puppet agent` with no further option, the agent will fork from shell and run in background permanently, "waking" himself every 30 minutes.
+
+The `--test` option ensures that the agent process stays in foreground and is running one time only.
+
+You receive an information that the agent has created an SSL certificate, but it can not connect to the master. When no Puppet master is configured thr Puppet agent will try to connect to a system with name "puppet".
+
+As your Puppet server uses another hostname, we must provide information regarding the host to the puppet.conf file:
+
+    # /etc/puppetlabs/puppet/puppet.conf
+    # This file can be used to override the default puppet settings.
+    # See the following links for more details on what settings are available:
+    # - https://docs.puppetlabs.com/puppet/latest/reference/config_important_settings.html
+    # - https://docs.puppetlabs.com/puppet/latest/reference/config_about_settings.html
+    # - https://docs.puppetlabs.com/puppet/latest/reference/config_file_main.html
+    # - https://docs.puppetlabs.com/puppet/latest/reference/configuration.html
+    [agent]
+    server = puppetmaster.example42.training
+
+Now you can run the `puppet agent`command again:
+
+    puppet agent --test
+    Info: Caching certificate for ca
+    Info: csr_attributes file loading from /etc/puppetlabs/puppet/csr_attributes.yaml
+    Info: Creating a new SSL certificate request for agent1.example42.training
+    Info: Certificate Request fingerprint (SHA256): 4A:30:16:96:14:01:3E:B6:2D:5A:3A:E7:B4:FE:C9:2D:FC:76:1C:AC:39:15:50:E1:88:A3:3C:8A:39:9E:5D:13
+    Info: Caching certificate for ca
+    Exiting; no certificate found and waitforcert is disabled
+
+This time you received one error message, claiming that 'no certificate found'. This information comes from the Puppet master.
+
+Switch back to your Puppet master and check for information regarding certificates using the `puppet cert` command:
+
+    puppet cert --list
+      "agent1.example42.training" (SHA256) 4A:30:16:96:14:01:3E:B6:2D:5A:3A:E7:B4:FE:C9:2D:FC:76:1C:AC:39:15:50:E1:88:A3:3C:8A:39:9E:5D:13
+
+The `puppet cert --list` command shows you outstanding certificate signing requests. Now you can sign the request:
+
+    puppet cert --sign agent1.example42.training
+    Signing Certificate Request for:
+      "agent1.example42.training" (SHA256) 4A:30:16:96:14:01:3E:B6:2D:5A:3A:E7:B4:FE:C9:2D:FC:76:1C:AC:39:15:50:E1:88:A3:3C:8A:39:9E:5D:13
+    Notice: Signed certificate request for agent1.example42.training
+    Notice: Removing file Puppet::SSL::CertificateRequest agent1.example42.training at '/etc/puppetlabs/puppet/ssl/ca/requests/agent1.example42.training.pem'
+
+Now the agent run on your node will work:
+
+    puppet agent --test
+    Info: Caching certificate for agent1.example42.training
+    Info: Caching certificate_revocation_list for ca
+    Info: Caching certificate for agent1.example42.training
+    Info: Using configured environment 'production'
+    Info: Retrieving pluginfacts
+    Info: Retrieving plugin
+    Info: Retrieving locales
+    Info: Caching catalog for agent1.example42.training
+    Info: Applying configuration version '1523190091'
+    Info: Creating state file /opt/puppetlabs/puppet/cache/state/state.yaml
+    Notice: Applied catalog in 0.01 seconds
+
+Congratulations. You have now a working setup between your agent and your master and you can run the agent premanently:
+
+    service puppet start
+    Redirecting to /bin/systemctl start puppet.service
+
+For now the node has no configuration on the Puppet server and therefor will not have anything managed. This is dealt with in the next tow. Stay tuned.
 
 In the next posting we will dig deeper into Puppet DSL, how to write flexible Puppet code instead of writing per node Puppet code, how to make use of existing Puppet module libraries how to deal with slight differences between systems and how to store Puppet code and Puppet data.
 
