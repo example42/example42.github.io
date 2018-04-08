@@ -300,7 +300,11 @@ The `--test` option ensures that the agent process stays in foreground and is ru
 
 You receive an information that the agent has created an SSL certificate, but it can not connect to the master. When no Puppet master is configured the Puppet agent will try to connect to a system with name "puppet".
 
-As your Puppet server uses another hostname, we must provide information regarding the host to the puppet.conf file:
+As your Puppet server uses another hostname, you must provide information regarding the DNS name of the puppetserver. You can either provide the information on command line, using the `--server` option:
+
+    puppet agent --test --server puppetmaster.example42.training
+
+or add the configuration to the puppet.conf file:
 
     # /etc/puppetlabs/puppet/puppet.conf
     # This file can be used to override the default puppet settings.
