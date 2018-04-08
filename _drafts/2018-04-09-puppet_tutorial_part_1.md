@@ -7,7 +7,7 @@ title: Tip of the Week 67 - example42 Puppet Tutorial - Part 1
 
 This is the first post of a series of articles covering an introduction to Puppet.
 
-I start with Puppet agent installation and how to use Puppet and Facter to analyze a system. Next topics are the introduction to the Puppet programming language (DSL), how to setup a central Puppet master and how to connect Puppet agents to a Puppet master.
+I start with Puppet agent installation and how to use Puppet and Facter to analyse a system. Next topics are the introduction to the Puppet programming language (DSL), how to setup a central Puppet master and how to connect Puppet agents to a Puppet master.
 
 The second part will cover Puppet modules, code logic and variables and how to add external facts to your systems. Besides this I will introduce parameters and the concept of separating code and data by using hiera.
 
@@ -35,7 +35,7 @@ The Puppet server can only run on Linux based systems (see [Puppetserver Support
 
 You start with installing Puppet agent on a Linux system. This tutorial uses CentOS 7, descriptions on how to install Puppet agent on other Linux distributions can be found on the [Puppet Platform](https://puppet.com/docs/puppet/latest/puppet_platform.html) website.
 
-As the first system also will become your Puppet server, you have to take care on proper hardware sizing. A Puppet server should have at least 2-4 GB of RAM and at least 1-2 CPU cores. The harddisk should have enough space to hold your code, plus information and reports from your agents. Usually Puppet recommends 100 GB free space. Further information can be found on the [Puppet Server Installation](https://puppet.com/docs/puppetserver/latest/install_from_packages.html) page.
+As the first system also will become your Puppet server, you have to take care on proper hardware sizing. A Puppet server should have at least 2-4 GB of RAM and at least 1-2 CPU cores. The hard disk should have enough space to hold your code, plus information and reports from your agents. Usually Puppet recommends 100 GB free space. Further information can be found on the [Puppet Server Installation](https://puppet.com/docs/puppetserver/latest/install_from_packages.html) page.
 
 Note: in larger environments (more than 400 nodes) a Puppet server should have 4-12 cores and 12 to 24 GB RAM.
 
@@ -113,7 +113,7 @@ Read a file resource:
       type     => 'file',
     }
 
-Read a servcie resource:
+Read a service resource:
 
     # puppet resource service puppet
     service { 'puppet':
@@ -143,7 +143,7 @@ As you can see Puppet always uses the same layout and syntax for resources:
 
 This pattern is named a "resource type declaration".
 
-Another important utility which is part of the pupept agent package is `facter`. `facter` collects different system information covering hardware (RAM, CPU, manufacturer), network (interfaces, IPv4 and IPv4 addresses), operating system (name, version) and many more.
+Another important utility which is part of the puppet agent package is `facter`. `facter` collects different system information covering hardware (RAM, CPU, manufacturer), network (interfaces, IPv4 and IPv4 addresses), operating system (name, version) and many more.
 
 You can print the whole set of information by running `facter` on the command line as root user.
 A single element can be read when adding the fact name: `facter os`, `facter networking`.
@@ -199,14 +199,14 @@ At the file resource I am managing the content. This is easy to do for small con
 
 But how do you now "execute" the manifest we have written?
 
-First: in Puppet you never "execute" something. Instead you want to apply a specifc declaration onto a system. This is done by Puppet first parsing the manifest and rendering it into a catalog. This process is called "catalog compile".
+First: in Puppet you never "execute" something. Instead you want to apply a specific declaration onto a system. This is done by Puppet first parsing the manifest and rendering it into a catalog. This process is called "catalog compile".
 No worries, this is not binary code, the Puppet compiler returns minified JSON to the Puppet agent, who will then start working on the returned catalog.
 
 #### Puppet apply
 
 As you are not (yet) having a Puppet master you must run Puppet in masterless mode. This is possible by running `puppet apply` and providing the filename.
 
-Prior installing and starting Pupprt master process you need to ensure that the DNS settings are correct and that time is set correctly:
+Prior installing and starting Puppet master process you need to ensure that the DNS settings are correct and that time is set correctly:
 
 You can use the `hostnamectl` utility to set a hostname ans add an entry to your puppetmaster /etc/hosts file:
 
@@ -249,7 +249,7 @@ As you can see, nothing happens. This concept is called [idempotence](https://en
 
 #### Puppet CA and Puppet agents
 
-Puppet uses client SSL certificates to authenticate and authorize Puppet agent connections to the Puppet server process. Per default the Puppet server uses a self signed CA to retrieve certificate signing requests and sign certificates.
+Puppet uses client SSL certificates to authenticate and authorise Puppet agent connections to the Puppet server process. Per default the Puppet server uses a self signed CA to retrieve certificate signing requests and sign certificates.
 
 Information about the Puppet CA can be read using the `puppet cert` command.
 
@@ -298,7 +298,7 @@ Please note the `--test` parameter!! When running `puppet agent` with no further
 
 The `--test` option ensures that the agent process stays in foreground and is running one time only.
 
-You receive an information that the agent has created an SSL certificate, but it can not connect to the master. When no Puppet master is configured thr Puppet agent will try to connect to a system with name "puppet".
+You receive an information that the agent has created an SSL certificate, but it can not connect to the master. When no Puppet master is configured the Puppet agent will try to connect to a system with name "puppet".
 
 As your Puppet server uses another hostname, we must provide information regarding the host to the puppet.conf file:
 
@@ -312,7 +312,7 @@ As your Puppet server uses another hostname, we must provide information regardi
     [agent]
     server = puppetmaster.example42.training
 
-Now you can run the `puppet agent`command again:
+Now you can run the `puppet agent` command again:
 
     puppet agent --test
     Info: Caching certificate for ca
@@ -352,7 +352,7 @@ Now the agent run on your node will work:
     Info: Creating state file /opt/puppetlabs/puppet/cache/state/state.yaml
     Notice: Applied catalog in 0.01 seconds
 
-Congratulations. You have now a working setup between your agent and your master and you can run the agent premanently:
+Congratulations. You have now a working setup between your agent and your master and you can run the agent permanently:
 
     service puppet start
     Redirecting to /bin/systemctl start puppet.service
