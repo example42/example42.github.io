@@ -7,7 +7,7 @@ title: Tip of the Week 68 - example42 Puppet Tutorial - Part 2
 
 This is the second post of a series of articles covering an introduction to Puppet.
 
-In the [first post](https://example42.com/blog) I started with Puppet agent installation and how to use Puppet and Facter to analyze your system. Next topics have been the introduction to the Puppet programming language (DSL), how to setup the central Puppet master and how to connect Puppet agents to the Puppet master.
+In the [first post](https://www.example42.com/2018/04/09/puppet_tutorial_part_1/) I started with Puppet agent installation and how to use Puppet and Facter to analyze your system. Next topics have been the introduction to the Puppet programming language (DSL), how to setup the central Puppet master and how to connect Puppet agents to the Puppet master.
 
 This posting will cover Puppet code location and structure like modules, code logic and variables and how to add external facts to your systems. Besides this I will introduce parameters and the concept of separating code and data by using hiera.
 
@@ -136,13 +136,253 @@ Please note that you must omit the files directory name!
     puppet:///modules/ssh/sshd_config
     <protocol>://<server>/modules/<modulename>/<file in files directory>
 
+But what happens if the SSH daemon is already running? Puppet will ensure that the config file will get updated. But the service will continue running with the old configuration.
+
+In this case you must tell the service resource that it should restart upon config file changes. This is done by using a metaparameter.
+
+    file { '/etc/ssh/sshd_config':
+      ensure => file,
+      source => 'puppet:///modules/ssh/sshd_config',
+      notify => Service['sshd'],
+    }
+
+The notify parameter uses a reference to a declared resource type. The resource type is written with capital letter and afterwards you use the title in brackets.
+
+    Type['title']
+
+Another solution is to use the chaining pattern:
+
+    File['/etc/ssh/sshd_config'] ~> Service['sshd']
+
+Let's put everything together:
+
+    # /etc/puppetlabs/code/environments/production/modules/ssh/manifests/init.pp
+    class ssh {
+      package { 'openssh-server':
+        ensure => present,
+      }
+      package { 'openssh-client':
+        ensure => present,
+      }
+      file { '/etc/ssh/sshd_config':
+       ensure => file,
+       source => 'puppet:///modules/ssh/sshd_config',
+       notify => Service['sshd'],
+      }
+      service { 'sshd':
+        ensure => running,
+        enable => true,
+      }
+    }
+
+And the configuration file:
+
+    # /etc/puppetlabs/code/environments/production/modules/ssh/files/sshd_config
+    Port 22
+    PermitRootLogin no
+    PubkeyAuthentication yes
+    AuthorizedKeysFile      .ssh/authorized_keys
+    UsePAM yes
+    UseDNS no
+    Subsystem       sftp    /usr/libexec/openssh/sftp-server
+
 #### Puppet Variables
+
+But what if one system needs a different configuration? e.g. allow root access or switch port.
+This would require a second configuratoin file and a class adopted to only one specifc system.
+Or what if you must manage SSH on another UNIX system where paths are different?
+
+Puppet allows you to build flexible code by making use of variables. A variable in Puppet is easily identified by having a dollar sign: `$variable`.
+
+You can assign values to variables - but within a class you can not reassign the same variable a second time. Variables in Puppet are more like static artifacts and Puppet is not a scripting language.
+
+Next you can check variables whether they have a value, you can check for specifc values or for regular expressions.
+
+Check for variable having a value:
+
+    $var1 = false
+    if $var1 {
+      # Puppet code
+    } else {          # <- else is optional
+      # Puppet code
+    }
+    
+Checking a variable like in the example above will return true in the following cases:
+
+1. the variable has the bool value `true`
+2. the variable has any content (Array, Hash String or even an empty string)
+
+Check for variable having specific value:
+
+    $var2 = 'dbmaster'
+    if $var2 == 'dbmaster' {
+      # Puppet code
+    }
+
+Check for variable using regular expression
+
+    $var3 = 'db22.domain.com'
+    if $var ~= /^db\d+\.domain\.com$/ {
+      # Puppet code
+    }    
 
 #### Puppet Code Logic
 
+Variables will be mostly used in Puppet code logic: use correct package names or file paths depending on Linux distribution name.
+
+This is where the `case` function will be useful:
+
+    case $::facts['os']['name'] {
+      'CentOS', 'Amazon', 'RHEL': {
+        # Puppet code for RedHat based systems
+      }
+      'Ubuntu', 'Debian': {
+        # Puppet code for Debian based systems
+      }
+      'SLES': {
+        # Puppet code for SuSE based systems
+      }
+      default: {
+        # Optional default for any other OS
+      }
+    }
+
+What is this `$::facts['os']['name']` thing? Remeber post 1 when I was introducing `facter`?
+Facts are available to Puppet code within a special variable: `$::facts`. All data are stored as a hash inside this variable.
+
+On the command line you were using `facter os` or `facter os.name` to access specific facts. Within Puppet code you must use the `$::facts` variable and put the elements into brackets and quote them.
+
+Now we can rewrite the SSH class to also work on Debian systems:
+
+    # /etc/puppetlabs/code/environments/production/modules/ssh/manifests/init.pp
+    class ssh {
+      case $::facts['os']['family'] {
+        'RedHat': {
+          $packages = ['openssh-server', 'openssh-client']
+        }
+        'Debian': {
+          $packages = ['ssh']
+        }
+      }
+      package { $packages:
+        ensure => present,
+      }
+      file { '/etc/ssh/sshd_config':
+       ensure => file,
+       source => 'puppet:///modules/ssh/sshd_config',
+       notify => Service['sshd'],
+      }
+      service { 'sshd':
+        ensure => running,
+        enable => true,
+      }
+    }
+
+Here we use another thing within Puppet: at a title you are able to use an array. Puppet internally will split the array up into single package resource type declarations.
+
 #### Class Parameters
 
+But how do you deal with a single node to allow root ssh access?
+
+You have multiple possible solutions like creating an external fact on the node, and check for existance of the fact. But that is highly unflexible. Instead you can use class parameters.
+
+    # /etc/puppetlabs/code/environments/production/modules/ssh/manifests/init.pp
+    class ssh (
+      Boolean $permit_root = true,
+    ){
+      # Puppet code
+    }
+
+At the parameter we specify the expected data type and we provide a default value.
+
+But how to now declare the class?
+
+#### Node classification
+
+The most simple approach (on small platforms) is the manifest based node classification. Remeber the environment directory structure where I showed the `manifests` directory with `site.pp` file inside? THis is the place where you will place information on your nodes.
+
+    # /etc/puppetlabs/code/environments/production/manifests/site.pp
+    
+    node 'agent1.example42.training' {
+    }
+
+There are two ways on how to inform the Puppet server that he should add a class to the node's catalog:
+
+    include ssh
+or
+
+    class { 'ssh':
+    }
+
+When using the second approach, you are able to specify class parameters:
+
+    class { 'ssh':
+      permit_root => true,
+    }
+
+#### Dynamic configuratoin files
+
+Now we must ensure that Puppet uses the provided parameter inside a configuration file. Which means the configuratoin file must be built during Puppet catalog compilation. This is where templates come into play.
+
+Puppet templates are plain text files which use opening (`<%`) and closing (`%>`) tags to identify where the template engine should do something. The content within the tags is just Puppet DSL code.
+
+Templates are - like files - part of the module, but are not in the files folder, but in the templates directory. Modern Puppet uses the EPP template engine which requires that temapltes must have the file ending `.epp`.
+
+In this case you want the template engine to check for the value of the parameter `permit_root` and set the correct configuratoin value:
+
+    # /etc/puppetlabs/code/environments/production/modules/ssh/templates/sshd_config.epp
+    Port 22
+    <% if $ssh::permit_root { %>
+    PermitRootLogin yes
+    <% } else { %>
+    PermitRootLogin no
+    <% } %>
+    PubkeyAuthentication yes
+    AuthorizedKeysFile      .ssh/authorized_keys
+    UsePAM yes
+    UseDNS no
+    Subsystem       sftp    /usr/libexec/openssh/sftp-server
+
+Using the template is different to using a static file. At the static file we were managing the `source`. Now you must manage the `content`:
+
+    file { '/etc/ssh/sshd_config':
+      ensure  => file,
+      content => epp('ssh/sshd_config.epp'),
+    }
+
+The template validation takes place on the Puppet master while compiling the catalog. So there is no need to specify the protocol or the server or telling the server that it should look in a module. You only specify the module and the name of the file in the templates directory.
+
+This will give you the following Puppet code:
+
+    # /etc/puppetlabs/code/environments/production/modules/ssh/manifests/init.pp
+    class ssh (
+      Boolean $permit_root = true,
+    ){
+      case $::facts['os']['family'] {
+        'RedHat': {
+          $packages = ['openssh-server', 'openssh-client']
+        }
+        'Debian': {
+          $packages = ['ssh']
+        }
+      }
+      package { $packages:
+        ensure => present,
+      }
+      file { '/etc/ssh/sshd_config':
+       ensure  => file,
+       content => epp('ssh/sshd_config.epp'),
+       notify  => Service['sshd'],
+      }
+      service { 'sshd':
+        ensure => running,
+        enable => true,
+      }
+    }
+    
 #### Separation of Code and Data
+
+But what if you have a largenumber of systems and each system needs to get configured slightly different. In this case it will become a nightmare when you add each node individually to `manifests/site.pp` file.
 
 The next posting will explain the concept of re-using existing modules and provide information on why you should see modules similar to libararies.
 I will explain the concept of Roles and Profiles and the Node Classification.
