@@ -320,15 +320,15 @@ When using the second approach, you are able to specify class parameters:
       permit_root => true,
     }
 
-#### Dynamic configuratoin files
+#### Dynamic configuration files
 
-Now we must ensure that Puppet uses the provided parameter inside a configuration file. Which means the configuratoin file must be built during Puppet catalog compilation. This is where templates come into play.
+Now we must ensure that Puppet uses the provided parameter inside a configuration file. Which means the configuration file must be built during Puppet catalog compilation. This is where templates come into place.
 
 Puppet templates are plain text files which use opening (`<%`) and closing (`%>`) tags to identify where the template engine should do something. The content within the tags is just Puppet DSL code.
 
-Templates are - like files - part of the module, but are not in the files folder, but in the templates directory. Modern Puppet uses the EPP template engine which requires that temapltes must have the file ending `.epp`.
+Templates are - like files - part of the module, but are not in the files folder, but in the templates directory. Modern Puppet uses the EPP template engine which requires that templates must have the file ending `.epp`.
 
-In this case you want the template engine to check for the value of the parameter `permit_root` and set the correct configuratoin value:
+In this case you want the template engine to check for the value of the parameter `permit_root` and set the correct configuration value:
 
     # /etc/puppetlabs/code/environments/production/modules/ssh/templates/sshd_config.epp
     Port 22
@@ -382,7 +382,67 @@ This will give you the following Puppet code:
     
 #### Separation of Code and Data
 
-But what if you have a largenumber of systems and each system needs to get configured slightly different. In this case it will become a nightmare when you add each node individually to `manifests/site.pp` file.
+But what if you have a large number of systems and each system needs to get configured slightly different. In this case it will become a nightmare when you add each node individually to `manifests/site.pp` file or by writing specific puppet code.
+
+This is where Hiera jumps in.
+Hiera allows you to do data lookups, so you can separate code from data.
+
+Think about the following Puppet code:
+
+    class ssh {
+      case $::facts['datacenter' {
+        'amsterdam': {
+          case $::certname {
+            'gateway.ams.example42.training': {
+              $permit_root = false
+            }
+            'default': {
+              $permit_root = true
+            }
+          }
+          $ssh_port = '22'
+          $ssh_listen = 'enp0s3'
+        }
+        'london': {
+          if $::certname == 'firewall.lon.example42.training' {
+            $permit_root = false
+          } else {
+            if $::certname = 'devel.lon.example42.training {
+              $permit_root = true
+            }
+          }
+          $ssh_port = '222'
+          $ssh_lisen = 'any'
+        }
+      }
+      file { '/etc/ssh/sshd_config':
+        ensure  => file,
+        content => epp('ssh/sshd_config.epp'),  # <- template uses variables from above
+      }
+    }
+
+Looks like nightmare? Yes, this is nightmare. Let's start using hiera:
+
+    class ssh {
+      $permit_root = lookup('permit_root', Boolean, first, false)
+      $ssh_port = lookup('ssh_port', String, first, '22')
+      $ssh_listen = lookup('ssh_listen', String, first, 'enp0s3')
+      file { '/etc/ssh/sshd_config':
+        ensure  => file,
+        content => epp('ssh/sshd_config.epp'),  # <- template uses variables from above
+      }
+    }
+
+Puppet code now looks cleaner. But where have you hidden the data?
+First: you need a Hiera configuration file located in `/etc/puppetlabs/code/environment/production/hiera.yaml`.
+Within the hiera.yaml file, one specifies different layers of data.
+
+Think of hiera being a huge chessboard. Every field means a key and has the value written on it.
+With every hiera layer, hiera looks whether it has another chessboard which can be placed over the default dashboard. The new layer chessboard has some elements unset, which means, you can look through the layer and you see the data from the default chessboard, some data are overwritten.
+
+
+
+There is another even more simple way: When declaring a parameterozed class using the `include` function, Puppet will automatically query hier afor data.
 
 The next posting will explain the concept of re-using existing modules and provide information on why you should see modules similar to libararies.
 I will explain the concept of Roles and Profiles and the Node Classification.
