@@ -415,7 +415,7 @@ Think about the following Puppet code:
           $ssh_lisen = 'any'
         }
       }
-      file { '/etc/ssh/sshd_config':
+      file { '/etc/ssh/sshd_config':
         ensure  => file,
         content => epp('ssh/sshd_config.epp'),  # <- template uses variables from above
       }
@@ -427,7 +427,7 @@ Looks like nightmare? Yes, this is nightmare. Let's start using hiera:
       $permit_root = lookup('permit_root', Boolean, first, false)
       $ssh_port = lookup('ssh_port', String, first, '22')
       $ssh_listen = lookup('ssh_listen', String, first, 'enp0s3')
-      file { '/etc/ssh/sshd_config':
+      file { '/etc/ssh/sshd_config':
         ensure  => file,
         content => epp('ssh/sshd_config.epp'),  # <- template uses variables from above
       }
@@ -437,15 +437,131 @@ Puppet code now looks cleaner. But where have you hidden the data?
 First: you need a Hiera configuration file located in `/etc/puppetlabs/code/environment/production/hiera.yaml`.
 Within the hiera.yaml file, one specifies different layers of data.
 
-Think of hiera being a huge chessboard. Every field means a key and has the value written on it.
-With every hiera layer, hiera looks whether it has another chessboard which can be placed over the default dashboard. The new layer chessboard has some elements unset, which means, you can look through the layer and you see the data from the default chessboard, some data are overwritten.
+Think of hiera layers being a huge 'chessboard'. At the default 'chessboard' every field means a key and has the value written on it.
+With every hiera layer, hiera looks whether it has another 'chessboard' which can be placed over the default one. The new layer 'chessboard' has some elements unset, which means, you can look through the layer and you see the data from the default 'chessboard', some data are overwritten.
+
+I try to visualize (the effective data are printed in **bold**
+
+1. node agent.ams.example42.training
+
+  - Datacenter: Amsterdam
+  - Certname: agent.ams.example42.training
+
+Level | permit_root | ssh_port | ssh_listen
+--- | --- | --- | ---
+Common Data | false | **22** | any
+Amsterdam Data | **true** | --- | **enp0s3**
+Node Data | --- | --- | ---
+
+2. node gateway.ams.example42.training
+
+  - Datacenter: Amsterdam
+  - Certname: gateway.ams.example42.training
+
+Level | permit_root | ssh_port | ssh_listen
+--- | --- | --- | ---
+Common Data | false | **22** | any 
+Amsterdam Data | true | --- | **enp0s3**
+Node Data | **false** | --- | ---
+
+3. node agent.lon.example42.training
+
+  - Datacenter: London
+  - Certname: agent.lon.example42.training
+
+Level | permit_root | ssh_port | ssh_listen
+--- | --- | --- | ---
+Common Data | **false** | 22 | **any** 
+London Data | --- | **222** | ---
+Node Data | --- | --- | ---
+
+4. node firewall.lon.example42.training
+
+  - Datacenter: London
+  - Certname: firewall.lon.example42.training
+
+Level | permit_root | ssh_port | ssh_listen
+--- | --- | --- | ---
+Common Data | **false** | 22 | **any** 
+London Data | --- | **222** | ---
+Node Data | --- | --- | ---
 
 
+5. node devel.lon.example42.training
 
-There is another even more simple way: When declaring a parameterozed class using the `include` function, Puppet will automatically query hier afor data.
+  - Datacenter: London
+  - Certname: devel.lon.example42.training
 
-The next posting will explain the concept of re-using existing modules and provide information on why you should see modules similar to libararies.
-I will explain the concept of Roles and Profiles and the Node Classification.
+Level | permit_root | ssh_port | ssh_listen
+--- | --- | --- | ---
+Common Data | false | 22 | **any** 
+London Data | --- | **222** | ---
+Node Data | **true** | --- | ---
+
+Based on these inforation you can build your hierarchies into your hiera.yaml file:
+
+    # /etc/puppetlabs/code/environments/production/hiera.yaml
+    ---
+    version: 5
+    defaults:
+      datadir: data
+      data_hash: yaml_data
+    hierarchy:
+      - name: 'Node Data'
+        path: "nodes/%{trusted.certname}.yaml"
+      - name: 'Data Center Data'
+        path: "datacenters/%{facts.datacenter}.yaml"
+      - name: 'Common Data'
+        path: 'common.yaml'
+
+The data for hiera are placed inside the (relative) path `data` (`/etc/puppetlabs/code/environments/production/data`).
+
+Your directory structure (using the above examples) will be the following:
+
+    /etc/puppetlabs/code/environments/production/data
+      |- common.yaml
+      |- datacenters/
+      |  |- london.yaml
+      |  \- amsterdam.yaml
+      \- nodes/
+         |- gateway.ams.example42.training.yaml
+         \- devel.lon.example42.training
+         
+The content of the files will be YAML structured data containing `key: value`.
+e.g.
+
+    # common.yaml
+    permit_root: false
+    ssh_port: '22'
+    ssh_listen: 'any'
+
+But now it is up to you to take care to not use duplicate key names.
+
+There is another even more simple way: When declaring a parameterozed class using the `include` function, Puppet will automatically query hiera for data.
+
+So you move the lookups to parameters:
+
+    class ssh (
+      Boolean $permit_root = false,
+      String  $ssh_port    = '22',
+      String  $ssh_listen  = 'enp0s3',
+    ){
+      file { '/etc/ssh/sshd_config':
+        ensure  => file,
+        content => epp('ssh/sshd_config.epp'),  # <- template uses variables from above
+      }
+    }
+
+When you just `include ssh` Puppet will ask hiera for the parameters in the given namespace: "Hey hiera, do you have a value for namespace `ssh` and parameter `permit_root`? Or to be short: `ssh::permit_root`.
+
+All you have to do is add the namesapces to your keys:
+
+    # common.yaml
+    ssh::permit_root: false
+    ssh::ssh_port: '22'
+    ssh::ssh_listen: 'any'
+
+The next posting will explain the concept of re-using existing modules and provide information on why you should see modules similar to libararies. Additionally I will explain the concept of Roles and Profiles and the Node Classification.
 
 
 Martin Alfke
