@@ -7,9 +7,9 @@ title: Tip of the Week 69 - example42 Puppet Tutorial - Part 3
 
 This is the third post of a series of articles covering an introduction to Puppet.
 
-In the [first post](https://example42.com/blog) I started with Puppet agent installation and how to use Puppet and Facter to analyze your system. Next topics have been the introduction to the Puppet programming language (DSL), how to setup the central Puppet master and how to connect Puppet agents to the Puppet master.
+In the [first post](https://www.example42.com/2018/04/09/puppet_tutorial_part_1/) I started with Puppet agent installation and how to use Puppet and Facter to analyze your system. Next topics have been the introduction to the Puppet programming language (DSL), how to setup the central Puppet master and how to connect Puppet agents to the Puppet master.
 
-The [second posting](https://example42.com/blog) covered cover Puppet modules, code logic and variables and how to add external facts to your systems. Besides this I introduced parameters and the concept of separating code and data by using hiera.
+The [second posting](https://www.example42.com/2018/04/16/puppet_tutorial_part_2/) covered Puppet modules, code logic and variables and how to add external facts to your systems. Besides this I introduced parameters and the concept of separating code and data by using hiera.
 
 This third part will explain how to make use of upstream Puppet libraries when describing your own infrastructure, how to best classify nodes and where to place the code.
 

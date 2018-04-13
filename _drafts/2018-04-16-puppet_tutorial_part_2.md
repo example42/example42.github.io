@@ -252,6 +252,37 @@ Facts are available to Puppet code within a special variable: `$::facts`. All da
 
 On the command line you were using `facter os` or `facter os.name` to access specific facts. Within Puppet code you must use the `$::facts` variable and put the elements into brackets and quote them.
 
+You might want to add your own set of variables during system provisioning. e.g. information on which datacenter the system is running in, what is the usecase of the system and whether it is a development or production system.
+
+You can add these facts easily by placing files into a specific directory (`/etc/puppetlabs/facter/facts.d/`). Don't worry, if the directory does not exist, just create it.
+
+In this directory you can place:
+
+  - .yaml files - with yaml syntax
+  - .json files - with json syntax
+  - .txt files - with key=value syntax
+
+Now you can create information on your datacenter to a node:
+
+    # /etc/puppetlabs/facter/facts.d/provision_facts.yaml
+    ---
+    datacenter: 'london'
+    application:
+      name: 'cms'
+      stage: 'dev'
+
+You can query these facts by using `facter -p`:
+
+    facter -p datacenter
+    london
+    facter -p application
+    {
+      "name" => "cms",
+      "stage" => "dev"
+    }
+
+Let's get back to the Puppet code:
+
 Now we can rewrite the SSH class to also work on Debian systems:
 
     # /etc/puppetlabs/code/environments/production/modules/ssh/manifests/init.pp
