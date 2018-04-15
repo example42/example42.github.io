@@ -6,6 +6,7 @@ title: Tip of the Week 68 - example42 Puppet Tutorial - Part 2
 ### example42 Puppet Tutorial - Part 2
 
 This is the second post of a series of articles covering an introduction to Puppet.
+Take your time digging through this posting as this a very dense summary with lots of information.
 
 In the [first post](https://www.example42.com/2018/04/09/puppet_tutorial_part_1/) I started with Puppet agent installation and how to use Puppet and Facter to analyze your system. Next topics have been the introduction to the Puppet programming language (DSL), how to setup the central Puppet master and how to connect Puppet agents to the Puppet master.
 
@@ -33,7 +34,7 @@ Let's also rename the teams: Ops is now Infrastructure Development, Dev is now A
 
 You can visualize the differences by the following table:
 
-Team | Infrastructure Development | Devevelopment | Testing | Production
+Team | Infrastructure Development | Devevelopment | Testing | Production
 --- | --- | --- | --- | ---
 Application Development | - | Development | Testing | Production
 Infrastructure Development | Development | Production | Production |Production
@@ -53,7 +54,7 @@ Within the environment we have a strict naming convention of content:
 A module is a directory located in the `$modulepath` configured location. This configuration is done in `environment.conf` and has the following default setting:
 
     modulepath = ./modules:$basemodulepath
-    
+
 The `$basemodulepath` configuration is a Puppet default and is especially needed if you are using Puppet Enterprise.
 
 Best option is to see a module as a small part of your platform like ssh, ldap, apache, nginx, postfix, exim, mysql, postgresql, firewall, ...
@@ -82,10 +83,10 @@ In the puppetserver.pp file we directly placed Puppet DSL code. In a class we wr
       }
       file { '/etc/motd':
         ensure  => file,
-        content => "# THis is puppetserver\n",
+        content => "# This is puppetserver\n",
       }
     }
-    
+
 The difference: a class definition is part of your Puppet code and will only be added to a nodes catalog if a class declaration is added. Class declaration is a concept we explain in the next posting.
 
 This time I concentrate on the concept of classes, the DSL and the naming convention.
@@ -122,7 +123,7 @@ Inside of a class you can put Puppet DSL code:
 
 This will ensure that you have an SSH daemon running with default configuration. I already showed how you can manage the content of a file. But placing the sshd\_config file content inside the class will lead to bad readable code. Let's assume that you want to deploy one version of sshd\_config file to all systems. In this case you can use the source parameter:
 
-    file { '/etc/ssh/sshd_config':
+    file { '/etc/ssh/sshd_config':
       ensure => file,
       source => 'puppet:///modules/ssh/sshd_config',
     }
@@ -140,7 +141,7 @@ But what happens if the SSH daemon is already running? Puppet will ensure that t
 
 In this case you must tell the service resource that it should restart upon config file changes. This is done by using a metaparameter.
 
-    file { '/etc/ssh/sshd_config':
+    file { '/etc/ssh/sshd_config':
       ensure => file,
       source => 'puppet:///modules/ssh/sshd_config',
       notify => Service['sshd'],
@@ -164,7 +165,7 @@ Let's put everything together:
       package { 'openssh-client':
         ensure => present,
       }
-      file { '/etc/ssh/sshd_config':
+      file { '/etc/ssh/sshd_config':
        ensure => file,
        source => 'puppet:///modules/ssh/sshd_config',
        notify => Service['sshd'],
@@ -206,7 +207,7 @@ Check for variable having a value:
     } else {          # <- else is optional
       # Puppet code
     }
-    
+
 Checking a variable like in the example above will return true in the following cases:
 
 1. the variable has the bool value `true`
@@ -298,7 +299,7 @@ Now we can rewrite the SSH class to also work on Debian systems:
       package { $packages:
         ensure => present,
       }
-      file { '/etc/ssh/sshd_config':
+      file { '/etc/ssh/sshd_config':
        ensure => file,
        source => 'puppet:///modules/ssh/sshd_config',
        notify => Service['sshd'],
@@ -400,7 +401,7 @@ This will give you the following Puppet code:
       package { $packages:
         ensure => present,
       }
-      file { '/etc/ssh/sshd_config':
+      file { '/etc/ssh/sshd_config':
        ensure  => file,
        content => epp('ssh/sshd_config.epp'),
        notify  => Service['sshd'],
@@ -410,7 +411,7 @@ This will give you the following Puppet code:
         enable => true,
       }
     }
-    
+
 #### Separation of Code and Data
 
 But what if you have a large number of systems and each system needs to get configured slightly different. In this case it will become a nightmare when you add each node individually to `manifests/site.pp` file or by writing specific puppet code.
@@ -421,7 +422,7 @@ Hiera allows you to do data lookups, so you can separate code from data.
 Think about the following Puppet code:
 
     class ssh {
-      case $::facts['datacenter' {
+      case $::facts['datacenter'] {
         'amsterdam': {
           case $::certname {
             'gateway.ams.example42.training': {
@@ -557,7 +558,7 @@ Your directory structure (using the above examples) will be the following:
       \- nodes/
          |- gateway.ams.example42.training.yaml
          \- devel.lon.example42.training
-         
+
 The content of the files will be YAML structured data containing `key: value`.
 e.g.
 
