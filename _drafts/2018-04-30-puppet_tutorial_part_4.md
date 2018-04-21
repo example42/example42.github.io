@@ -32,7 +32,7 @@ The [PSICK control repository](https://github.com/example42/psick.git) contains:
 
 Your main starting point is `manifests/site.pp` here you check for trusted facts variables, set defaults for different operatingsystems, manage the noop mode and classify all nodes using the [example42 PSICK puppet module](https://github.com/example42/puppet-psick.git).
 
-Next important file is hiera.yaml - the environment level hiera configuration file. Here you see that data and data management is split into two different repositories. The main reason is that we see data management changes as dangerous. Whith this setup you can provide different access to data.
+Next important file is `hiera.yaml` - the environment level hiera configuration file. Here you see that data and data management is split into two different repositories. The main reason is that we see data management changes as dangerous. Whith this setup you can provide different access to data.
 Besides this you learn that we have enabled hiera-eyaml from scratch.
 ***Please note that you must create your keys:***
 
@@ -49,12 +49,12 @@ Next you want to verify whether our provided default hierarchies can also be use
 
 #### The PSICK Module (Library)
 
-Within the PSICK module you will find an infrastructure library based on [example42's tiny-puppet](http://tiny-puppet.com/) and many standard Puppet modules.
+Within the PSICK module you will find an infrastructure library based on [example42's tiny-puppet](http://tiny-puppet.com/) and many standard Puppet modules in `Puppetfile`.
 Next you will see modules which are used by specifc profiles.
 
 Please note that we use profiles only from the [Roles & Profiles pattern](https://puppet.com/docs/pe/latest/r_n_p_full_example.html).
 
-In the module main class (`init.pp`) we provide parameters for global PSICK settings (e.g. noop mode and first_run), then you will find information regarding your management network. Last parameter block (general endpoints and variables) is used for your infrastructure and stages.
+In the module main class (`manifests/init.pp`) we provide parameters for global PSICK settings (e.g. noop mode and first_run), then you will find information regarding your management network. Last parameter block (general endpoints and variables) is used for your infrastructure and stages.
 
 At the end of the file you will see the verification for first_run. If this is not needed or already done, you will see three contain functions for three different deployment levels:
 
