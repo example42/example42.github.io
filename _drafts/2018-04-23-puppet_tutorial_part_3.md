@@ -210,7 +210,7 @@ Now there is also no need to have the node mentioned. You can place the variable
 This solution is handy when you want to be able to reuse an existing system and let it have another role, as you only have to change the fact.
 **Please note that changing a systems use case is not considered best practice!** Usually you want to de-provision the old system and provision a new one.
 
-And then there is hiera. YOu can add node classifications also directly into hiera.
+And then there is hiera. You can add node classifications also directly into hiera.
 
     # /etc/puppetlabs/code/environments/production/data/nodes/id3046756732.domain.com.yaml
     #
@@ -267,7 +267,7 @@ r10k pulls the control repository and checks for existing branches. Branch names
 In each of the environments, r10k will parse the Puppetfile and install the mentioned modules.
 This is achieved by running r10k:
 
-    r10k deploy environments -pv
+    /opt/puppetlabs/puppet/bin/r10k deploy environments -pv
 
 The `-p` option enables parsing of Puppetfile and installing modules. `-v` enables verbose output so you see what r10k is doing.
 
