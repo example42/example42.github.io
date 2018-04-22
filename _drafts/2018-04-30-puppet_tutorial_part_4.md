@@ -5,13 +5,13 @@ title: Tip of the Week 70 - example42 Puppet Tutorial - Part 4
 
 ### example42 Puppet Tutorial - Part 4
 
-This is the fourth post of a series of articles covering an introduction to Puppet.
+This is the last post of a series of articles covering an introduction to Puppet.
 
 In the [first post](https://www.example42.com/2018/04/09/puppet_tutorial_part_1/) I started with Puppet agent installation and how to use Puppet and Facter to analyze your system. Next topics have been the introduction to the Puppet programming language (DSL), how to setup the central Puppet master and how to connect Puppet agents to the Puppet master.
 
 The [second posting](https://www.example42.com/2018/04/16/puppet_tutorial_part_2/) covered cover Puppet modules, code logic and variables and how to add external facts to your systems. Besides this I introduced parameters and the concept of separating code and data by using hiera.
 
-Th [third part](http://example42.com/blog) explained how to make use of upstream Puppet libraries when describing your own infrastructure, how to best classify nodes and where to place the code.
+Th [third part](http://example42.com/2018/04/23/puppet_tutorial_part_3/) explained how to make use of upstream Puppet libraries when describing your own infrastructure, how to best classify nodes and where to place the code.
 
 In this posting I will combine what I have shown and explain how to make use of the example42 [PSICK control repository](https://github.com/example42/psick.git), the [PSICK module](https://github.com/example42/puppet-psick.git) and the [PSICK hieradata](https://github.com/example42/psick-hieradata).
 
@@ -24,16 +24,16 @@ Yes, you can start from scratch, with an empty control-repository. I wonder why 
 
 The [PSICK control repository](https://github.com/example42/psick.git) contains:
 
+- Setup automation (Hardware, Vagrant, Fabric, Docker)
 - Puppet node classification
 - Unit and acceptance tests (rspec-puppet, beaker)
 - CI/CD integration (GitLab, Jenkins, Travis, Danger)
 - Developer support (editorconfig, Vscode, RuboCop, Codacy)
-- Setup automation (Hardware, Vagrant, Fabric, Docker)
 
 Your main starting point is `manifests/site.pp` here you check for trusted facts variables, set defaults for different operatingsystems, manage the noop mode and classify all nodes using the [example42 PSICK puppet module](https://github.com/example42/puppet-psick.git).
 
 Next important file is `hiera.yaml` - the environment level hiera configuration file. Here you see that data and data management is split into two different repositories. The main reason is that we see data management changes as dangerous. Whith this setup you can provide different access to data.
-Besides this you learn that we have enabled hiera-eyaml from scratch.
+Besides this you learn that we have enabled [hiera-eyaml[(https://www.example42.com/2017/08/21/encrypt-your-secrets-with-hiera-eyaml/) from scratch.
 ***Please note that you must create your keys:***
 
     pushd /etc/puppetlabs/puppet
@@ -47,10 +47,11 @@ Next you want to verify whether our provided default hierarchies can also be use
 - Zone-stage
 - Nodes
 
+Upstream dependencies are placed into `Puppetfile`. Here you can male use of [example42's tiny-puppet](http://tiny-puppet.com/) and many standard Puppet modules. Next you will see modules which are used by specifc profiles.
+
 #### The PSICK Module (Library)
 
-Within the PSICK module you will find an infrastructure library based on [example42's tiny-puppet](http://tiny-puppet.com/) and many standard Puppet modules in `Puppetfile`.
-Next you will see modules which are used by specifc profiles.
+Within the PSICK module you will find an infrastructure library - mostly based on tiny-puppet.
 
 Please note that we use profiles only from the [Roles & Profiles pattern](https://puppet.com/docs/pe/latest/r_n_p_full_example.html).
 
@@ -60,6 +61,7 @@ At the end of the file you will see the verification for first_run. If this is n
 
 |Level|Description|
 |---|---|
+|First_run|initial configuration prior a reboot - will be disabled on any further puppet agent run|
 |Pre|prepare system, e.g. network, repositories,...|
 |Base|basic setup, mail, ssh, sudo, logging, ntp,...|
 |Profiles|the usecase for the system, e.g. webserver, db, loadbalancer, imap, CI server,...)|
@@ -73,5 +75,7 @@ As you have ssen, we fully rely on hiera config v5 (Data in Modules, Data in Env
 Basically everything can be enabled or disabled and configured by changing hieradata only. Try to stick to this pattern as long as possible.
 
 Start writing your own production code after you have understood Puppet Modules, Profiles and PSICK well enough to ensure good code stability and maintainability.
+
+Happy hacking.
 
 Martin Alfke
