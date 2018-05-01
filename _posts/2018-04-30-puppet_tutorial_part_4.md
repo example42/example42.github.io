@@ -35,7 +35,7 @@ The [PSICK control repository](https://github.com/example42/psick.git) contains:
 - Developer support (editorconfig, Vscode, RuboCop, Codacy)
 - Multiple Vagrant environments where to test your code
 
-Your main starting point is `manifests/site.pp` here are defined the top scope variables used in Hiera, some resources defaults are set and server side noop mode is managed. Then only the psick class from [example42 PSICK puppet module](https://github.com/example42/puppet-psick.git) is included:
+Your main starting point is `manifests/site.pp` here you want to define the top scope variables used in Hiera, set defaults for some resources defaults and manage the server side noop mode. Then the psick class from [example42 PSICK puppet module](https://github.com/example42/puppet-psick.git) is included:
 
     include '::psick'
 
@@ -44,9 +44,9 @@ Next important file is `hiera.yaml`, the environment level hiera configuration f
 Here you see that data and data management is split into a separated hieradata repository:
 
     defaults:
-    datadir: modules/hieradata/data # Data in separated module, defined in Puppetfile
-    # datadir: hieradata              # Data in control-repo. Previous psick setting
-    # datadir: data                   # Data in control-repo. Default for puppetlabs/control-repo
+    datadir: modules/hieradata/data # Data in separated module, defined in Puppetfile
+    # datadir: hieradata            # Data in control-repo. Previous psick setting
+    # datadir: data                 # Data in control-repo. Default for puppetlabs/control-repo
 
  We do this on PSICK control-repo in order to ease its upgrade without the need to align the sample hieradata, in some cases it may be preferred to have the hieradata directly in the control repo directory. The choice depends mostly on personal preferences and if different people need to access and edit the data from the ones who have to manage the Puppet code.
 
@@ -65,7 +65,7 @@ Hiera hierarchy is probably something you may need to change and adapt to your i
       - "zone/%{::zone}.yaml"
       - "common.yaml"
 
-Where zone may refer to a datacenter or region, the role is the function of the system (as in the roles and profiles pattern), and env is the operational environment or tier of the node.
+Zone may refer to a datacenter or region, the role is the function of the system (as in the roles and profiles pattern), and env is the operational environment or tier of the node.
 
 All the variables must be top scope, so they are supposed to be set as facts, or defined in the ```site.pp``` or set via an External Node Classifier (ENC) like Puppet enterprise or The Foreman.
 
@@ -74,11 +74,11 @@ By using [example42's tiny-puppet](http://tiny-puppet.com/) and the psick module
 
 #### The PSICK Module (Library)
 
-The PSICK module can be considered an infrastructure library, and provider 3 major features:
+The PSICK module can be considered an infrastructure library which provides 3 major features:
 
 - Phased classification
 - Profiles for common system configurations
-- TP profiles to manage applications (via tp module)
+- TinyPuppet profiles to manage applications (via tp module)
 
 ##### Phased classification
 
@@ -150,7 +150,7 @@ For the most common use cases the psick module provides profiles, both for Linux
 
 Give a look at [psick's manifests](https://github.com/example42/puppet-psick/tree/master/manifests) to have an idea of the available profiles.
 
-Some of these profiles are able to manage common system features for Linux (users, cron, sysctl, time and timezones, hostname, hosts file, repositories, system's proxy, dns, motd, nfs, syslog, iptables...) and Windows (users, packages, features, registry keys, services, time...) other are application specific and in some cases can even provide more features that dedicated component modules (apache, openssh, bolt, ansible, mariadb, mysql, docker, gitlab, icinga, java, mongo, openvpn, oracle, openswan, prometheus, php, puppet...).
+Some of these profiles are able to manage common system features for Linux (users, cron, sysctl, time and timezones, hostname, hosts file, repositories, system's proxy, dns, motd, nfs, syslog, iptables...) and Windows (users, packages, features, registry keys, services, time...) other are application specific and in some cases can even provide more features than dedicated component modules (apache, openssh, bolt, ansible, mariadb, mysql, docker, gitlab, icinga, java, mongo, openvpn, oracle, openswan, prometheus, php, puppet...).
 
 In some cases a psick profile even allows you to choose different modules to manage the same resource (users, sysctl, puppet, php, docker ...).
 
