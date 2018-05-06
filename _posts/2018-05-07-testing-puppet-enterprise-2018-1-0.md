@@ -13,30 +13,37 @@ We can make tasks for any "one shot" action we may need to execute on one or mor
 
 ### Trying Puppet Enterprise
 
-Puppet Enterprise can be downloaded and used for up to 10 nodes for free. This is enough to have an idea of how it works and eventually to manage very small shops. You can [download](https://puppet.com/download-puppet-enterprise) the packages for RedHat 6 or 7, SLES 12 or Ubuntu 16.04 from Puppet site (note: thiese are the only supported OS for the PE server components, the Puppet agent is available for many more OS.
+Puppet Enterprise can be downloaded and used for up to 10 nodes for free. This is enough to have an idea of how it works and eventually to manage very small shops. You can [download](https://puppet.com/download-puppet-enterprise) the packages for RedHat 6 or 7, SLES 12 or Ubuntu 16.04 from Puppet site (note: these are the only supported OS for the PE server components, the Puppet agent is available for many more OS.
 
 You can also test it on the [Learning VM](https://puppet.com/download-learning-vm) or, if you have your infrastructure on AWS cloud you can also use try [Opsworks for Puppet Enterprise](https://aws.amazon.com/opsworks/puppetenterprise/).
 
+### Testing local code on Puppet Enterprise with PSICK
+
 You can finally test a fully operational Puppet Enterprise infrastructure under Vagrant (based on Virtualbox) using example42's [PSICK control-repo](https://github.com/example42/psick).
 
-A single [commit](https://github.com/example42/psick/commit/9c77782ca5f06ebce8c2b79f7f2cc7b8ef6d4abb#diff-8cb16d894484dcb2c3bc465723063264R38) is what we needed to add support for it in one of the Vagrant environments available in PSICK.
+A single [commit](https://github.com/example42/psick/commit/9c77782ca5f06ebce8c2b79f7f2cc7b8ef6d4abb#diff-8cb16d894484dcb2c3bc465723063264R38) is what we needed to add support for it in one of the Vagrant environments available.
 
 In order to test a PE infrastructure with PSICK on Vagrant you need:
 
 - Puppet (you can install it with ```bin/puppet_install.sh```)
+
+- The r10k and optionally hiera-eyaml and deep_merge Ruby gems
+
 - Vagrant (you can install it with the needed plugins with ```bin/vagrant_setup.sh```). If you want to install the plugins manually just run:
 
-    vagrant plugin install vagrant-vbguest
-    vagrant plugin install vagrant-pe_build
-    vagrant plugin install vagrant-hostmanager
+        vagrant plugin install vagrant-vbguest
+        vagrant plugin install vagrant-pe_build
+        vagrant plugin install vagrant-hostmanager
 
 - Virtualbox
 
-These are the commands to run:
+These are the commands to run to setup locally a full featured control repo based on PSICK:
 
     git clone https://github.com/example42/psick
     cd psick
     r10k puppetfile install -v
+
+
     cd vagrant/environments/pe
     vagrant up puppet.pe.psick.io
 
@@ -56,7 +63,7 @@ This will proceed with the installation of PE on the local VM, at its end you sh
 
 The last command, after having installed Puppet Enterprise (thanks to the vagrant-pe_build plugin) triggers also a normal Puppet run on the node, using directly the contents of the PSICK control repo.
 
-Once the command has ended you have a full configured PE server, which can serve the other nodes present in the same vagrant environment (they are configured in  ```vagrant/environments/pe/config.yaml```). Note that the PE Vm is not thin, by default we allocate GB of RAM to it (this can be configured too on the ```config.yaml``` file) and to this you have to add the memory used by each client VM: an host with at least 8, better 16GB, is recommended.
+Once the command has ended you have a full configured PE server, which can serve the other nodes present in the same vagrant environment (they are configured in  ```vagrant/environments/pe/config.yaml```). Note that the PE Vm is not thin, by default we allocate 4GB of RAM to it (this can be configured too on the ```config.yaml``` file) and to this you have to add the memory used by each client VM: an host with at least 8, better 16GB, is recommended.
 
 Now you can start other VMs from the same Vagrant environment, they will automatically connect and autosign to the PE server and apply their Puppet code and data:
 
@@ -72,7 +79,7 @@ And set the following key to true:
 
     psick::base::manage: true
 
-This particulat parameter is used to skip the management of the base profiles (useful when we want to test only role specific classes or when building Docker images via Puppet). When set to true all the base classes are going to be effectively applied and several changes are going to occur on the node by running Puppet either via Vagrant:
+This particular parameter is used to skip the management of the base profiles (useful when we want to test only role specific classes or when building Docker images via Puppet). When set to true all the base classes are going to be effectively applied and several changes are going to occur on the node by running Puppet either via Vagrant:
 
     vagrant provision
 
