@@ -21,7 +21,7 @@ For example, Puppetlabs' ntp module has the ntp class which has parameters like 
       Variant[Boolean, Integer[0,1]] $tos_cohort,
       ...
 
-These few lines give us a good idea of how flexible is the type system, and how it can be extended and customised.
+These few lines give us a good idea of how flexible the type system is, and how it can be extended and customised.
 
 Besides the most common data types like:
 
@@ -45,7 +45,7 @@ In the above code fragment, we can see an "unusual" data type: ```Stdlib::Absolu
 
 What's nice here is that we can compose and use different data types, even custom ones (as ```Stdlib::Windowspath``` and ```Stdlib::Unixpath```) and ship them directly in a module.
 
-For example, in ur psick module we have created, under ```types/ensure.pp``` a ```Psick::Ensure``` data type which we use to manage the ensure parameter of a package resource, its content looks like:
+For example, in our psick module we have created, under ```types/ensure.pp``` a ```Psick::Ensure``` data type which we use to manage the ensure parameter of a package resource, its content looks like:
 
     type Psick::Ensure = Variant[Enum['present', 'absent', 'installed','latest'],Pattern[/\d+(\.\d+)*/]]
 
@@ -129,7 +129,7 @@ We find the Struct type particularly useful when using the [templates + options 
 
 Another very useful data type is ```Sensitive``` which, when used, hides the relevant value from being shown in reports and logs.
 
-You can use to to manage single values (and avoid to see them in reports) or for whole files, when using the ```content``` argument for a file resource:
+You can use it to manage single values (and avoid to see them in reports) or for whole files, when using the ```content``` argument for a file resource:
 
     file { '/etc/secret':
       content => Sensitive(template("${module_name}/secret.erb")),
