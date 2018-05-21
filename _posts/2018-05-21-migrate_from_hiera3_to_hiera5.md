@@ -3,9 +3,9 @@ layout: blog
 title: Tip of the Week 73 - Migrate from Hiera v3 to Hiera v5
 ---
 
-Hiera is the Puppet concept of seaprating code from data. This concept allows you to describe your infrastructure in code and to let you put differences amongts your platform into the data source: e.g. different NTP servers or different password for databases.
+Hiera is the Puppet implementation of separating code from data. This concept allows you to describe your infrastructure in code and to let you put differences among your platform into the data source: e.g. different NTP servers or different password for databases.
 
-With Pupept 4.9 Hiera config version 5 was introduced.
+With Puppet 4.9 Hiera config version 5 was introduced.
 The new Hiera version allows you to place data globally, in environments and modules.
 
 As of Puppet 4.9.2 Hiera has the following data backends included:
@@ -13,7 +13,7 @@ As of Puppet 4.9.2 Hiera has the following data backends included:
 - json
 - eyaml (hiera-eyaml gem still required)
 
-This posting describes how to migrate from Hiera config version 3 to the new usage.Hiera data levels.
+This posting describes how to migrate from Hiera config version 3 to the new usage. Hiera data levels.
 
 * Table of content
 {:toc}
@@ -55,7 +55,7 @@ This layer is usually only used by module authors and you are encouraged to over
 
 ## Content of Hiera configuration file
 
-In older hiera configuration files backends and hierarchies were seaparated settings. First you provided an array of used backends and then you listed the hierarchies. Backends were searched in order of occurence in the configuration file and then the hierarchies got queried for data.
+In older hiera configuration files backends and hierarchies were separated settings. First you provided an array of used backends and then you listed the hierarchies. Backends were searched in order of occurrence in the configuration file and then the hierarchies got queried for data.
 
 The new hiera config allows you to specify backends globally (as default) or on a per hierarchy level.
 
@@ -109,7 +109,7 @@ Afterwards the hierarchies get listed. Single hierarchies can make use of differ
           - "os/%{facts.os.family}.yaml"
           - "common.yaml"
 
-Ayou can see it is now possible to group hierarchies which use the same backend.
+As you can see it is now possible to group hierarchies which use the same backend.
 In this special case it is also possible to completely remove the `yaml` backend and simplify the configuration file, as the eyaml backend is also capable of returning unencrypted values:
 
     # Hiera config v5 - eyaml only
@@ -120,7 +120,7 @@ In this special case it is also possible to completely remove the `yaml` backend
         options:
           pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem
           pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem
-    
+
     hierarchy:
       - name: "All hierarchies"
         paths:
@@ -134,7 +134,7 @@ In this special case it is also possible to completely remove the `yaml` backend
 
 The new `lookup` function provides a huge amount of possible usages. The most impressing one is that the function will query hiera for lookup and merge options prior doing the real lookup on a key.
 
-First let's get an overview on explizit lookup function usage:
+First let's get an overview on explicit lookup function usage:
 
 | lookup type | hiera v3 | hiera v5 with merge options hash| hiera v5 with Data type, default and merge option|
 |---|---|---|---|
@@ -144,7 +144,7 @@ hash - first found values| hiera_hash('hash')|lookup('hash', {merge => hash})|lo
 hash - merged values| hiera_hash('hash')| lookup('hash', {merge => deep})|lookup('hash', Hash, {}, deep)|
 |include|hiera_include('classes')|lookup('classes', {merge => unique}).include|lookup('classes', Array, [], unique).include
 
-If you have more complex decisions on when to do deep lookups, you have the option to place the lookup behavior into your hiera data:
+If you have more complex decisions on when to do deep lookups, you have the option to place the lookup behaviour into your hiera data:
 
     lookup_options:
       'keyname':
@@ -171,7 +171,7 @@ Hiera has changed the way how lookup backends are working. The old hiera 3 backe
          connections:
            dbname: hdata
            collection: config
-           host: localhost 
+           host: localhost
 
 If you don't want to use the global hiera level anymore, you must use hiera v5 style lookup functions. Ask the authors of the backend used, whether they are able to provide a hiera config 5 compatible solution.
 
