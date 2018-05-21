@@ -13,7 +13,7 @@ As of Puppet 4.9.2 Hiera has the following data backends included:
 - json
 - eyaml (hiera-eyaml gem still required)
 
-This posting describes how to migrate from Hiera config version 3 to the new usage. Hiera data levels.
+This posting describes how to migrate from Hiera config version 3 to the new usage of Hiera data levels.
 
 * Table of content
 {:toc}
