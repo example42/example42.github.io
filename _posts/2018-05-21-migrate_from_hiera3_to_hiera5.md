@@ -139,10 +139,10 @@ First let's get an overview on explicit lookup function usage:
 | lookup type | hiera v3 | hiera v5 with merge options hash| hiera v5 with Data type, default and merge option|
 |---|---|---|---|
 |single | hiera('key')|lookup('key')|lookup('key', DataType) |
-|array| hiera_array('array')|lookup('array', {merge => unique})| lookup('array', Array, [], unique)
-hash - first found values| hiera_hash('hash')|lookup('hash', {merge => hash})|lookup('hash', Hash, {}, hash)|
-hash - merged values| hiera_hash('hash')| lookup('hash', {merge => deep})|lookup('hash', Hash, {}, deep)|
-|include|hiera_include('classes')|lookup('classes', {merge => unique}).include|lookup('classes', Array, [], unique).include
+|array| hiera_array('array')|lookup('array', {merge => unique})| lookup('array', Array, unique, [])
+hash - first found values| hiera_hash('hash')|lookup('hash', {merge => hash})|lookup('hash', Hash, hash, {} )|
+hash - merged values| hiera_hash('hash')| lookup('hash', {merge => deep})|lookup('hash', Hash, deep, {} )|
+|include|hiera_include('classes')|lookup('classes', {merge => unique}).include|lookup('classes', Array, unique, [] ).include
 
 If you have more complex decisions on when to do deep lookups, you have the option to place the lookup behaviour into your hiera data:
 
