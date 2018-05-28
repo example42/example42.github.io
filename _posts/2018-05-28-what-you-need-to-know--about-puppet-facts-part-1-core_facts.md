@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 74 - What you need to know about Puppet facts. Part 1: Core facts
+title: Tip of the Week 74 - What you need to know about Puppet facts. Part 1 - Core facts
 ---
 
 Whoever works with Puppet is probably familiar with facts.
