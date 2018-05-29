@@ -69,26 +69,26 @@ In Puppet 3 a neater distinction has been promoted:
 
 So, for example, legagy facts, like ```operatingsystem```, ```osfamily```, ```architecture``` are now replaceable with subkeys of the modern, structured fact ```os```:
 
-[vagrant@git ~]$ facter  os
-{
-  architecture => "x86_64",
-  family => "RedHat",
-  hardware => "x86_64",
-  name => "CentOS",
-  release => {
-    full => "7.5.1804",
-    major => "7",
-    minor => "5"
-  },
-  selinux => {
-    config_mode => "enforcing",
-    config_policy => "targeted",
-    current_mode => "enforcing",
-    enabled => true,
-    enforced => true,
-    policy_version => "28"
-  }
-}
+    [vagrant@git ~]$ facter  os
+    {
+      architecture => "x86_64",
+      family => "RedHat",
+      hardware => "x86_64",
+      name => "CentOS",
+      release => {
+        full => "7.5.1804",
+        major => "7",
+        minor => "5"
+      },
+      selinux => {
+        config_mode => "enforcing",
+        config_policy => "targeted",
+        current_mode => "enforcing",
+        enabled => true,
+        enforced => true,
+        policy_version => "28"
+      }
+    }
 
 Being an hash, we can access the values of its subkeys as we normally do in Puppet code:
 
@@ -98,8 +98,18 @@ Being an hash, we can access the values of its subkeys as we normally do in Pupp
       and has_key('os','selinux') {
         notice ("Selinux current mode ${::os['selinux']['current_mode']}")
       }
-
     }
+
+We have actually different ways to access to facts in Puppet code:
+
+- Referring directly to them: ```$factname```
+- Using the ```$facts``` hash: ```$facts[$factname]```
+- Using the ```fact``` function from stdlib module (which allows dotted notation and doesn't fail if we try to access a non existing subkey): ```fact($factname)```.
+
+So for example, the legacy fact ```$osfamily``` can be expressed also with any of these alternatives:
+- ```$os['osfamily']```
+- ```$facts['os']['osfamily']```
+- ```fact('os.osfamily')```
 
 The most commonly used **legacy facts** are:
 - ```operatingsystem``` ( same of ```$::os['operatingsystem']``` )
@@ -125,17 +135,6 @@ The most interesting **modern facts**:
 - ```ssh```: System's ssh host public keys in various formats
 - ```timezone```: The system's timezone
 - ```virtual```: Name of Hypervisor, or 'physical' for physical machines
-
-We have different ways to access to facts in Puppet code:
-
-- Referring directly to them: ```$factname```
-- Using the ```$facts``` hash: ```$facts[$factname]```
-- Using the ```fact``` function from stdlib module (which allows dotted notation and doesn't fail if we try to access a non existing subkey): ```fact($factname)```.
-
-So for example, the legacy fact ```$osfamily``` can be expressed also with any of these alternatives:
-- ```$os['osfamily']```
-- ```$facts['os']['osfamily']```
-- ```fact('os.osfamily')```
 
 #### Digression on facts and local class variables
 
