@@ -102,14 +102,14 @@ Being an hash, we can access the values of its subkeys as we normally do in Pupp
     }
 
 The most commonly used **legacy facts** are:
-- operatingsystem ( same of $::os['operatingsystem'] )
-- osfamily ( same of $::os['family'] )
-- operatingsystemrelease ( same of $::os['version']['full'] )
-- architecture ( same of $::os['architecture'] )
-- ipaddress ( same of $::networking['interfaces']["${::networking['primary']}"]['ip'] )
-- fqdn ( same of $::networking['fqdn'] )
-- hostname ( same of $::networking['hostname'] )
-- domain ( same of $::networking['domain'] )
+- ```operatingsystem``` ( same of ```$::os['operatingsystem']``` )
+- ```osfamily``` ( same of ```$::os['family']``` )
+- ```operatingsystemrelease``` ( same of ```$::os['version']['full']``` )
+- ```architecture``` ( same of ```$::os['architecture']``` )
+- ```ipaddress``` ( same of ```$::networking['interfaces']["${::networking['primary']}"]['ip']``` )
+- ```fqdn``` ( same of ```$::networking['fqdn']``` )
+- ```hostname``` ( same of ```$::networking['hostname']``` )
+- ```domain``` ( same of ```$::networking['domain']``` )
 
 
 The most interesting **modern facts**:
@@ -126,6 +126,16 @@ The most interesting **modern facts**:
 - ```timezone```: The system's timezone
 - ```virtual```: Name of Hypervisor, or 'physical' for physical machines
 
+We have different ways to access to facts in Puppet code:
+
+- Referring directly to them: ```$factname```
+- Using the ```$facts``` hash: ```$facts[$factname]```
+- Using the ```fact``` function from stdlib module (which allows dotted notation and doesn't fail if we try to access a non existing subkey): ```fact($factname)```.
+
+So for example, the legacy fact ```$osfamily``` can be expressed also with any of these alternatives:
+- ```$os['osfamily']```
+- ```$facts['os']['osfamily']```
+- ```facts('os.osfamily')```
 
 #### Digression on facts and local class variables
 
@@ -150,8 +160,6 @@ generates this output:
     Notice: Scope(Class[Test_fact]): $timezone is still : CEST
     Notice: Scope(Class[Test_fact]): $::timezone, after local override is still: CEST
     Notice: Scope(Class[Test_fact]): $timezone, after local override is now: Local change
-
-Needless to say that it's always good practice to use $:: when referring to facts and rarely a good idea to use in our classes variables with the same names of existing facts.
 
 
 ### Conclusions
