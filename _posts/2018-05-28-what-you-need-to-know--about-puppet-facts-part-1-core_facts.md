@@ -135,7 +135,7 @@ We have different ways to access to facts in Puppet code:
 So for example, the legacy fact ```$osfamily``` can be expressed also with any of these alternatives:
 - ```$os['osfamily']```
 - ```$facts['os']['osfamily']```
-- ```facts('os.osfamily')```
+- ```fact('os.osfamily')```
 
 #### Digression on facts and local class variables
 
