@@ -107,9 +107,9 @@ We have actually different ways to access to facts in Puppet code:
 - Using the ```fact``` function from stdlib module (which allows dotted notation and doesn't fail if we try to access a non existing subkey): ```fact($factname)```.
 
 So for example, the legacy fact ```$osfamily``` can be expressed also with any of these alternatives:
-- ```$os['osfamily']```
-- ```$facts['os']['osfamily']```
-- ```fact('os.osfamily')```
+- The relevant key in the structured fact os: ```$os['osfamily']```
+- The relevant key and subkey in the facts hash: ```$facts['os']['osfamily']```
+- The function fact with subkey expressed in dotted notation: ```fact('os.osfamily')```
 
 The most commonly used **legacy facts** are:
 - ```operatingsystem``` ( same of ```$::os['operatingsystem']``` )
