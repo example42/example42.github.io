@@ -110,20 +110,20 @@ This is a way to compose the content of a structured fact but executing differen
 
 A fact with aggregated resolution may look like:
 
-Facter.add(:connected_users, :type => :aggregate) do
+    Facter.add(:connected_users, :type => :aggregate) do
 
-  chunk(:a_name) do
-    [..] # Ruby code that get some information from the system
-  end
+      chunk(:a_name) do
+        [..] # Ruby code that get some information from the system
+      end
 
-  chunk(:another_name) do
-    [..]
-  end
+      chunk(:another_name) do
+        [..]
+      end
 
-  aggregate do | chunks |
-    # Optional aggregate block that massages the output ProgramData
-  end
-end
+      aggregate do | chunks |
+        # Optional aggregate block that massages the output ProgramData
+      end
+    end
 
 A glorious example of structured fact using aggregated resolution is the Ruby version of the [```$::os``` fact](
 https://github.com/puppetlabs/facter/blob/2.x/lib/facter/os.rb). Note that in this case different chunks are defined and simply merged in the final result, without the use of the ```aggregate``` method.
