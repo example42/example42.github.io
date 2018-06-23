@@ -11,7 +11,7 @@ But before beginning, if you missed something, here are the previous posts:
 - [Part 3 - External facts](https://www.example42.com/2018/06/11/what-you-need-to-know-about-puppet-facts-part-3-external_facts/)
 
 
-### Trusted facts are Certificate's extensions attributes
+### Trusted facts are certificate's extensions attributes
 
 We call trusted facts what are, more precisely, [extensions](https://puppet.com/docs/puppet/5.3/ssl_attributes_extensions.html) to the Puppet agent x509 certificates, used in all the https communications with the server.
 
@@ -37,7 +37,7 @@ A sample ```/etc/puppetlabs/puppet/csr_attributes.yaml``` can look like:
       pp_application: 'jenkins'
 
 
-### The $trusted fact
+### The $trusted hash
 
 In Puppet we have an handy ```$trusted``` variable, an hash containing information about the client certificate with the following keys:
 
@@ -47,6 +47,8 @@ In Puppet we have an handy ```$trusted``` variable, an hash containing informati
 - ```extensions``` — the hash containing any custom extensions we have set in ```csr_attributes.yaml```. Keys here are the extensions OIDs, or, if they are registered extensions, their relevant short names.
 
 There's already a list of Puppet registered [ID extensions](https://puppet.com/docs/puppet/5.3/ssl_attributes_extensions.html#puppet-specific-registered-ids), and it's possible to add custom IDs to map by editing the [custom_trusted_oid_mapping.yaml](https://puppet.com/docs/puppet/5.3/config_file_oid_map.html) file.
+
+### Use cases
 
 So, we can access our trusted facts with ```$trusted[extensions][<EXTENSION OID>]```, the above sample ```csr_attributes.yaml``` file would generate a ```$trusted``` variable as follows:
 
@@ -88,7 +90,7 @@ If we had the above variables set at top scope, in a place like ```manifests/sit
 
 ### Conclusions
 
-When have seen that trusted facts are *hardcoded* in the Puppet client certificate, that can be set by editing the ```csr_attributes.yaml``` file before launching Puppet the very first time on a node.
+We have seen that trusted facts are *hardcoded* in the Puppet client certificate, that can be set by editing the ```csr_attributes.yaml``` file before launching Puppet the very first time on a node.
 
 They can't be altered, unless the client ssl certificate is cleaned and regenerated with updated attributes, so we can decide to use them or not according to our use cases.
 
@@ -98,6 +100,6 @@ With this approach we can decide to use such custom facts to configure and class
 
 The same can be achieved with normal custom or external facts, which have the benefit or defect of being more easily changeable during a node' lifetime.
 
-As usual different approaches are possible, according to our needs, what's essential is to know the landscape.
+As usual different approaches are possible, according to our needs, what's essential is to know possible alternatives and available options.
 
 Alessandro Franceschi
