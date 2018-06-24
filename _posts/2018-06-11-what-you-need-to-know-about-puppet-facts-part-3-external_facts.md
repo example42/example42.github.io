@@ -45,7 +45,7 @@ We can have even more than one fact definition in a single file, and it's trivia
 External facts can be also expressed as the output of a command, on Unix derivatives it's enough to have an executable file under ```/etc/facter/facts.d/``` that outputs the name of the facts and its value (in ini like style: ```name=value```):
 
     #!/usr/bin/env bash
-    echo connected_users=$(/usr/bin/who | wc -l)
+    echo connected_users=$(/usr/bin/who | wc -l | tr -d ' ')
 
 Any language can be used to write external facts as executables, but it's required to specify the path of the interpreter to use (here bash) in the first line, with a shebang (```#!```).
 
