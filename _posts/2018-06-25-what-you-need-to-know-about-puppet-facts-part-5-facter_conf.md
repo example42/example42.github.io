@@ -21,8 +21,8 @@ It has been introduced from Version 3, and by default it's not even created when
 ```facter.conf``` is written in [Hocon](https://en.wikipedia.org/wiki/HOCON) format, and has 3 main sections:
 
 - **facts** where we configure facts groups and policies on how to cache or distribute them
-- **global** where we defines the paths where facter looks for  and if to include some kinf of core_facts
-- **cli** where are manage facter cli command outputs
+- **global** where we defines the paths where facter looks for  and if to include some kind of core_facts
+- **cli** where are managed facter cli command outputs
 
 A sample output may look as follows:
 
@@ -51,7 +51,7 @@ A sample output may look as follows:
 
 ### Configuring caching and exclusions
 
-The most useful and interesting settings can be set under the **facts** section, here we can configure, with the ```ttts``` key, a caching Time To Live for each listed fact group, so that facter doesn't have to run all the facts of that group every time is executed (that is, at least at every Puppet run).
+The most useful and interesting settings can be set under the **facts** section, here we can configure, with the ```ttls``` key, a caching Time To Live for each listed fact group, so that Facter doesn't have to resolve all the facts of that group every time is executed (that is, at least at every Puppet run).
 
 Here we can also completely exclude from execution, with the ```blocklist``` key, whole groups of facts.
 
@@ -210,22 +210,22 @@ The configuration of caching or blocking of groups of facts can save a lot of ti
 
 ### Global and cli settings
 
-The other keys we can configure on ```facter.conf``` can be used to manage the general behaviour of the facter command, all of them can be set or overridden via arguments specified in the command line.
+The other keys we can configure on ```facter.conf``` can be used to manage the general behaviour of the ```facter command```, all of them can be set or overridden via arguments specified in the command line.
 
 The **global** settings are the following:
 
 - ```external-dir``` A list of directories to search for external facts (equivalent to the cli argument ```--external-dir```)
 - ```custom-dir``` A list of directories to search for custom facts (equivalent to ```--custom-dir```)	 
-- ```no-external``` If true, prevents Facter from searching for external facts. (Default false, when set to ```true``` is equivalent to argument ```--no-external-facts```)
-- ```no-custom``` If true, prevents Facter from searching for custom facts. (Default false, when set to ```true``` is equivalent to argument ```--no-custom-facts```)
+- ```no-external-facts``` If true, prevents Facter from searching for external facts. (Default false, when set to ```true``` is equivalent to argument ```--no-external-facts```)
+- ```no-custom-facts``` If true, prevents Facter from searching for custom facts. (Default false, when set to ```true``` is equivalent to argument ```--no-custom-facts```)
 - ```no-ruby``` If true, prevents Facter from loading facts written in Ruby.  (Default false, when set to ```true``` is equivalent to argument ```--no-ruby```)
 
 The **cli** settings are the following:
 
 - ```debug``` If true, Facter outputs debug messages. (Default false, when set to ```true``` is equivalent to cli argument ```--debug```)
-- ```trace``` 	If true, Facter prints stack traces from errors arising in your custom facts. (Default false, when set to ```true``` is equivalent to cli argument ```--trace```)
-verbose 	If true, Facter outputs its most detailed messages. (Default false, when set to ```true``` is equivalent to cli argument ```--verbose```)
-log-level 	Sets the minimum level of message severity that gets logged. Valid options: “none”, “fatal”, “error”, “warn”, “info”, “debug”, “trace”. Equivalent to cli argument ```--log-level```
+- ```trace``` If true, Facter prints stack traces from errors arising in your custom facts. (Default false, when set to ```true``` is equivalent to cli argument ```--trace```)
+- ```verbose``` If true, Facter outputs its most detailed messages. (Default false, when set to ```true``` is equivalent to cli argument ```--verbose```)
+- ```log-level``` Sets the minimum level of message severity that gets logged. Valid options: “none”, “fatal”, “error”, “warn”, “info”, “debug”, “trace”. Equivalent to cli argument ```--log-level```
 
 ### Conclusions
 
