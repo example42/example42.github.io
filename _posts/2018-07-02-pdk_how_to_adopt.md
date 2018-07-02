@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 77 - How to adopt the Puppet Developer Kit (PDK) to your code
+title: Tip of the Week 79 - How to adopt the Puppet Developer Kit (PDK) to your code
 ---
 
 PDK alows you to easily get unit tests for your puppet modules.
@@ -86,6 +86,9 @@ As you can see, PDK creates you a stub file using `.sh` extension. The JSON file
 
 ## Using PDK on existing module
 
+On your module base directory just run `pdk convert`. This will add all required files to your module. 
+Please note that several existing files might managed by the PDK template from now on. How do you re-enable your individual settings and configurations?
+
 ## Adopting PDK to your code
 
 PDK manages several files and will overwrite them when running `pdk update`.
@@ -101,18 +104,35 @@ Installation of Ruby gems is done via `Gemfile`.
 Any additional gem can be placed either in `~/.gemfile` or in `Gemfile.local`.
 Please note that `Gemfile.local` is excluded from git in `.gitignore` file!
 
-We usually remove that entry from `.gitignore` file and take care to again remove after `pdk update`.
+Another solution is to use the .sync.yml file:
+
+    Gemfile:
+      required:
+        ':development':
+          - gem: hiera-eyaml
+          - gem: puppet-lint-resource_reference_syntax
+          - gem: puppet-lint-trailing_comma-check
+          - gem: puppet-lint-variable_contains_upcase
+
+The .sync.yml file allows you to also specify additions to other files:
+
+    spec/spec_helper.rb:
+      hiera_config: 'spec/fixtures/hiera.yaml'
+    Rakefile:
+      default_disabled_lint_checks:
+        - 'class_inherits_from_params_class'
 
 ### Adding your own code to spec_helper
 
-Don't manage `spec/spec_helper.rb` directly.
-Add your own rspec settings to `spec/spec_helper_local.rb` instead.
+Using sync.yml will be less optimal when you want to add lots of content to spec_helper. In this case you can use the `spec/spec_helper_local.rb` file instead.
 
 ### Adding more facts
 
-Don't manage `spec/default_facts.yml` directly.
-Add your own facts to `spec/default_module_facts.yml` instead.
+How to add more facts to your tests. e.g. you want to make suse of an ssh module which has an `::ssh_version` fact. In this case you add the additional facts to `spec/default_module_facts.yml` instead.
 
+## Running individual tests
+
+PDK allows you to not only use `pdk validate` or `pdk test unit`. You also have the option to run specific pdk rake tasks: `pdk bundle exec rake -T` gives you the complete list of rake tasks available.
 
 Happy hacking,
 Martin Alfke
