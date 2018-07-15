@@ -49,6 +49,8 @@ Here you can easily use facter.value to access available facts.
 
 Another issue which can occur is that facter takes a hugh amount of time to collect facts. Sometimes this can be related to an external or custom fact where you try to connect to a non-performance system collecting data.
 
+### Facter timeout example
+
 Consider your 200 nodes to query information e.g. from LDAP or a remote database.
 
 See the following code example:
@@ -62,6 +64,11 @@ What happens if your LDAP server is not available, slowly responding of availabl
 Facter will take long time to collect all information.
 This can even lead to a timeout.
 
+### Facter timeout prevention
+
+Don't access remote systems from facter. Either the remote system can not deal well with the amount of requests or single nodes can not access the remote system.
+
+Each external (executable) fact must use local resources only.
 
 Happy hacking,
 Martin Alfke
