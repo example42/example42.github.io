@@ -5,7 +5,7 @@ title: Tip of the Week 81 - Facter fork bombs and timeouts - what are they, how 
 
 On [April 11th 2018 we wrote about external facts](https://www.example42.com/2018/06/11/what-you-need-to-know-about-puppet-facts-part-3-external_facts/). Within the mentioned posting we explained the possibilities you have and that you can use executables (like shell scripts) which will allow you to add individual facts.
 
-What we have not talked about is the facter fork bomb which you can run into easily.
+What we have not talked about is the facter fork bomb and long facter execution times which you can run into easily.
 
 * Table of content
 {:toc}
@@ -40,12 +40,12 @@ Welcome to your first facter fork bomb. Within a couple of seconds your system w
 
 ### Facter fork bomb prevention
 
-Never use the facter binary in an external, executable fact.
+Never use the facter executable in an external, executable fact.
 If you really must use a fact, then please consider writing a custom fact in Ruby.
 
-Here you can easily use facter.value to access available facts.
+Here you can easily use facter.value to access available facts without the experience of a fork bomb.
 
-## Facter timeouts
+## Facter execution times
 
 Another issue which can occur is that facter takes a hugh amount of time to collect facts. Sometimes this can be related to an external or custom fact where you try to connect to a non-performance system collecting data.
 
@@ -59,7 +59,7 @@ See the following code example:
     $role=$(ldapsearch -b 'cn=role, cn=$(hostname) ou=Servers, dc=example42, cd=com' -h ldapmaster.example42.com -l 3600
     echo "role=$role"
 
-What happens if your LDAP server is not available, slowly responding of available over a highly saturated network link?
+What happens if your LDAP server is not available, slowly responding or available over a highly saturated network link only?
 
 Facter will take long time to collect all information.
 This can even lead to a timeout.
@@ -68,7 +68,7 @@ This can even lead to a timeout.
 
 Don't access remote systems from facter. Either the remote system can not deal well with the amount of requests or single nodes can not access the remote system.
 
-Each external (executable) fact must use local resources only.
+Each external (executable) fact should use local resources only.
 
 Happy hacking,
 Martin Alfke
