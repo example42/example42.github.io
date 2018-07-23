@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 82 - A few steps to Tiny Ouppet on the command line
+title: Tip of the Week 82 - A few steps to Tiny Puppet on the command line
 ---
 
 [Tiny Puppet](https://www.github.com/example42/puppet-tp) if a Puppet module that provides general defines to manage any application on any operatingsystem, using the data present in the companion [Tiny Data](https://www.github.com/example42/tinypuppet) module.
@@ -56,7 +56,7 @@ The command shows the available actions and the list of applications that have b
 
 Via tp on the cli you can install or uninstall packages or repos.
 
-For example top install epel Repository on Redhat derivstiveres it's enough to write:
+For example top install epel Repository on Redhat distributions it's enough to write:
 
     tp install repo
 
@@ -68,7 +68,7 @@ To list all the available applications:
 
     tp list
 
-But, more useful than anything else, to test if applications are correcrtly working:
+But, more useful than anything else, to test if applications are correctly working:
 
     [root@lab ~]# tp test
     - openssh: package openssh-server OK
