@@ -4,6 +4,7 @@ title: Tip of the Week 84 - Configuration Management and Containers
 ---
 
 When we are at customers who start thinking about containers we usually get confronted with a combination of half knowledge and weird assumptions.
+
 One of the most interesting topics usually deals with configuration management and the idea that this is no longer needed when switching to containers.
 
 This posting will explain, how Puppet can help you managing your container infrastructure.
@@ -14,7 +15,8 @@ This posting will explain, how Puppet can help you managing your container infra
 ## Container host
 
 To run containers you must have a system at hand. Usually people will just use a cloud provider, eliminating the need of local hardware.
-But running on cloud needs detaiulled configuration like access control and authentication, besides the container host.
+
+But running on cloud needs detailed configuration like access control and authentication, besides the container host.
 
 When running locally on your own hardware you want to configure the system to be capable of running container at all. Puppet Inc. has therefor published the [puppetlabs-docker](https://github.com/puppetlabs/puppetlabsdocker) module.
 
@@ -25,6 +27,7 @@ The main docker class installs and configures your dockerd.
 ## Container runtime
 
 With the docker module you can choose to either install Docker CE (Community Edition) or Docker EE (Enterprise Edition).
+
 Please note that the puppetlabs-docker module does not install or configure the Docker Enterprise UCP (Universal Control Plane) nor the DTR (Docker Trusted Registry).
 
 For installation and configuration of UCP and DTR you can use the [puppetlabs-ucp module](https://forge.puppetlabs.com/puppetlabs/docker_ucp)
@@ -33,7 +36,7 @@ Now let's get started installing docker:
 
     # Docker CE:
     class { 'docker': }
-    
+
     # Docker EE:
     class { 'docker':
       docker_ee => true,
@@ -142,13 +145,13 @@ Especially for the registry container you want to also add the registry browser.
 ## The container orchestration
 
 Until now we created single instances of containers on single hosts.
-This is not what you usally want, as this causes outage when the one hosts goes down or when docker needs maintenance (e.g. adding a configuration and restarting docker daemon).
+This is not what you usually want, as this causes outage when the one hosts goes down or when docker needs maintenance (e.g. adding a configuration and restarting docker daemon).
 
 The puppetlabs-docker module can also handle swarm and compose.
 
 ### Docker compose
 
-Docker compose doues not give you high availability. It is useful when you want to run several containers which are functional **together** only.
+Docker compose does not give you high availability. It is useful when you want to run several containers which are functional **together** only.
 
 e.g. you need a database and a webserver.
 
