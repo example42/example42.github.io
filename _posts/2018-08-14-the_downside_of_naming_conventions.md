@@ -7,12 +7,12 @@ In the past we had our servers and handled them like pets. We loved and we hated
 
 We had names like *dbmaster*, *dbslave01* to *dbslave99*, *lb-ext* and *lb-int*. Our shell prompt directly showed us the system we were working on:
 
-    [dbmaster] /etc $: 
+    [dbmaster] /etc $:
 
 Some companies even have more information placed in the fqdn of a system:
 
     dc1_appf_01_t.domain.com
-    
+
 - dc1: Data Center 1
 - appf: Frontend Application Server
 - 01: Number
@@ -29,7 +29,7 @@ Similar to your dog or cat you look at them carefully and doing healthcare when 
 
 The opposite of this are short living systems, where you don't do OS upgrades, but reinstantiate the system with a new OS underneath. Switching back to the old version in case that something is not working. These systems are called **cattle**. Similar to cows, sheeps or ducks which you grow to use them afterwards. You have plenty of them and when one is going to become ill you will rarely do healthcare but remove it from the crowd and try to get a new one instead.
 
-From data center perspective you can compre pets to OS running on hardware whereas cattle are virtual machines.
+From data center perspective you can compare pets to OS running on hardware whereas cattle are virtual machines.
 
 ## Puppet and the pet node classification
 
@@ -54,7 +54,7 @@ Everybody was happy and we had our list of 158 node classifications in Puppet.
 
 We never saw a good naming convention which was useful when it comes to growth in numbers of nodes or applications. Additionally admins struggled with node specific declarations and - even worse - node specific modules.
 
-The naming convention makes it hard to migrate e.g. to cloud as you usually will not be able to re-use yournaming convention on any cloud provider. Yes, you can set hostnames, yes, you can have your own DNS server in cloud. How to deal with autoscaling? How to deal with containers and how to deal with the next 25 new applications?
+The naming convention makes it hard to migrate e.g. to cloud as you usually will not be able to re-use your naming convention on any cloud provider. Yes, you can set hostnames, yes, you can have your own DNS server in cloud. How to deal with autoscaling? How to deal with containers and how to deal with the next 25 new applications?
 Consider rebuilding everything and you will learn, that the naming convention blocks you from doing so.
 
 ## Puppet and the certificate trust based node classification
