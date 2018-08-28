@@ -148,7 +148,7 @@ In the menatime you can do the following to your local Git copy of the upstream 
 - add changes to the branch, commit and push them locally
 - within your puppetfile, switch to the branch name or the commit id
 
-When upstrema fixes the issue you just update your local module working copy and switch back to release tags.
+When upstream fixes the issue you just update your local module working copy and switch back to release tags.
 
 Happy hacking,
 Martin Alfke
