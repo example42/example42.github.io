@@ -17,27 +17,29 @@ I think it's time for some updates on Tiny Puppet given that we are at version 2
 
 The module is stable, solid, used in several productions, it provides:
 
-- The user defined types ```tp::install```, ```tp::conf```, ```tp::dir``` to manage any (\*) application
+- The user defined types ```tp::install```, ```tp::conf```, ```tp::dir``` to manage any **(\*)** application
 
 - The ruby command `tp` with actions like ```tp install```, ```tp test```, ```tp log``` to check the status of the applications installed via tp
 
-#### (\* Any application)
+#### (\*) Any application
 
-The promise of installing any application (and by this we mean, package) on any  (\*\*) OS where Puppet can run is potentially matched.
+The promise of installing any application (and by this we mean, package) on any **(\*\*)** OS where Puppet can run is potentially matched.
 
 The difference between potential and real is a matter or more or less present and correct tiny data.
 
-Up to a few days ago the *any* was related to any application for which there's [tinydaya](https://github.com/example42/tinydata/tree/master/data), now, since [version 2.3.0](https://github.com/example42/puppet-tp/commit/c764b7b60727110518c8b3db0cf61aad0aaeff11), tp install defaults to the given title, if a package with that name is installable it tries to install it on the underlying (\*\*) OS, given the needed prerequisites for Windows and MacOS.  
+Up to a few days ago the *any* was related to any application for which there's [tinydaya](https://github.com/example42/tinydata/tree/master/data), now, since [version 2.3.0](https://github.com/example42/puppet-tp/commit/c764b7b60727110518c8b3db0cf61aad0aaeff11), tp install defaults to the given title, if a package with that name is installable it tries to install it on the underlying (\*\*) OS.  
 
-#### On (\*\*) Any OS
+#### (\*\*) Any OS
 
 By **Any OS** we mean any OS where Puppet can run.
 
 With `tp::install` (`tp install` on cli) we can install any application, even if no tinydata is present, if there's usable tinydata we can configure it with `tp::conf` and `tp::dir`.
 
+On Windows and MacOS respectively Chocolatey and Homebrew are used as default package provider and they are a prerequisite to install anything via tp.
+
 ### Usage on the cli
 
-On Mac and Windows some module dependencies are needed.
+You can install tp as a normal module, it depends on puppetlabs-stdlib and example42-tinydata:
 
     puppet module install example42-tp
 
@@ -57,13 +59,13 @@ Then, whatever the OS we can install locally the tp command with:
 
 Now you can try to install anything.
 
-On Linux try:
+On Linux try with packages like (if tinydata is present also custom repos are created):
 
     tp install docker
     tp install elasticsearch
     tp install apache
 
-On Mac install anything brew can install, also via cask:
+On Mac install anything [brew](https://brew.sh/) can install, also via cask:
 
     tp install opera
     tp install dropdox ...
@@ -74,7 +76,9 @@ Usage from cli under windows is Work In Progress.
 
 The tp command might be nice to play around and test the status of apps managed via tp, but it's inside Puppet manifests where the tp defines can give real help in configuring our applications.
 
-In your classes, typically in your profiles to manage a specific application you can manage the package, service, configuration files triple with:
+#### The tp defines
+
+In your classes, typically in your profiles for specific applications you can manage the package, service, configuration files triple with:
 
     # Manage package (and relevant repos if needed) and service
     tp::install { 'openssh': }
@@ -90,11 +94,16 @@ In your classes, typically in your profiles to manage a specific application you
       content => $ssh_content,
     }
 
+tp takes care of managing dependencies and using the right names and paths for the underlying OS.
+
+#### The tp class
+
 In order to install the tp command on a node, it's enough to:
 
     include tp
 
-The tp class is needed and used only for this, and as entrypoint for hiera data for hashes of tp resources.
+The tp class is needed and used only to install the tp command eventually and as entrypoint for hiera data for hashes of tp resources.
+
 In this way, for example, you can define what applications to install with data like:
 
     # We can define an array or an hash of tp installs:
@@ -122,18 +131,18 @@ In this way, for example, you can define what applications to install with data 
       logstash::my_app:
         source: puppet:///modules/logstash/my_app
 
-We don't actually recommend to use the `tp` namespace for using tp, it's more handy to use tp defines in profiles, as needed and when needed.
+We don't actually recommend to use the `tp` namespace for using tp, it's more handy to use tp defines in profiles, as needed and when needed. If you don't want to install the tp command you can skip the inclusion of the tp class, the other defines can work the same.
 
 
-### Custom templates and variables
+#### Custom templates and variables
 
 When using tp::conf to manage the content of a configuration file, we have at disposal, and can interpolate in our epp or erb templates, two very useful variables:
 
-- `$settings` is an hash with the result of the tp_lookup function, which for the given app tries to get usable tinydata. This is useful to manage in the same template cross OS differences, given to file paths and names.
+- `$settings` is an hash with the result of the `tp_lookup` function, which for the given app tries to get usable tinydata. This is useful to manage in the same template cross OS differences due to file paths and names.
 
 - `$options` or `$options_hash` is currently just the content of the `options_hash` parameter passed to `tp::conf`. You can do with it whatever you want, according to the configured application.
 
-So, your erb template can look in the following fragments from [erb template](https://github.com/example42/puppet-psick/blob/master/templates/mongo/mongod.conf.erb):
+So, your erb template can have contents as in the following fragments from this [erb template](https://github.com/example42/puppet-psick/blob/master/templates/mongo/mongod.conf.erb):
 
     storage:
       dbPath: <%= @settings['data_dir_path'] %>
@@ -145,7 +154,7 @@ So, your erb template can look in the following fragments from [erb template](ht
 To have an idea of the available settings, give a look to the [tp::settings Data type](https://github.com/example42/puppet-tp/blob/master/types/settings.pp).
 
 
-### Generic templates for standard file formats
+#### Generic templates for standard file formats
 
 If we like the idea of having all our configurations as (hiera) data, we can use `tp conf` to manage configurations using generic templates for standard file formats, [like these](https://github.com/example42/puppet-psick/tree/master/templates/generic) from the psick module.
 
@@ -181,13 +190,13 @@ It depends on what you need and what you know.
 
 Tiny Puppet manages packages, services, repo configurations, and files whose content is entirely up to you. It doesn't manage any application specific resource.
 
-If you know how to configure your application and want a quick way (probably the quickest) to manage it with Puppet, and know at least Puppet basics, tp is for you.
+If you know how to configure your application, want a quick way (probably the quickest) to manage it with Puppet, and know at least Puppet basics, tp is for you.
 
-When tp (and some DIY code) would be better than using a dedicated module from the Forge?
+When tp (and some DIY code) can be better than using a dedicated module from the Forge?
 
-- If don't want to spent time testing a new module, add its dependencies, hoping it does all what you need
-- When at the end there's to manage packages, services and files
-- When you know exactly how our configuration files must be and want to control how they are generated (from static sources or dynamic templates with custom $options and os related $settings).
+- When don't want to spent time testing a new module, add its dependencies, hoping it does all what you need
+- When at the end there's just to manage packages, services and files
+- When you know exactly how our configuration files must be and want to control how they are generated (from static sources or dynamic templates with custom `$options` and os related `$settings`).
 - When you don't have to manage application specific resources, which are present in a dedicated module
 - When you don't have to manage complex setups for which a good dedicated module would deliver faster results
 
