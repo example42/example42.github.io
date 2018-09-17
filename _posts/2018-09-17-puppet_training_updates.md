@@ -45,6 +45,7 @@ People can now choose the IDE they prefer. Depending on existing knowledge it is
 ## Training Availability
 
 The new courses are available from Puppet starting at [Puppetize Live](https://puppet.com/puppetizelive) in October 2018.
+
 example42 will switch to the new training courses after we have verified the setup, see our [list of upcoming training courses](https://www.example42.com/#training).
 
 Martin Alfke
