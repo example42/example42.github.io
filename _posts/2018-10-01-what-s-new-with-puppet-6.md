@@ -12,7 +12,7 @@ Let's see what are the most interesting new features.
 * Table of content
 {:toc}
 
-## [Backwards Incompatibility] Several types moved to dedicated modules
+## Several types moved to dedicated modules
 
 This is a long awaited cleanup: all the Nagios types, and some other [OS specific ones](https://puppet.com/docs/puppet/6.0/type.html#deprecated-types) are no more part of the core product or have been moved to modules.
 
@@ -29,7 +29,7 @@ In general all the moved types are now placed in a puppetlabs module with `_core
 
 The core modules shipped with Puppet-agent are placed under `/opt/puppetlabs/puppet/modules` on \*nix and `$codedir/modules` on Windows, these paths are added to the default `basemodulepath` setting.
 
-## [Backwards Incompatibility] New CA management on the puppetserver
+## New CA management on the puppetserver
 
 Puppet CA support has been rewritten in Clojure and included in the puppetserver package, the old CA Ruby code has been removed. The new `puppetserver ca` command has been introduced to replace the previous `puppet cert` and `puppet ca` commands.
 
