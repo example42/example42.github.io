@@ -12,10 +12,22 @@ Let's see what are the most interesting new features.
 * Table of content
 {:toc}
 
-## [Backwards Incompatibility] Several types deprecated and moved to dedicated modules
+## [Backwards Incompatibility] Several types moved to dedicated modules
 
-This is a long awaited cleanup : all the Nagios types, and some other [OS specific ones](https://puppet.com/docs/puppet/6.0/type.html#deprecated-types) are now deprecated and are no more part of the core product. If you use them in your code after an upgrade you will see an **Unknown resource** error, to fix it just add to your modulepath (or your control-repo Puppetfile) the relevant module from the forge, for example all Nagios types are now in [puppetlabs.nagios_core](https://forge.puppet.com/puppetlabs/nagios_core) module.
+This is a long awaited cleanup: all the Nagios types, and some other [OS specific ones](https://puppet.com/docs/puppet/6.0/type.html#deprecated-types) are no more part of the core product or have been moved to modules.
 
+Most of them are still shipped in the puppet-agent package, others are in maintained modules not included in the puppet agent and some have been moved to modules and been deprecated.
+
+More precisely, the following types are included in supported modules on the forge and repackaged in puppet-agent, so nothing changes for end users:
+`augeas cron host mount scheduled_task selboolean selmodule ssh_authorized_key sshkey yumrepo zfs zone zpool`.
+
+These other types have been moved to module which are still supported by are not included in Puppet agent package, so if you use them you should add the relevant modules from the Forge: `k5login mailalias maillist`.
+
+These types have been deprecated, they are moved to modules which are not going to be actively maintained and are not shipped with puppet-agent package: `computer interface macauthorization mcx router vlan` plus all the `nagios_*` types (all moved to [puppetlabs-nagios_core](https://forge.puppet.com/puppetlabs/nagios_core) module).
+
+In general all the moved types are now placed in a puppetlabs module with `_core` suffix. Look here for a [rough list](https://forge.puppet.com/modules?utf-8=%E2%9C%93&page_size=25&sort=rank&q=core).
+
+The core modules shipped with Puppet-agent are placed under `/opt/puppetlabs/puppet/modules` on \*nix and `$codedir/modules` on Windows, these paths are added to the default `basemodulepath` setting.
 
 ## [Backwards Incompatibility] New CA management on the puppetserver
 
@@ -39,7 +51,7 @@ The `puppet ssl` command has been introduced. It replaces `puppet certificate_re
 
 A [Resource API](https://puppet.com/docs/puppet/6.0/create_types_and_providers_resource_api.html) has been added, providing a new, recommended method to create custom types and providers. The Resource API is built on top of Puppet core and is easier, faster, and safer than the old types and providers method.
 
-Writing new Puppet types based on the Resource API is even simpler by using the `pdk new type` and `pdk new provider` commands with the puppet Development Kit.
+Writing new Puppet providers based on the Resource API is even simpler by using the `pdk new provider` commands with the puppet Development Kit.
 
 Check the [reference](https://puppet.com/docs/puppet/6.0/about_the_resource_api.html) for more details.
 
@@ -67,14 +79,19 @@ Some [functions](https://puppet.com/docs/puppet/6.0/function.html) from the Pupp
 
 - New compare() function.
 
+## Command puppet module build removed
+
+The `puppet module build` command has been removed. To build and package modules [PDK](https://puppet.com/docs/pdk/) should be used.
+
 ## Conclusions
 
 This is a list of the most important changes with Puppet 6, in our opinion.
 
 As you have seen they are mostly related to consolidation, cleanup and enrichment of the language and the platform.
 
-If you don't use the deprecated types and don't have custom tooling around CA management, you might not even realise you've updated Puppet and in any case the things to do to fix and support the upgrade are minimal.
+Upgrade from Puppet 5 is expected to be safe and painless for most of the cases. If you are using any of the types which have been moved to separated modules which are not shipped with puppet-agent, you will have to add them by yourself to your module path.
 
+Thanks to David Schmitt from Puppet for the remarks about some incorrect statements in the first revision of this post.
 
 
 Alessandro Franceschi
