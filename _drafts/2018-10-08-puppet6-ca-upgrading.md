@@ -12,8 +12,8 @@ Now we look forward on how to migrate to the new CA.
 
 ## CA usage on Puppet 5 and earlier
 
-The CA and certificate mangement was usually part of the Puppet Agent package.
-Alle related commands were part of the `puppet` command:
+The CA and certificate management was usually part of the Puppet Agent package.
+All related commands were part of the `puppet` command:
 
     puppet cert list [--all]
     puppet cert sign <certname>
@@ -24,7 +24,7 @@ Alle related commands were part of the `puppet` command:
 ## The Puppet 6 CA
 
 Starting with Puppet 5.5 you will recognize that Puppet CA and certificate management will be moved from Puppet Agent to Puppetserver in Puppet 6.
-Puppet 5.5 preapres you by providing deprecation information in the Puppet server logfile and on the command line.
+Puppet 5.5 prepares you by providing deprecation information in the Puppet server logfile and on the command line.
 
 The Puppetserver handles certificate management via API calls. All Puppetserver APIs are protected with an authorization layer for read and write access.
 This concept is also done for the certificate management API.
@@ -63,6 +63,7 @@ Within a newer Puppet server, you will find two new entries in the authorization
         },
 
 Within the allow section we see the default settings, which now requires the Puppet server ca certificate to have an extension set.
+
 Let's analyze the new Puppet 6 CA certificate:
 
     openssl x509 -noout -text -in /etc/puppetlabs/puppet/ssl/certs/$(puppet config print certname).pem
@@ -101,7 +102,7 @@ In general you have multiple possibilities which you can follow when upgrading t
 ### New CA
 
 Usually you barely want to follow option 1. as this does mean a complete CA roll-over within all of your Puppet managed systems.
-Maybe this is an option in case that your CA is about to exire soon?
+Maybe this is an option in case that your CA is about to expire soon?
 
 We will look into the two solutions which do not require new certificates:
 
@@ -133,7 +134,7 @@ Please remember to restart your Puppet server process to activate changes.
 ### Modify CA cert
 
 Another solution (untested) is to add the required extension to the Puppet CA certificate.
-There is a project on [GitHub from smortex](https://github.com/smortex/puppet-add-cli-auth-to-certificate) which also has links to tickets at Puppet and which provides a ruby script which adss the required extension.
+There is a project on [GitHub from smortex](https://github.com/smortex/puppet-add-cli-auth-to-certificate) which also has links to tickets at Puppet and which provides a ruby script which adds the required extension.
 
 ## Autosigning on Puppet 6 CA
 
