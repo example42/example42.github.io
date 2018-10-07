@@ -26,8 +26,7 @@ All related commands were part of the `puppet` command:
 Starting with Puppet 5.5 you will recognize that Puppet CA and certificate management will be moved from Puppet Agent to Puppetserver in Puppet 6.
 Puppet 5.5 prepares you by providing deprecation information in the Puppet server logfile and on the command line.
 
-The Puppetserver handles certificate management via API calls. All Puppetserver APIs are protected with an authorization layer for read and write access.
-This concept is also done for the certificate management API.
+The Puppetserver handles certificate management via API calls. All Puppetserver APIs are protected with an authorization layer for read and write access. This authorization and access control is also done for the certificate management API.
 
 Within a newer Puppet server, you will find two new entries in the authorization configuration file located at `/etc/puppetlabs/puppetserver/conf.d/auth.conf`:
 
@@ -62,7 +61,7 @@ Within a newer Puppet server, you will find two new entries in the authorization
             name: "puppetlabs cert statuses"
         },
 
-Within the allow section we see the default settings, which now requires the Puppet server ca certificate to have an extension set.
+Within the allow section we see the default settings, which now requires the Puppet server ca certificate to have the `pp_cli_auth` extension set.
 
 Let's analyze the new Puppet 6 CA certificate:
 
@@ -82,15 +81,6 @@ Let's analyze the new Puppet 6 CA certificate:
 
 Here we see a new entry with an OID (1.3.6.1.4.1.34380.1.3.39) and the value set to true.
 
-The new CA management is completely integrated into Puppet server:
-
-    puppetserver ca list [--all]
-    puppetserver ca sign <certname>
-    puppetserver ca print <certname>
-    puppetserver ca revoke <certname>
-    puppetserver ca clean <certname>
-
-
 ## Migrating to Puppet 6 CA
 
 In general you have multiple possibilities which you can follow when upgrading to Puppet 6:
@@ -101,7 +91,7 @@ In general you have multiple possibilities which you can follow when upgrading t
 
 ### New CA
 
-Usually you barely want to follow option 1. as this does mean a complete CA roll-over within all of your Puppet managed systems.
+Usually you barely want to follow this option as this does mean a complete CA roll-over within all of your Puppet managed systems.
 Maybe this is an option in case that your CA is about to expire soon?
 
 We will look into the two solutions which do not require new certificates:
@@ -147,6 +137,15 @@ The configuration is still done in Puppet configuration file (`/etc/puppetlabs/p
     autosign = true                               # <- default, sign based on content of autosign.conf file (naive autosigning)
     autosign = /etc/puppetlabs/puppet/autosign.sh # <- script to execute: on exit 0 signing will take place (policy based autosigning)
 
+## CA and certificate management on Puppet 6
+
+The new CA management is completely integrated into Puppet server:
+
+    puppetserver ca list [--all]
+    puppetserver ca sign <certname>
+    puppetserver ca print <certname>
+    puppetserver ca revoke <certname>
+    puppetserver ca clean <certname>
 
 We wish everybody fun and success with Puppet 6,
 
