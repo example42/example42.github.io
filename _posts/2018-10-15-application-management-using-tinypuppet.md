@@ -3,13 +3,13 @@ layout: blog
 title: Tip of the Week 94 - Custom applications management using Tiny Puppet
 ---
 
-This weeks tip of the day deals with management of custom application and Puppet.
+This week's tip of the day deals with management of custom applications with Puppet and Tiny Puppet.
 
-Usually developers would like to concentrate on their application development and not also write Puppet modules for application deployment and configuration.
+Usually developers prefer to concentrate on their application development and not also write Puppet modules for its deployment and configuration.
 
-Especially when it comes to individual, in-house developed solutions you will find no Puppet module available, so a custom profile or module has to be written.
+Especially when it comes to individual, in-house developed software you will find no Puppet module available, so a custom profile or module has to be written.
 
-In this post we are going to show, how we can easily manage custom applications with Tiny Puppet with limited or no Puppet code at all.
+In this post we are going to show how we can easily manage custom applications with Tiny Puppet with limited or no Puppet code at all.
 
 * Table of content
 {:toc}
@@ -53,13 +53,13 @@ e.g.
 
 If multi OS support is needed, the module can get a lot more complex, with a params class or data in module to cope with different paths and names.
 
-Moreover you may need to add fragments of code for each managed file.
+Moreover you may need to add fragments of code for each managed file and manage the relevant dependencies.
 
 All code must be inside either a module or a profile and needs unit and acceptance testing.
 
 When you have multiple applications you will have multiple classes for each of your applications.
 
-Hopefully your application modules do not interfere with any other module which might lead to duplicate resource type declarations.
+Hopefully, finally, your application modules do not interfere with any other module which might lead to duplicate resource type declarations.
 
 ## Application deployment using a Tiny Puppet profile
 
@@ -70,6 +70,7 @@ Tiny Puppet is an abstraction layer for any application deployment and can fully
 Let's migrate the above Puppet code to a profile with Tiny Puppet defines. First we generate a wrapper class (profile), which can be used by all applications:
 
     class profile::my_application (
+      String[4] $admin_password  = '',      
       Hash      $install_options = {},
       Hash      $conf_options    = {},
     ){
@@ -83,10 +84,16 @@ Let's migrate the above Puppet code to a profile with Tiny Puppet defines. First
           * => $conf_options,
         }
       }
+      if !empty($admin_password) {
+        tp::conf { 'my_application::secrets':
+          content => "admin:${admin_password}",
+        }
+      }
     }
 
 Now we can add the required data to hiera:
 
+    profile::my_application::admin_password: ENC[...] # encrypted data
     profile::my_application::install_options:
       ensure: '1.1.3'
     profile::my_application::conf_options:
@@ -98,7 +105,6 @@ Now we can add the required data to hiera:
 
 In the conf.erb template we can refer to our application configuration options with something like: `master = <%= @options_hash['master'] %>`.
 
-Now any development team just provides a set of YAML data for their application based on a custom template where we can parametrise what we need to change in different environments or servers
 
 ## Application deployment using a Tiny Puppet wrapper define
 
@@ -144,9 +150,11 @@ This is the only code we would need to write for any application, then we can fe
           path: '/etc/application/app.conf'
           template: 'profile/my_application/conf.epp'
 
-## Application deployment using Tiny Puppet and custom Tiny data
+Now any development team just provides a set of YAML data for their application based on a custom template where we can parametrise what we need to change in different environments or servers.
 
-We can be even smarter and create tinydata specific for our application, in a custom tinydata module, with custom hierarchy for each application we want to manage (in case we want support for multiple OS):
+## Application deployment using Tiny Puppet and custom Tinydata
+
+We can be even smarter and create tinydata (the data used by Tiny Puppet) specific for our application, in a custom data module, with custom hierarchy for each application we want to manage (in case we want support for multiple OS):
 
     vi my_tinydata/data/my_application/hiera.yaml
 
@@ -156,11 +164,15 @@ We can be even smarter and create tinydata specific for our application, in a cu
       - "%{title}/default"
       - default
 
-We need a generic (valid for all applications) my_tinydata/data/default.yaml which can have the same contents of the [tinydaya default](https://github.com/example42/tinydata/blob/master/data/default.yaml).
+We need a generic (valid for all applications) data/default.yaml which can have the same contents of the [tinydaya default](https://github.com/example42/tinydata/blob/master/data/default.yaml).
+
+    vi my_tinydata/data/default.yaml
 
 Now we need to create at least a file with application specific data, let's just create the default file, valid for all OS:
 
     vi my_tinydata/data/my_application/default.yaml
+
+Content might look like:
 
     ---
     my_application::settings:
@@ -171,12 +183,19 @@ Now we need to create at least a file with application specific data, let's just
 
 These are the minimal settings for having a typical package/service/config file setup, but we can add more options such as:
 
-      log_file_path: '/var/log/my_application.log' # Used by tp log command
-      nodaemon_args: '-D' # Optional argument to launch service in forground (useful inside Docker containers)
-      validate_cmd: 'my_application -t -f %' # Optional command to check the syntax of the application configuration before restarting my_application service
-      repo_package_url: 'https://repo.mydomain/my_application/my_application-release-el-7.noarch.rpm' # Optional Url of the release package which configures my_application Yum/Apt repo (if no release package is available the repo settings can be set via other keys in tinydata)
+      # Used by tp log command, can be an array
+      log_file_path: '/var/log/my_application.log'
 
-Give tinydata like this we can configure our application without writing a single line of code. We can just include the `tp` class (here needed just to expose Hiera configurable parameters to manage tp defines, the same can be accomplished with a custom class similar to the profile example before) and write Hiera data like:
+      # Optional argument to launch service in forground (useful inside Docker containers)
+      nodaemon_args: '-D'
+
+      # Optional command to check the syntax of the application configuration before restarting my_application service
+      validate_cmd: 'my_application -t -f %'
+
+      # Optional Url of the release package which configures my_application Yum/Apt repo (if no release package is available the repo settings can be set via other keys in tinydata)
+      repo_package_url: 'https://repo.mydomain/my_application/my_application-release-el-7.noarch.rpm'
+
+Given tinydata like this we can configure our application without writing a single line of code. We can just include the `tp` class (here needed just to expose Hiera configurable parameters to manage tp defines, the same can be accomplished with a custom class similar to the profile example before) and write Hiera data like:
 
     tp::install_hash:
       my_application:
@@ -201,7 +220,13 @@ Alternatively we could just form the tinydata module and add our applications da
 
 ## Advantages?
 
-Besides the reduced amount of Puppet code to write, using tp to manage custom applications (when they can be installed via a package) with the relevant tinydata, has the added benefit of automatically configuring the `tp` command, which can be used on a system to check the status of all the applications installed via tp (`tp test [my_application]`) or `tail -f` all theirs logs (`tp log [my_application]`).
+When it's worth using tp instead of writing a custom module?
+
+- When we want to reduce the amount of custom Puppet code to write and prefer a totally data driven management of applications
+- When we need to manage packages, services, configuration files (tp takes care of relationships)
+- When we might benefit for a command like `tp test`, which can be executed locally on the system, via a monitoring, remote execution or orchestration tool to quickly and automatically get the status of all the applications managed by tp
+- When we want a quick and standardised way to troubleshoot applications, using the `tp log` command to tail all the logs of the applications we manage.
+
 
 We wish everybody fun and success with Tiny Puppet,
 
