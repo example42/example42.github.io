@@ -106,20 +106,47 @@ This security artifact is stored using [hiera-eyaml](https://github.com/voxpupul
 
 Security settings are now separated from configuration settings.
 
+## What is a role?
+
+A role is a class that includes ones or more profiles. It's generally recommended that in role classes you just include profiles, without passing parameters or other Puppet resources.
+
+A role class may look like:
+
+    class role::webserver {
+      include profile::base
+      include profile::apache
+      include profile::php
+    }
+
+This implies that as we may have a `profile` module containing all our profile classes, we can have a `role` module containing all our role classes.
+
+So, basically, roles are used to simplify nodes classification. You just include a role class for each nodes' role and all the rest is managed according to the profiles included there. If you have a fact called $role we can just have a line like this in our control repo's `manifests/site.pp`:
+
+    include "::role::${::role}"
+
+For this reason, even if the roles and profiles pattern is well established as it makes things simpler, it's not necessarily the only approach we can use: we may have just profiles without roles, in this case we don't need role classes, but just other ways to define what profiles to include in a node (for example via Hiera data, or on an external node classifier).
+
+Bear this in mind when working with roles and profiles: what you really need to define is basically what profiles you want on your nodes, how this is done, if via role classes or other methods does not make a real difference.
 
 ## Using an existing implementation
 
-Now the real work begins: writing code for all the different things you have in your environment.
+So now the real work begins: writing profiles for all the different things you have in your environment.
 
-Another solution is to use our [Puppet Systems Infrastructure Construction Kit - PSICK](https://github.com/example42/psick/blob/production/README.md).
-This will allow you easily spin up your Puppet infrastructure and configure your implementations by providing hiera data only.
+Profiles are typically local classes, not supposed to be shared, as they implement our own specific way to manage resources.
 
-Within PSICK you will find many profiles using [tiny-puppet](https://github.com/example42/puppet-tp/blob/master/README.md) and others which cover common features with normal Puppet resources. With this module implementation we provide in interface from hiera data to types and providers, without the need for individual classes.
+Still you can actually benefit from others' work on profiles: our [PSICK module](https://github.com/example42/puppet-psick/) contains several reusable profiles, some of them use [tiny-puppet](https://github.com/example42/puppet-tp/blob/master/README.md) some plain Puppet resources, and they cover [common features](https://github.com/example42/puppet-psick#psick-base-profiles) and use cases which may apply also to your setup.
 
-But PSICK let you decide which solution you prefer. It only provides an interface for hiera data.
+The important thing to understand about the psick module, is that you can pick the profiles you want to use, and ignore the others: you decide which solution you prefer: you just have to be sure that if you include any psick profile, you should also include the main psick class (which by default, with the predefined parameters, does NOTHING):
+
+    include psick # Prerequisite for all the psick Profiles
+    include psick::time # A profile to manage NTP and timezones on Linux and Windows
+
+All psick profiles have parameters which can be used to customise and manage their behaviour via Hiera data.
 
 We wish everybody success.
 
 Please provide feedback, especially when you are using our [Puppet Systems Infrastructure Construction Kit - PSICK](https://github.com/example42/psick)
 
 Martin Alfke
+
+Alessandro Franceschi
