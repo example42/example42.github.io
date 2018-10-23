@@ -118,6 +118,9 @@ Within PSICK you will find many profiles using [tiny-puppet](https://github.com/
 
 But PSICK let you decide which solution you prefer. It only provides an interface for hiera data.
 
-We wish everybody success. Please provide feedback, especially when you are using our [Puppet Systems Infrastructure Construction Kit - PSICK](https://github.com/example42/psick)
+We wish everybody success.
+
+Please provide feedback, especially when you are using our [Puppet Systems Infrastructure Construction Kit - PSICK](https://github.com/example42/psick)
+
 Martin Alfke
 
