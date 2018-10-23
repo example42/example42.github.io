@@ -22,7 +22,7 @@ You want to have self written Puppet code in case that you are still in the proc
 
 A technical component can be something like SSH, backup, your web server with specific extensions, your virus scanner installation.
 
-Configuration differences are either placed directly into your code (static data) or placed into hiera using automatic data bindig on profile class parameters.
+Configuration differences are either placed directly into your code (static data) or placed into hiera using automatic data binding on profile class parameters.
 
 Additionally a profile directory structure can also hold templates or static configuration files.
 
@@ -60,7 +60,7 @@ Your Login into a VM consists of SSH, SSSD with LDAP integration and SUDO settin
       # ...
     }
 
-Always remember to add documentation to your modules. This is highly important and can be vizualized by [puppet-strings](https://github.com/puppetlabs/puppet-strings).
+Always remember to add documentation to your modules. This is highly important and can be visualized by [puppet-strings](https://github.com/puppetlabs/puppet-strings).
 
 Other - non basic parts of your server - can be easily grouped by placing them into a directory structure. Now we will add windows support:
 
@@ -114,7 +114,7 @@ Now the real work begins: writing code for all the different things you have in 
 Another solution is to use our [Puppet Systems Infrastructure Construction Kit - PSICK](https://github.com/example42/psick/blob/production/README.md).
 This will allow you easily spin up your Puppet infrastructure and configure your implementations by providing hiera data only.
 
-Within PSICK you will find many profiles using [tiny-puppet](https://github.com/example42/puppet-tp/blob/master/README.md). With this module implementation we provide in interface from hiera data to types and providers, without the need for individual classes.
+Within PSICK you will find many profiles using [tiny-puppet](https://github.com/example42/puppet-tp/blob/master/README.md) and others which cover common features with normal Puppet resources. With this module implementation we provide in interface from hiera data to types and providers, without the need for individual classes.
 
 But PSICK let you decide which solution you prefer. It only provides an interface for hiera data.
 
@@ -123,4 +123,3 @@ We wish everybody success.
 Please provide feedback, especially when you are using our [Puppet Systems Infrastructure Construction Kit - PSICK](https://github.com/example42/psick)
 
 Martin Alfke
-
