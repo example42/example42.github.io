@@ -3,7 +3,7 @@ layout: blog
 title: Tip of the Week 96 - example42 is rewarded as one of the Top 10 DevOps consulting companies in Europe
 ---
 
-We are surprised and honoured to be rewarded as one of the [Top 10 DevOps consulting companies in Europe](https://www.cioapplicationseurope.com/vendors/top-10-devops-consultingservices-companies-2018-rid-22.html?fbclid=IwAR00owT5OaswxS6GIZ57nuL2MppieLj2rNik3_kUL1Ej1uQsaC3Lps4p-ns) by [CIO Applications Europe](https://www.cioapplicationseurope.com). [Here](https://www.cioapplicationseurope.com/magazines/October2018/Devops/) the full issue in PDF.
+We are pleasantly surprised and honoured to be rewarded as one of the [Top 10 DevOps consulting companies in Europe](https://www.cioapplicationseurope.com/vendors/top-10-devops-consultingservices-companies-2018-rid-22.html?fbclid=IwAR00owT5OaswxS6GIZ57nuL2MppieLj2rNik3_kUL1Ej1uQsaC3Lps4p-ns) by [CIO Applications Europe](https://www.cioapplicationseurope.com). [Here](https://www.cioapplicationseurope.com/magazines/October2018/Devops/) the full issue in PDF.
 
 Example42, is described as a company that "offers and shares huge IT experience and world-class knowledge of Puppet software and DevOps practices".
 
