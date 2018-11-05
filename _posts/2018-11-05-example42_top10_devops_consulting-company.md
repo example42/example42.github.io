@@ -3,7 +3,7 @@ layout: blog
 title: Tip of the Week 96 - example42 is rewarded as one of the Top 10 DevOps consulting companies in Europe
 ---
 
-We are pleasantly surprised and honoured to be rewarded as one of the [Top 10 DevOps consulting companies in Europe](https://www.cioapplicationseurope.com/vendors/top-10-devops-consultingservices-companies-2018-rid-22.html?fbclid=IwAR00owT5OaswxS6GIZ57nuL2MppieLj2rNik3_kUL1Ej1uQsaC3Lps4p-ns) by [CIO Applications Europe](https://www.cioapplicationseurope.com). [Here](https://www.cioapplicationseurope.com/magazines/October2018/Devops/) the full issue in PDF.
+We are pleasantly surprised and honoured to be rewarded as one of the [Top 10 DevOps consulting companies in Europe](https://www.cioapplicationseurope.com/vendors/top-10-devops-consultingservices-companies-2018-rid-22.html?fbclid=IwAR00owT5OaswxS6GIZ57nuL2MppieLj2rNik3_kUL1Ej1uQsaC3Lps4p-ns){:target="_blank"} by [CIO Applications Europe](https://www.cioapplicationseurope.com){:target="_blank"}. [Here](https://www.cioapplicationseurope.com/magazines/October2018/Devops/){:target="_blank"} the full issue in PDF.
 
 Example42, is described as a company that "offers and shares huge IT experience and world-class knowledge of Puppet software and DevOps practices".
 
@@ -28,18 +28,18 @@ Especially in the DevOps world training is one of the essentials tasks which mus
 
 ## Knowledge sharing
 
-We have always shared, and will continue to share, our experience on Puppet, operations, automation and DevOps. A list of the material, software and documentation we are shared includes:
+We have always shared, and will continue to share, our experience on Puppet, operations, automation and DevOps. A list of the material, software and documentation we have shared includes:
 
-- This same [blog](https://www.example42.com/blog/), with our Tips of the Week on Puppet and DevOps
-- [Tiny Puppet](https://tiny-puppet.com/) a Puppet module that abstracts installation of configuration of applications ("Any app on any OS")
-- [PSICK](https://github.com/example42/psick) a Puppet control-repo and module to easily setup a full featured Puppet infrastructure
+- This same [blog](https://www.example42.com/blog/){:target="_blank"}, with our Tips of the Week on Puppet and DevOps
+- [Tiny Puppet](https://tiny-puppet.com/){:target="_blank"} a Puppet module that abstracts installation of configuration of applications ("Any app on any OS")
+- [PSICK](https://github.com/example42/psick){:target="_blank"} a Puppet control-repo and module to easily setup a full featured Puppet infrastructure
 
 Less recent projects involve:
 
-- A [Puppet Tutorial](https://www.example42.com/tutorials/PuppetTutorial/) usable for trainings and workshops
-- The DevOps Guide to Puppet, Universe and Everything. Featuring a [Slides deck fro beginners](https://www.example42.com/guide/slides/beginner) and a reusable control-repo from which the PSICK project was derived
+- A [Puppet Tutorial](https://www.example42.com/tutorials/PuppetTutorial/){:target="_blank"} usable for trainings and workshops
+- The DevOps Guide to Puppet, Universe and Everything. Featuring a [Slides deck fro beginners](https://www.example42.com/guide/slides/beginner){:target="_blank"} and a reusable control-repo from which the PSICK project was derived
 - The NextGen Example42 Puppet modules set, most of which are now no more maintained, but for years have been a point of reference in Puppet modules
-- [Puppi](https://github.com/example42/puppi) a Puppet module to configure automate application deployments
+- [Puppi](https://github.com/example42/puppi){:target="_blank"} a Puppet module to configure automate application deployments
 
 We want to thank the CIO Applications authors for the honour and the reward and you, as reader, for being here.
 
