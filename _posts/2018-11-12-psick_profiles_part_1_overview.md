@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 98 - psick profiles - Part 1: Overview
+title: Tip of the Week 98 - Psick profiles Part 1: Overview
 ---
 
 We have already talked in our blog about the PSICK project, both the [control-repo](https://github.com/example42/psick){:target="_blank"} and the [Puppet module](https://github.com/example42/puppet-psick){:target="_blank"}.
