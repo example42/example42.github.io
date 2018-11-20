@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Tip of the Week 98 - Psick profiles. Part 2 - Setting proxy server and hostname
+---
 
 On the [first post](){:target="_blank"} of our series on Psick profiles we introduced the psick module and had an overview of its reusable profiles.
 
