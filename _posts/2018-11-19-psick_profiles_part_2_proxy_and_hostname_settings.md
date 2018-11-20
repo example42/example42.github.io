@@ -105,6 +105,12 @@ The update booleans have effect only on Linux and control where we want to set t
 
 On Windows if $update_hostname is true and hostname is not the same configured, the `netdom renamecomputer` command is run.
 
+Usage is the usual, include in manifests (ie: in role classes):
+
+    include psick::proxy
+
+Or via any other classification option you use.
+
 Configuration via hiera can be as follows:
 
     psick::hostname::host: my_host
