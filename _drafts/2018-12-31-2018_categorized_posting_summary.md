@@ -74,7 +74,7 @@ As similar post was done for [2017](https://www.example42.com/2018/01/01/2017_ca
 ## Puppet 6
 
 - [What's new with Puppet 6?](https://www.example42.com/2018/10/01/what-s-new-with-puppet-6/){:target="_blank"}
-- [Upgrading to Puppet 6 CA](https://www.example42.com/2018/10/08/puppet6-ca-upgrading{:target="_blank"}
+- [Upgrading to Puppet 6 CA](https://www.example42.com/2018/10/08/puppet6-ca-upgrading){:target="_blank"}
 
 ## Bolt, tasks, plans
 
