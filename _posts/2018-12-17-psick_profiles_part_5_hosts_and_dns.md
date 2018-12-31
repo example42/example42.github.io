@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week 102 - Psick profiles. Part 5 - Managing /etc/hosts and DNS
+title: Tip of the Week 103 - Psick profiles. Part 5 - Managing /etc/hosts and DNS
 ---
 
 Our tour of the ready to use profiles of the psick module continues this week with management of DNS entries for the resolver, and of the content of /etc/hosts file.
