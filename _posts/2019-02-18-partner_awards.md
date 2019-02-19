@@ -9,7 +9,7 @@ Shortly after [example42 GmbH](https://example42.com/) was founded, in October 2
 
 This partnership allows Puppet Inc and example42 GmbH to work closely together on training, consulting, migrations and any aspect of a [Puppet Enterprise](https://puppet.com/products/puppet-enterprise) installation.
 
-Several of the relevant engagements been conducted by [Alessandro Franceschi](https://www.linkedin.com/in/alessandrofranceschi), CTO at example42 GmbH.
+Several of the relevant engagements have been conducted by [Alessandro Franceschi](https://www.linkedin.com/in/alessandrofranceschi), CTO at example42 GmbH.
 
 We are super excited that Alessandro is rewarded as Channel Partner **Engineer of the Year** for "exemplifying excellence in engineering and solving customer challenges using Puppet products".
 
@@ -32,11 +32,11 @@ A [Service Delivery Partner](https://puppet.com/partners/service-delivery-partne
 
 ## Why example42 GmbH?
 
-At example42 GmbH two long time Puppet experts have combined their Puppet knowledge, each one having more that ten years of on field Pupept experience.
+At example42 GmbH two long time Puppet experts have combined their Puppet knowledge, each one having more that ten years of hands-on Puppet experience.
 
-Meanwhile we participate in a world wide network of Puppet experts and contribute to the community with our [Open Source](https://github.com/example42) modules and Puppet related projects.
+Meanwhile we participate in a world-wide network of Puppet experts and contribute to the community with our [Open Source](https://github.com/example42) modules and Puppet related projects.
 
-We have happy and proud of being part of this world.
+We are happy and proud of being part of this world.
 
 example42 GmbH
 
