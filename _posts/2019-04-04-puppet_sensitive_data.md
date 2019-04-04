@@ -7,7 +7,7 @@ Securing important and sensitive information with Puppet is a long time issue.
 
 There are at least three different locations where one has to deal with securing information.
 
-The most well known is the Hiera data store, where many people today use **hiera-yaml** to encrypt values using a public-private key pair.
+The most well known is the Hiera data store, where many people today use **hiera-eyaml** to encrypt values using a public-private key pair.
 
 The next one is the catalog itself, where the Puppet server places data unencrypted inside. Ben Ford from Puppet provided a solution using **node_encrypt** module.
 
