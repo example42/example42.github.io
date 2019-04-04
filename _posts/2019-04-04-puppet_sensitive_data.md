@@ -4,13 +4,15 @@ title: Puppet Tip 106 - Sensitive Data in Puppet
 ---
 
 Securing important and sensitive information with Puppet is a long time issue.
+
 There are at least three different locations where one has to deal with securing information.
 
-The most well known is the Hiera data store, where many people today use eyaml to encrypt values using a public-private key pair.
+The most well known is the Hiera data store, where many people today use **hiera-yaml** to encrypt values using a public-private key pair.
 
-The next one is the catalog itself, where the Puppet server places data unencrypted inside. Ben Ford from Puppet provided a solution using node_encrypt module.
+The next one is the catalog itself, where the Puppet server places data unencrypted inside. Ben Ford from Puppet provided a solution using **node_encrypt** module.
 
 The third one is the Puppet report. Here we see file diffs, showing old and new password.
+
 This is the topic we are dealing in today's Puppet Tip.
 
 Let's start with the data type:
@@ -37,7 +39,7 @@ But on the next Puppet agent run, we will receive an error message:
     String (file: /etc/puppetlabs/code/environments/production/manifests/
     site.pp, line: 31, column: 3) on node master.example42.training
 
-We need to inform hiera, that we want to receive the valua as Sensitive data type by adding a lookup option:
+We need to inform hiera, that we want to receive the value as Sensitive data type by adding a lookup option:
 
     ---
     lookup_options:
