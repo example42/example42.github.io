@@ -3,13 +3,29 @@ layout: blog
 title: Puppet Tip 107 - Request for Tiny Data
 ---
 
+Before talking about Tiny data with have to mention
+
+### Tiny Puppet (tp)
+
 If you know something about example42, you should know that we developed [Tiny Puppet](https://github.com/example42/puppet-tp){:target="_blank"} (tp), a Puppet module which allows to manage potentially **any application** on any **Operating System**.
 
-What application? Anything that can be installed via a Puppet **package** resource.
+What exactly, currently Tiny Puppet can manage?
 
-What Operating Systems? Mainly **Linux** (RedHat, Debian, Suse and derivatives) but also **Solaris**, **BSDs** and **Darwin** (with brew-cask), **Windows** (with Chocolatey).
+**Any application** that can be installed via a Puppet **package** resource.
 
-It's supposed to be used in local profiles, when for a given application we just need to manage the package, service, and configuration file(s) triplet.
+On What Operating Systems?
+
+- Mostly **Linux** (RedHat, Debian, Suse and derivatives)
+- But also **Solaris**, **BSDs** and **Darwin** (with brew-cask)
+- And potentially also **Windows** (with Chocolatey).
+
+What you can use it for?
+
+- Quickly install, test, show logs of the managed applications, from the shell
+- Manage applications installation and configuration in Puppet manifests. such as
+  - Local profiles, with our code, our files and logic 
+  - Possibly, optionally, in component modules, to benefit from tp integrations
+  - Ready for Hiera use collections, like the [tp-profiles],
 
 Just to give you an idea, the following code:
 
@@ -151,17 +167,21 @@ the second, when repo_package_url is defined, involves setting the download url 
 
 #### Managing application upstream repositories
 
-We have recently added to to the tp::install a very powerful parameter: `upstream_repo`, which allows users to **install an app from its own upstream repositories**.
+We have recently added to the `tp::install` define a very powerful parameter: `upstream_repo`, which allows users to **install an app from its own upstream repositories**.
 
 So, if you want to install a package using the native OS packages, you simply can have a manifest with:
 
-    tp::install { 'puppet': }
+```shell
+tp::install { 'puppet': }
+```
 
 but if you want to install the same application using the upstream Puppet repositories, provided by the same application authors, you can write:
 
-    tp::install { 'puppet':
-      upstream_repo => true,
-    }
+```puppet
+tp::install { 'puppet':
+  upstream_repo => true,
+}
+```
 
 All the tinydata necessary and specific to the upstream repo packages, in placed in (for this case with puppet) the [data/puppet/upstream](https://github.com/example42/tinydata/tree/master/data/puppet/upstream){:target="_blank"} directory.
 
