@@ -231,4 +231,4 @@ Our goal is, on any OS, to:
 
     tp install everything
 
-Now **let's define everything** together.
+Now **let's define everything** together!
