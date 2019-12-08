@@ -114,9 +114,16 @@ This tells tiny puppet in what files to look for tinydata starting from:
 
 Lookup is an hiera like (note that Hiera is not actually used to get his data): first value found while crossing the hierarchy has precedence on values found, for any key, at lower hierarchy levels.
 
-### Managing repositories
 
-Tinydata does not only contain info on the packages to install, the services to manage and the typical configuration files to manage, it can provide information consumed by tp to **manage additional software repositories**, to configure before trying to install the relevant application's package.
+Tiny data can define:
+
+  - packages to install, services and the typical configuration files to manage
+  - **date for additional software repositories** to configure before trying to install the relevant application's package
+  - how to launch the application in a docker instance
+  - what command to use to validate the syntax of the app configuration files
+  - what ports, pids, users are used with the application, used for monitoring and availability checks
+
+### Managing additional repositories
 
 There 2 ways to are manage repos, the first is to specify the typical data to use in apt repos:
 
@@ -137,10 +144,12 @@ or yum repos:
       key: 'D88E42B4'
       key_url: 'http://packages.elastic.co/GPG-KEY-elasticsearch'
 
-the second, where available, involves setting the url of the release package, with all the necessary repository configurations:
+the second, when repo_package_url is defined, involves setting the download url of the release package, with all the necessary repository configurations:
 
     puppet::settings:
       repo_package_url: 'https://yum.puppet.com/puppet/puppet-release-el-7.noarch.rpm'
+
+#### Managing application upstream repositories
 
 We have recently added to to the tp::install a very powerful parameter: `upstream_repo`, which allows users to **install an app from its own upstream repositories**.
 
@@ -148,7 +157,7 @@ So, if you want to install a package using the native OS packages, you simply ca
 
     tp::install { 'puppet': }
 
-but if you want to install the same application using the upstream repositories, provided by the same application authors, you can write:
+but if you want to install the same application using the upstream Puppet repositories, provided by the same application authors, you can write:
 
     tp::install { 'puppet':
       upstream_repo => true,
@@ -158,18 +167,48 @@ All the tinydata necessary and specific to the upstream repo packages, in placed
 
 This is a new feature and we currently have very few application with upstream data info. 
 
-### Request for tinydata
+## Request for Tiny Data!
 
-So, here is our **Call for tiny data**.
+So, here is our **call for tiny data**.
 
-We have tinydata for *some* applications, the ones we needed or found interesting, but we don't know what people might be interested to.
+We have tinydata for *some* applications:
 
-Or what OS support they would like.
+    ls -la data/ | wc -l
+      179
 
-Or for what applications they want the option to choose native or upstream packages.
+the common ones or what we needed or found interesting.
+
+Still there's more.
+
+A lot of wonderful applications that would be great to be able to install on a shell command:
+
+    tp install wonderapp
+
+or manage with a Puppet define:
+
+    tp::install { 'wonderapp': }
+
+On any Linux, and maybe Mac and Windows.
+
+With the quick choice of using the default OS packages, the app upstream repo or any other repo might be configured.
+
+    tp::install { 'wonderapp': 
+      upstream_repo => true|false,
+    }
 
 We know we can add new data very easily, and relatively quickly.
 
-Just open a [ticket on Github](https://github.com/example42/tinydata/issues){:target="_blank"}, either with the name of the app you want to manage with Tiny Puppet, or which ones needs fixing, support for new OS versions, or data for upstream packages.
+We don't know what application interests you.
 
-And if you feel brave enough, submit your tinydata to improve the app and os coverage.
+Please engage with, in effort order:
+
+- **Let us know**, in any way (tweet, comment, mail, voice) what app you would like to quickly manage via tp
+- **Open a [ticket on Github](https://github.com/example42/tinydata/issues){:target="_blank"}** for a new app support. Possibly provide context and relevant information
+- **Open a [ticket](https://github.com/example42/tinydata/issues){:target="_blank"}** for incorrect, incomplete or not updated existing tiny data
+- Do directly the work with updated tinydata and submit a **[Pull Request](https://github.com/example42/tinydata/pulls){:target="_blank"}**
+
+Our goal is, on any OS, to:
+
+    tp install everything
+
+Now **let's define everything**!
