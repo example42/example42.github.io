@@ -222,13 +222,13 @@ We don't know what application interests you.
 
 Please engage with, in effort order:
 
-- **Let us know**, in any way (tweet, comment, mail, voice) what app you would like to quickly manage via tp
-- **Open a [ticket on Github](https://github.com/example42/tinydata/issues){:target="_blank"}** for a new app support. Possibly provide context and relevant information
-- **Open a [ticket](https://github.com/example42/tinydata/issues){:target="_blank"}** for incorrect, incomplete or not updated existing tiny data
-- Do directly the work with updated tinydata and submit a **[Pull Request](https://github.com/example42/tinydata/pulls){:target="_blank"}**
+- **Let us know**, in any way (tweet, comment, mail, voice) **what app** you would like to quickly manage via tp
+- **Open a [ticket on Github](https://github.com/example42/tinydata/issues){:target="_blank"}** for a **new app** support. Possibly provide context and relevant information
+- **Open a [ticket](https://github.com/example42/tinydata/issues){:target="_blank"}** for **incorrect, incomplete or not updated** existing tiny data
+- **Do directly the work** with updated tinydata and submit a **[Pull Request](https://github.com/example42/tinydata/pulls){:target="_blank"}**
 
 Our goal is, on any OS, to:
 
     tp install everything
 
-Now **let's define everything**!
+Now **let's define everything** together.
