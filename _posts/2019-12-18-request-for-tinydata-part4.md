@@ -3,10 +3,35 @@ layout: blog
 title: Puppet Tip 110 - Request for Tiny Data - Part 4
 ---
 
+Part Four of the Four parts blog serie on our Request for Tiny Data.
+
+Previously we have:
+
+- Part 1 - Introduced Tiny Puppet and where it can be used
+- Part 2 - Described how to write Tiny Data
+- Part 3 - Show how to manage extra repositories and how to define an app upstream repo
+
+### Tiny Puppet defaults
+
+Did we mention that Tiny Puppet is smart enough to do something also when it has no Tiny data for an application?
+
+In this case it simply tries to declare a resource like:
+
+    packake { 'unknown_app':
+      ensure => present,
+    }
+
+Automatically adding the right package provider,, like **chocolatey** on Windows and **homebrew** on MacOS.
+
+So, even if there's no tidy data for opera, something like this works on any OS:
+
+    tp::install { 'opera': }
+
+When there's no tiny data anyway the `tp::conf` define can't be used.
 
 ## Request for Tiny Data!
 
-So, here is our **call for tiny data**.
+So, here is our renovated **call for tiny data**.
 
 We have tinydata for *some* applications:
 

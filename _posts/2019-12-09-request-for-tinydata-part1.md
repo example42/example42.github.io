@@ -3,7 +3,9 @@ layout: blog
 title: Puppet Tip 107 - Request for Tiny Data - Part 1
 ---
 
-Before talking about Tiny data with have to mention
+This is the first of a 4 part call for Tiny Data.
+
+Before talking about Tiny data we have to mention what uses it:
 
 ### Tiny Puppet (tp)
 
@@ -64,3 +66,11 @@ Content of the template, to be placed in our profile module, could be something 
     <% @options.each do |k,v| -%>
     <%= k %> <%= v %>
     <% end -%>
+
+### Request for Tiny Data!
+
+So, is there any app you would like to be managed via Tiny Puppet?
+
+**Let us know**, in any way (tweet, comment, email, voice...).
+
+We will **give our answer**.

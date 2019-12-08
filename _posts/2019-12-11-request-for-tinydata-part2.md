@@ -3,7 +3,9 @@ layout: blog
 title: Puppet Tip 108 - Request for Tiny Data - Part 2
 ---
 
-Second part of the Request for Tiny Data serie is about ....
+This is the second of a 4 part call for Tiny Data.
+
+In the firsto post we introduced Tiny Puppet (tp), now we are going to talk about its:
 
 ### Tiny data
 
@@ -70,8 +72,7 @@ This tells tiny puppet in what files to look for tinydata starting from:
 
 Lookup is an hiera like (note that Hiera is not actually used to get his data): first value found while crossing the hierarchy has precedence on values found, for any key, at lower hierarchy levels.
 
-
-Tiny data can define:
+Tiny data can currently define:
 
   - packages to install, services and the typical configuration files to manage
   - **date for additional software repositories** to configure before trying to install the relevant application's package
@@ -79,3 +80,15 @@ Tiny data can define:
   - what command to use to validate the syntax of the app configuration files
   - what ports, pids, users are used with the application, used for monitoring and availability checks
 
+### Request for Tiny Data!
+
+You see? Writing tiny data is not difficult, and it's very fast once you know these principles.
+
+If you want to improve existing data or have data for new applications, you can:
+
+- **Let us know**, in any way (tweet, comment, mail, voice) **what app** you would like to quickly manage via tp
+- **Open a [ticket on Github](https://github.com/example42/tinydata/issues){:target="_blank"}** for a **new app** support. Possibly provide context and relevant information
+- **Open a [ticket](https://github.com/example42/tinydata/issues){:target="_blank"}** for **incorrect, incomplete or not updated** existing tiny data
+- **Do directly the work** with updated tinydata and submit a **[Pull Request](https://github.com/example42/tinydata/pulls){:target="_blank"}**
+
+In any case we will try to **give our answer**.
