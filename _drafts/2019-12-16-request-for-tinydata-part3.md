@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Puppet Tip 109 - Request for Tiny Data - Part 3
+title: Puppet Tip 109 - Request for Tiny Data - Part 3 - Managing additional repos
 ---
 
 Here is the is the third part of a blog serie on our Request for for Tiny Data.
@@ -68,8 +68,7 @@ Still we have to know know what to prioritize, and you can help with that, in ma
 
 - **Let us know**, in any way (tweet, comment, mail, voice) **what app** you would like to quickly manage via tp
 - **Open a [ticket on Github](https://github.com/example42/tinydata/issues){:target="_blank"}** for a **new app** support. Possibly provide context and relevant information
-- **Open a [ticket](https://github.com/example42/tinydata/issues){:target="_blank"}** for the **applications missing upstream repo data** you woudd like.
+- **Open a [ticket](https://github.com/example42/tinydata/issues){:target="_blank"}** for the **applications missing upstream repo data** you would like.
 - **Do directly the work** with updated tinydata and submit a **[Pull Request](https://github.com/example42/tinydata/pulls){:target="_blank"}**
 
-In any case we will try to **give on giving our answers**.
-
+There will be **example42 answers**.

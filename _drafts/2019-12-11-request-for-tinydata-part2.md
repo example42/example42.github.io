@@ -1,11 +1,11 @@
 ---
 layout: blog
-title: Puppet Tip 108 - Request for Tiny Data - Part 2
+title: Puppet Tip 108 - Request for Tiny Data - Part 2 - Tiny data exposed
 ---
 
-This is the second of a 4 part call for Tiny Data.
+This is the **second** of **four** post series for our call for Tiny Data.
 
-In the firsto post we introduced Tiny Puppet (tp), now we are going to talk about its:
+In the first post we introduced Tiny Puppet (tp), now we are going to talk about what feeds it:
 
 ### Tiny data
 
@@ -91,4 +91,4 @@ If you want to improve existing data or have data for new applications, you can:
 - **Open a [ticket](https://github.com/example42/tinydata/issues){:target="_blank"}** for **incorrect, incomplete or not updated** existing tiny data
 - **Do directly the work** with updated tinydata and submit a **[Pull Request](https://github.com/example42/tinydata/pulls){:target="_blank"}**
 
-In any case we will try to **give our answer**.
+In any case we will try to give our **example42 answer**.

@@ -1,11 +1,11 @@
 ---
 layout: blog
-title: Puppet Tip 107 - Request for Tiny Data - Part 1
+title: Puppet Tip 107 - Request for Tiny Data - Part 1 - Tiny Puppet (tp)
 ---
 
-This is the first of a 4 part call for Tiny Data.
+This is the **first** of **four** post series for our call for Tiny Data.
 
-Before talking about Tiny data we have to mention what uses it:
+But first, let's talk about **what uses Tiny Data**:
 
 ### Tiny Puppet (tp)
 
@@ -23,11 +23,11 @@ On What Operating Systems?
 
 What you can use it for?
 
-- Quickly install, test, show logs of the managed applications, from the shell
-- Manage applications installation and configuration in Puppet manifests. such as
-  - Local profiles, with our code, our files and logic 
-  - Possibly, optionally, in component modules, to benefit from tp integrations
-  - Ready for Hiera use collections, like the [tp-profiles],
+- Shell usage: Use the `tp` command to quickly install, test, show logs of the managed applications
+- Puppet manifests usage: Use `tp::install', `tp::dir` and `tp::conf` defines to manage applications installation and configuration in:
+  - Local site profiles, with our code, our files configured with our logic 
+  - Possibly, optionally, in component modules, to benefit of tp cli integrations
+  - Ready for Hiera use profiles collections, like the [tp-profile](https://github.com/example42/puppet-tp_profile) or the [psick module](https://github.com/example42/puppet-psick)
 
 Just to give you an idea, the following code:
 
@@ -67,10 +67,10 @@ Content of the template, to be placed in our profile module, could be something 
     <%= k %> <%= v %>
     <% end -%>
 
-### Request for Tiny Data!
+### Request for Tiny Data
 
 So, is there any app you would like to be managed via Tiny Puppet?
 
 **Let us know**, in any way (tweet, comment, email, voice...).
 
-We will **give our answer**.
+We will **give an example42 answer**.
