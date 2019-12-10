@@ -1,0 +1,149 @@
+I"s <p>One of the most powerful features introduced with Puppet 4 is the new type system.</p>
+
+<p>For every variable or parameter in Puppet can be defined the type of data we can expect for it.</p>
+
+<p>We typically use the type system to validate the kind of data expected for classes or defines parameters.</p>
+
+<p>For example, Puppetlabs’ ntp module has the ntp class which has parameters like these:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ntp (
+  Boolean $broadcastclient,
+  Stdlib::Absolutepath $config,
+  Optional[Stdlib::Absolutepath] $config_dir,
+  String $config_file_mode,
+  Optional[String] $config_epp,
+  Enum['running', 'stopped'] $service_ensure,
+  Variant[Boolean, Integer[0,1]] $tos_cohort,
+  ...
+</code></pre></div></div>
+
+<p>These few lines give us a good idea of how flexible the type system is, and how it can be extended and customised.</p>
+
+<p>Besides the most common data types like:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Boolean</code> (matches a boolean value, either <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code>, without quotes otherwise they become Strings)</li>
+  <li><code class="highlighter-rouge">String</code> (matches any string)</li>
+  <li><code class="highlighter-rouge">Hash</code> (matches an hash (an unordered list of key values))</li>
+  <li><code class="highlighter-rouge">Array</code> (matches an ordered array of elements)</li>
+  <li><code class="highlighter-rouge">Integer</code> (matches a integer number)</li>
+</ul>
+
+<p>Puppet has natively many more useful data types:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Optional</code> allows to accept a valid value (of the data type specified in square brackets) or an undef value.</li>
+  <li><code class="highlighter-rouge">Enum</code> accepts a list of strings, as defined, separate by comma, in the square brackets.</li>
+  <li><code class="highlighter-rouge">Variant</code> accepts different data types, separated by comma. In the above example a Boolean or an Integer from 0 to 1.</li>
+</ul>
+
+<p>For a more extensive list of the native data types you can  heck the <a href="https://puppet.com/docs/puppet/5.5/lang_data.html">official documentation</a>.</p>
+
+<p>In the above code fragment, we can see an “unusual” data type: <code class="highlighter-rouge">Stdlib::Absolutepath</code>, this is a case of a custom data type, defined in the <a href="https://github.com/puppetlabs/puppetlabs-stdlib/blob/master/types/absolutepath.pp">stdlib</a> module, under the path <code class="highlighter-rouge">types/absolute.pp</code> with content as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>type Stdlib::Absolutepath = Variant[Stdlib::Windowspath, Stdlib::Unixpath]
+</code></pre></div></div>
+
+<p>What’s nice here is that we can compose and use different data types, even custom ones (as <code class="highlighter-rouge">Stdlib::Windowspath</code> and <code class="highlighter-rouge">Stdlib::Unixpath</code>) and ship them directly in a module.</p>
+
+<p>For example, in our psick module we have created, under <code class="highlighter-rouge">types/ensure.pp</code> a <code class="highlighter-rouge">Psick::Ensure</code> data type which we use to manage the ensure parameter of a package resource, its content looks like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>type Psick::Ensure = Variant[Enum['present', 'absent', 'installed','latest'],Pattern[/\d+(\.\d+)*/]]
+</code></pre></div></div>
+
+<p>This accepts either a string as defined in Enum, or a Regular expression matching version numbers.</p>
+
+<p>Another interesting data type is <code class="highlighter-rouge">Struct</code> which allows to validate the type of each value of the keys of an Hash.</p>
+
+<p>We use it in Tiny Puppet, to validate the list of settings which can be used to override an application’s tinydata:</p>
+
+<p>Here is is, as defined in tp module’s <a href="https://github.com/example42/puppet-tp/blob/master/types/settings.pp">types/settings.pp</a>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>type Tp::Settings = Struct[{
+
+  Optional[package_name] =&gt; Variant[String,Array],
+  Optional[package_ensure] =&gt; String,
+  Optional[package_provider] =&gt; String,
+
+  Optional[service_name] =&gt; Variant[String,Array],
+  Optional[service_enable] =&gt; Boolean,
+  Optional[service_ensure] =&gt; Enum['running', 'stopped'],
+
+  Optional[process_name] =&gt; String,
+  Optional[process_extra_name] =&gt; String,
+  Optional[process_user] =&gt; String,
+  Optional[process_group] =&gt; String,
+
+  Optional[config_file_path] =&gt; Stdlib::Absolutepath,
+  Optional[config_file_owner] =&gt; String,
+  Optional[config_file_group] =&gt; String,
+  Optional[config_file_mode] =&gt; String,
+
+  Optional[config_dir_path] =&gt; Stdlib::Absolutepath,
+  Optional[config_dir_owner] =&gt; String,
+  Optional[config_dir_group] =&gt; String,
+  Optional[config_dir_mode] =&gt; String,
+  Optional[config_dir_recurse] =&gt; Boolean,
+
+  Optional[log_file_path] =&gt; Stdlib::Absolutepath,
+  Optional[pid_file_path] =&gt; Stdlib::Absolutepath,
+  Optional[init_file_path] =&gt; Stdlib::Absolutepath,
+  Optional[log_file_path] =&gt; Stdlib::Absolutepath,
+
+  Optional[conf_dir_path] =&gt; Stdlib::Absolutepath,
+  Optional[data_dir_path] =&gt; Stdlib::Absolutepath,
+  Optional[plugins_dir_path] =&gt; Stdlib::Absolutepath,
+  Optional[modules_dir_path] =&gt; Stdlib::Absolutepath,
+
+  Optional[tcp_port] =&gt; Variant[String,Integer],
+  Optional[udp_port] =&gt; Variant[String,Integer],
+
+  Optional[nodaemon_args] =&gt; String,
+  Optional[dockerfile_prerequisites] =&gt; String,
+
+  Optional[package_prerequisites] =&gt; Array,
+  Optional[tp_prerequisites] =&gt; Array,
+  Optional[exec_prerequisites] =&gt; Hash,
+  Optional[exec_postinstall] =&gt; Hash,
+
+  Optional[repo_package_url] =&gt; String,
+  Optional[repo_package_provider] =&gt; String,
+  Optional[repo_url] =&gt; String,
+  Optional[repo_namel] =&gt; String,
+  Optional[key] =&gt; String,
+  Optional[key_url]=&gt; String,
+  Optional[include_src] =&gt; String,
+
+  Optional[apt_repos] =&gt; String,
+  Optional[apt_key_server] =&gt; String,
+  Optional[apt_key_fingerprint] =&gt; String,
+  Optional[apt_release] =&gt; String,
+  Optional[apt_pin] =&gt; String,
+  Optional[yum_priority] =&gt; String,
+  Optional[yum_mirrorlist] =&gt; String,
+  Optional[zypper_repofile_url] =&gt; String,
+
+}]
+</code></pre></div></div>
+
+<p>Note that each key an be optional (so the parameter passed can be an hash with any of the above keys) and must adhere to the defined type, either native or custom, like <code class="highlighter-rouge">Stdlib::Absolutepath</code>.</p>
+
+<p>We find the Struct type particularly useful when using the <a href="https://www.example42.com/2014/10/29/reusability-features-every-module-should-have/">templates + options hash pattern</a>.</p>
+
+<p>Another very useful data type is <code class="highlighter-rouge">Sensitive</code> which, when used, hides the relevant value from being shown in reports and logs.</p>
+
+<p>You can use it to manage single values (and avoid to see them in reports) or for whole files, when using the <code class="highlighter-rouge">content</code> argument for a file resource:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file { '/etc/secret':
+  content =&gt; Sensitive(template("${module_name}/secret.erb")),
+}
+</code></pre></div></div>
+
+<p>In this way even if the content of the file changes in a Puppet run, you won’t see it and its diff with potential sensitive information.</p>
+
+<p>There’s a lot more to talk about data types, and it’s definitively worth reading the official documentation and giving a look to the ones provided by <a href="https://github.com/puppetlabs/puppetlabs-stdlib/tree/master/types">puppetlabs-stdlib</a> module, as they cover some quite common use cases (<code class="highlighter-rouge">Stdlib::Ip_address</code>, <code class="highlighter-rouge">Stdlib::HTTPSUrl</code>, <code class="highlighter-rouge">Stdlib::MAC</code> to name a few).</p>
+
+<p>Give a type to your data, it makes your code more robust and reliable.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

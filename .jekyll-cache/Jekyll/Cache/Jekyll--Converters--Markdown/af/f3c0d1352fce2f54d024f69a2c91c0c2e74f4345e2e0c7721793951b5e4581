@@ -1,0 +1,73 @@
+I"�<p>Credentials with a certain level of security should never be stored in plain text on a Puppet server.</p>
+
+<p>How about items that shpuld be managed by another team (e.g. Security and Compliance) but the team insists that these data may not be part of the standard Puppet environments?</p>
+
+<p>In this case one can make use of a second file mountpoint.
+Using a second mount point within Puppet code follows the already well known pattern for delivering static configuration files using file resource type and source property:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class my_certs {
+  file { '/etc/ssl/certs/my_company_ca.pem':
+    ensure =&gt; file,
+    source =&gt; 'puppet:///certs/my_company_ca.pem',
+  }
+}
+</code></pre></div></div>
+
+<p>Do you recognize the pattern?</p>
+
+<p>Let’s compare this with a “normal” file source declaration where we fetch the file from the module files directory:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class my_old_certs {
+  file { '/etc/ssl/certs/my_company_ca_old.pem':
+    ensure =&gt; file,
+    source =&gt; 'puppet:///modules/my_old_certs/my_company_ca_old.pem',
+  }
+}
+</code></pre></div></div>
+
+<p>The second declaration uses the file from the module. Directory layout is the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;modulepath&gt;/my_old_certs/
+                    |- manifests/
+                    |         \- init.pp
+                    \- files/
+                           \- my_company_ca_old.pem
+</code></pre></div></div>
+
+<p>Adding a second mount point is straight forward.
+Just add the following snippet to <code class="highlighter-rouge">/etc/puppetlabs/puppet/fileserver.conf</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/puppet/fileserver.conf
+[certs]
+path /opt/security/data/certs/
+allow *
+</code></pre></div></div>
+
+<p>Don’t forget to restart the puppetserver process</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># On Open Source
+service puppetserver restart
+# On Puppet Enterprise
+service pe-puppetserver restart
+</code></pre></div></div>
+
+<p>Now one can use the new mountpoint easily in Puppet code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class my_certs {
+  file { '/etc/ssl/certs/my_company_ca.pem':
+    ensure =&gt; file,
+    source =&gt; 'puppet:///certs/my_company_ca.pem'
+  }
+}
+</code></pre></div></div>
+
+<p>File system layout looks the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/opt/security/data/certs
+                    \- my_company_ca.pem
+</code></pre></div></div>
+
+<p>This concept allows you to easily store information on the master in a specific path without these information being part of the Puppet environment DSL code.</p>
+
+<p>Martin Alfke</p>
+:ET

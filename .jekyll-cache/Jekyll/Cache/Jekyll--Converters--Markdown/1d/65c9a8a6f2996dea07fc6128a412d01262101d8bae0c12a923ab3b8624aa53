@@ -1,0 +1,145 @@
+I"�<p>In Puppet trainings I usually tell people that a lazy admin is a good admin. A lazy admin will automate repetitive tasks.</p>
+
+<p>Additionally I like to refer to Puppet as also being lazy: Puppet always checks the actual state and compares it with the desired state.</p>
+
+<p>In case that actual state is correct, Puppet will go to sleep again.</p>
+
+<p>But there are parts where being lazy is kind of a problem.
+One of these is what I prefer to name “the lazy tagging” in Puppet.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#what-are-tags" id="markdown-toc-what-are-tags">What are tags?</a></li>
+  <li><a href="#tags-and-collectors" id="markdown-toc-tags-and-collectors">Tags and collectors</a></li>
+  <li><a href="#work-around-the-lazy-tagging-issue" id="markdown-toc-work-around-the-lazy-tagging-issue">Work around the lazy tagging issue</a></li>
+</ul>
+
+<h2 id="what-are-tags">What are tags?</h2>
+
+<p>Puppet offers the possibility to add arbitrary names to resources or classes.</p>
+
+<p>Let’s have a look at some examples:</p>
+
+<p>You can add tags to resource declarations using meta parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="p">{</span> <span class="s1">'foobar'</span><span class="p">:</span>
+  <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+  <span class="n">tag</span>    <span class="p">=&gt;</span> <span class="s1">'barfoo'</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Or you can have a class and you add an additional name to it using the tag function:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class foobar {
+  tag('barfoo')
+}
+</code></pre></div></div>
+
+<p>For classes Puppet also does automatic tagging using the class name.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class profile::database::mysql {
+  tag('profile::database::mysql')  # not needed, done by Puppet internally
+}
+</code></pre></div></div>
+
+<p>These tags can then be used to limit the resources the Puppet agent is checking and managing by using the <code class="highlighter-rouge">--tag</code> cli option:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet agent --test --tags=barfoo
+</code></pre></div></div>
+
+<p>The agent will still receive the whole catalog of resources for a node. But the agent will only work on resources with the provided tags, which may be a comma separated list.</p>
+
+<h2 id="tags-and-collectors">Tags and collectors</h2>
+
+<p>When using virtual resources and collectors, one might think, that the tags are usable also during catalog compilation.
+But this is not true, as tags are usually handled by the Puppet agent, not the server.</p>
+
+<p>Let’s assume that you want to manage users locally.</p>
+
+<p>You have some people which always get access (the sysadmins) and you have staff being responsible for specific applications.
+Maybe some of your people manage more than one application.</p>
+
+<p>First you consider placing all the user information into hiera and you tag the individual users:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># data/common.yaml
+profile::usermanagement::users:
+  'ben':
+    uid: '1044'
+    shell:'/bin/zsh'
+    tag:
+      - 'sysadmin'
+  'bob':
+    uid: '1045'
+    shell: '/bin/bash'
+    tag:
+      - 'sysadmin'
+  'rob':
+    uid: '1046'
+    shell: '/bin/bash'
+    tag:
+      - 'app3b'
+      - 'billing2'
+  'fin':
+    uid: '1047'
+    shell: '/bin/bash'
+    tag:
+      - 'proxy'
+      - 'billing2'
+</code></pre></div></div>
+
+<p>Now you want to create users based on the node role. Let’s assume that we have the following roles:</p>
+
+<ul>
+  <li>app3b</li>
+  <li>billing2</li>
+  <li>proxy</li>
+</ul>
+
+<p>In this case you might consider using virtual resources and declare/collect only users which have a node role tag set (and of course all of your sysadmin people).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class profile::usermanagement (
+  Hash $users = {},
+) {
+  $users.each |String $key, Hash $value| {
+    @user { $key:
+      * =&gt; $value,
+    }
+  }
+
+  User &lt;| tag == $::role or tag == 'sysadmin' |&gt;
+}
+</code></pre></div></div>
+
+<p>But what will happen?</p>
+
+<p>Puppet will always create ALL users which you listed in hiera.</p>
+
+<p>The reason is that the lazy tagging gets evaluated on the Puppet agent and not on the Puppet master.</p>
+
+<h2 id="work-around-the-lazy-tagging-issue">Work around the lazy tagging issue</h2>
+
+<p>Using Lambdas will allow you to run a function which is executed at the compiler to remove unneeded users.</p>
+
+<p>Here we can use the filter function:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class profile::usermanagement (
+  Hash $users = {},
+) {
+  $sysadmins = $users.filter |$key, $value| { 'sysadmin' in $value['tag'] }
+  $roleadmins = $users.filter |$key, $value| { $::role in $value['tag'] }
+
+  $all_admins = $sysadmin.merge($roleadmins)
+
+  $all_admins.each | $key, $value | {
+    user { $key:
+      * =&gt; $value,
+    }
+  }
+}
+</code></pre></div></div>
+
+<p>As you have removed all users you don’t want to have on systems using the filter function, you can now directly declare the users instead of using virtual resources and collectors.</p>
+
+<p>example42 wishes everybody a healthy and successful new year.</p>
+
+<p>Martin Alfke</p>
+:ET

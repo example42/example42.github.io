@@ -1,0 +1,37 @@
+I"\<p>The Github account where all the Example42 Puppet modules have been published so far, is now an organization on GitHub.</p>
+
+<p>This change is not only “a flag in a db record”, but involves a new approach on how Example42 Puppet modules are going to be maintained.</p>
+
+<p>The effort to keep this modules set updated and in good shape was becoming overwhelming for a single person not even working on them full time.</p>
+
+<p>Rspec tests and Travis integration were breaking, support for new OSes was not introduced timely, bugs and sometimes pull requests had been ignored for too much time.</p>
+
+<p>This was not a sustainable scenario and for this reason everything is changing.</p>
+
+<p>Example42 is no more a single-man effort but a community project.</p>
+
+<p>Whoever is interested and has the skills to do that, can become maintainer of one or mode modules.</p>
+
+<p>The current priorities for the existing modules are these:</p>
+
+<ul>
+  <li>
+    <p>Fix rpsec tests and Travis integration.</p>
+  </li>
+  <li>
+    <p>Review and work out the bugs and PRs queue</p>
+  </li>
+  <li>
+    <p>Guarantee support for more recent versions of the most important OS</p>
+  </li>
+  <li>
+    <p>Preserve backwards compatibility and the general design patterns of these modules.</p>
+  </li>
+</ul>
+
+<p>If you are interested in maintaining one or more modules, please <a href="https://github.com/alvagante">contact me</a>.</p>
+
+<p>This is not a disengagement from my own side, I’ll keep on working on these modules, but, simply, I can’t guarantee the support and dedication that their users deserve.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

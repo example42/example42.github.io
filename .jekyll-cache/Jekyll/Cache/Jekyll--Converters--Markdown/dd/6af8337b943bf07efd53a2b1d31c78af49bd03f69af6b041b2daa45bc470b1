@@ -1,0 +1,246 @@
+I"�*<p>When we are at customers who start thinking about containers we usually get confronted with a combination of half knowledge and weird assumptions.</p>
+
+<p>One of the most interesting topics usually deals with configuration management and the idea that this is no longer needed when switching to containers.</p>
+
+<p>This posting will explain, how Puppet can help you managing your container infrastructure.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#container-host" id="markdown-toc-container-host">Container host</a></li>
+  <li><a href="#container-runtime" id="markdown-toc-container-runtime">Container runtime</a></li>
+  <li><a href="#container-network" id="markdown-toc-container-network">Container network</a></li>
+  <li><a href="#container-volumes" id="markdown-toc-container-volumes">Container volumes</a></li>
+  <li><a href="#container-images" id="markdown-toc-container-images">Container images</a></li>
+  <li><a href="#running-single-containers" id="markdown-toc-running-single-containers">Running single containers</a></li>
+  <li><a href="#the-container-orchestration" id="markdown-toc-the-container-orchestration">The container orchestration</a>    <ul>
+      <li><a href="#docker-compose" id="markdown-toc-docker-compose">Docker compose</a></li>
+      <li><a href="#docker-swarm" id="markdown-toc-docker-swarm">Docker swarm</a></li>
+      <li><a href="#kubernetes" id="markdown-toc-kubernetes">Kubernetes</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="container-host">Container host</h2>
+
+<p>To run containers you must have a system at hand. Usually people will just use a cloud provider, eliminating the need of local hardware.</p>
+
+<p>But running on cloud needs detailed configuration like access control and authentication, besides the container host.</p>
+
+<p>When running locally on your own hardware you want to configure the system to be capable of running container at all. Puppet Inc. has therefor published the <a href="https://github.com/puppetlabs/puppetlabsdocker">puppetlabs-docker</a> module.</p>
+
+<p>To make use of the puppetlabs docker module, you must use a supported operatingsystem like modern CentOS, Debian or SLES releases and have a Puppet Agent running locally.</p>
+
+<p>The main docker class installs and configures your dockerd.</p>
+
+<h2 id="container-runtime">Container runtime</h2>
+
+<p>With the docker module you can choose to either install Docker CE (Community Edition) or Docker EE (Enterprise Edition).</p>
+
+<p>Please note that the puppetlabs-docker module does not install or configure the Docker Enterprise UCP (Universal Control Plane) nor the DTR (Docker Trusted Registry).</p>
+
+<p>For installation and configuration of UCP and DTR you can use the <a href="https://forge.puppetlabs.com/puppetlabs/docker_ucp">puppetlabs-ucp module</a></p>
+
+<p>Now let’s get started installing docker:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Docker CE:
+class { 'docker': }
+
+# Docker EE:
+class { 'docker':
+  docker_ee =&gt; true,
+}
+</code></pre></div></div>
+
+<p>This will give you a default docker installation from docker repositories and docker daemon is listening on socket only.</p>
+
+<p>If you want to reach the docker daemon from remote and locally you must declare the docker class with several parameters:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class { 'docker':
+  tcp_bind        =&gt; ['tcp://127.0.0.1:4243','tcp://10.0.0.1:4243'],
+  socket_bind     =&gt; 'unix:///var/run/docker.sock',
+}
+</code></pre></div></div>
+
+<p>Usually only root is allowed to access docker daemon. You can easily add other users to docker group:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class { 'docker':
+  docker_users =&gt; ['user1', 'user2'],
+}
+</code></pre></div></div>
+
+<p>Other useful parameters you want to set on your docker daemon might be <code class="highlighter-rouge">live-restore</code> or configuring the <code class="highlighter-rouge">storagedriver</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class { 'docker':
+  stragedriver     =&gt; 'devicemapper',
+  extra_parameters =&gt; ['--live-restore'],
+}
+</code></pre></div></div>
+
+<h2 id="container-network">Container network</h2>
+
+<p>If you need to use a specific bridge with individual network settings you can declare the docker class with core networking parameters.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class { 'docker':
+  ip_forward      =&gt; true,
+  iptables        =&gt; true,
+  ip_masq         =&gt; true,
+  bridge          =&gt; br0,
+  fixed_cidr      =&gt; '10.20.1.0/24',
+  default_gateway =&gt; '10.20.0.1',
+}
+</code></pre></div></div>
+
+<p>Next to core networking you can add docker networks (which are supported since docker 1.9 and later):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker_network { 'my-network':
+  ensure   =&gt; present,
+  driver   =&gt; 'overlay',
+  subnet   =&gt; '192.168.1.0/24',
+  gateway  =&gt; '192.168.1.1',
+  ip_range =&gt; '192.168.1.4/32',
+}
+</code></pre></div></div>
+
+<h2 id="container-volumes">Container volumes</h2>
+
+<p>Container should not have persitant data.
+One option for persistant data (as long as you are on one host) is to make use of volumes:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker::volume { 'registry-volume':
+  ensure =&gt; present,
+}
+</code></pre></div></div>
+
+<h2 id="container-images">Container images</h2>
+
+<p>We now can prepare the local docker daemon to have images available which can then be instantiated (<code class="highlighter-rouge">docker container run</code>).</p>
+
+<p>As of now, we can only pull images from official Docker registry as we have no private registry yet available.
+So let’s pull the registry image via Puppet:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker::image { 'registry':
+  image_tag =&gt; '2.6.2',
+}
+</code></pre></div></div>
+
+<p>You can also the <code class="highlighter-rouge">docker::image</code> defined resource type to build containers by yourself using a Dockerfile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker::image { 'my_container':
+  docker_file =&gt; '/home/docker/my_container/Dockerfile',
+}
+</code></pre></div></div>
+
+<h2 id="running-single-containers">Running single containers</h2>
+
+<p>Now everything is prepared to spin up a container.
+Let’s start the registry container:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker::run { 'registry':
+  image            =&gt; 'registry:2',
+  ports            =&gt; ['5000:5000'],
+  volumes          =&gt; ['registry-volume:/var/lib/registry'],
+  extra_parameters =&gt; ['--restart=always'],
+  privileged       =&gt; false,
+  env              =&gt; [
+    'REGISTRY_STORAGE_DELETE_ENABLED=true',
+    'REGISTRY_LOG_LEVEL=warn',
+  ],
+}
+</code></pre></div></div>
+
+<p>Especially for the registry container you want to also add the registry browser. We assume that both containers run on the same host:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker::run { 'registry-browser':
+  image =&gt; 'klausmeyer/docker-registry-browser',
+  ports =&gt; ['8888:8080'],
+  env   =&gt; [
+    "DOCKER_REGISTRY_URL=http://${::fqdn}:5000",
+    'NO_SSL_VERIFICATION=true',
+    'ENABLE_DELETE_IMAGES=true',
+  ],
+}
+</code></pre></div></div>
+
+<h2 id="the-container-orchestration">The container orchestration</h2>
+
+<p>Until now we created single instances of containers on single hosts.
+This is not what you usually want, as this causes outage when the one hosts goes down or when docker needs maintenance (e.g. adding a configuration and restarting docker daemon).</p>
+
+<p>The puppetlabs-docker module can also handle swarm and compose.</p>
+
+<h3 id="docker-compose">Docker compose</h3>
+
+<p>Docker compose does not give you high availability. It is useful when you want to run several containers which are functional <strong>together</strong> only.</p>
+
+<p>e.g. you need a database and a webserver.</p>
+
+<p>First you need to install the compose utility:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class {'docker::compose':
+  ensure =&gt; present,
+  version =&gt; '1.9.0',
+}
+</code></pre></div></div>
+
+<p>Docker compose descriptions must be placed in a yam file, which can be easily deployed via Puppet:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file { '/etc/docker-compose/teamA/web-db.yaml':
+  ensure =&gt; file,
+  source =&gt; 'puppet:///...',
+}
+</code></pre></div></div>
+
+<p>Now we can use the Docker compose resource type to deploy the application:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker_compose { '/etc/docker-compose/teamA/web-db.yaml':
+  ensure =&gt; present,
+  scale  =&gt; {
+    'web_server' =&gt; '4',
+  },
+}
+</code></pre></div></div>
+
+<h3 id="docker-swarm">Docker swarm</h3>
+
+<p>When HA is required one should look into Swarm or Kubernetes. Both are capable of managing multiple containers on multiple hosts.</p>
+
+<p>To activate docker swarm one first must run an initial command on the first swarm manager node.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker::swarm { 'cluster_manager':
+  init           =&gt; true,
+  advertise_addr =&gt; $fact['networking']['ip'],
+  listen_addr    =&gt; $fact['networking']['ip'],
+}
+</code></pre></div></div>
+
+<p>The token can be found in the node log file.</p>
+
+<p>Adding workers must use the token from forst master:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker::swarm { 'worker_1':
+  join           =&gt; true,
+  advertise_addr =&gt; $fact['networking']['ip'],
+  listen_addr    =&gt; $fact['networking']['ip'],
+  manager_ip     =&gt; '192.168.1.1',
+  token          =&gt; '&lt;your join token&gt;'
+}
+</code></pre></div></div>
+
+<p>Having your Docker Swarm ready allos you to deploy docker services:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker::services { nginx':
+  create    =&gt; true,
+  service_name =&gt; 'nginx',
+  image        =&gt; 'nginx:latest',
+  publish      =&gt; '8443:80',
+  replicas     =&gt; '5',
+}
+</code></pre></div></div>
+
+<h3 id="kubernetes">Kubernetes</h3>
+
+<p>Whereas Swarm integrates many configurations, Kubernetes allows you to choose the tools you need. This is done by separating APIs, Networks and Hosts into separate services (which are usually run in containers).</p>
+
+<p>We will cover Kubernetes and Puppet in an upcoming Tip of the Week.</p>
+
+<p>Martin Alfke</p>
+:ET

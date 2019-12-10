@@ -1,0 +1,68 @@
+I".0<p>Update 20140206. Some of the links and the info on this article may be outdated. For current implementations and discussions refer to <a href="https://github.com/stdmod">https://github.com/stdmod</a>&#160;. Current namings are here:&#160;<a href="https://github.com/stdmod/puppet-modules/blob/master/Parameters_List.md">https://github.com/stdmod/puppet-modules/blob/master/Parameters_List.md</a></p>
+<p>Discussions about Puppet modules standards have been raising and decaying for years: occasional posts on the Google groups, some presentations at conferences, gists, twits and bits around the net but, up to now, this topic has never been pushed enough to turn into something real or widespread.</p>
+<p>Still the matter is important, and we see it more evidently now, when we have several hundreds of modules on the Forge and GitHub, which are typically reviewed, cherry picked, forked and painfully adapted to custom needs by so many Puppet Masters.&#160;</p>
+<p>When you start to select modules from different authors you inevitably get into dependencies conflicts and different usage patterns, you start to have local, not merged, forks of upstream modules, and introduce hacks that inevitably affect your code cleanness.</p>
+<p>Puppet is no more a young and quickly growing software, I'd say it's in an early adulthood, with established principles and patterns but still with a long life to sustain and feed.</p>
+<p>Now, even more than before, is time to start to make some order in the modules ecosystem.</p>
+<p>The topic is large and debatable, but can be begin from some simple, standard naming convention in modules' usage.</p>
+<p>If a "Standard Module" exposes a minimal set of common parameters that manage some of it behavior and usage patterns, it will be easier to switch modules, eventually merge the best parts of different modules for the same application, use them in a predictable and conventional way and also make them interoperate better.</p>
+<p>It's not something that can happen in a short time, is has eventually to be embraced, not enforced: a suggested set of naming principles for modules interfaces that suggest re-usability best practices and ease integrations.</p>
+<h2>&#160;Standard benefits</h2>
+<p>Standard naming conventions can be set at different levels:</p>
+<p>- In the module's <strong>main class parameters</strong></p>
+<p>- In parameters used by <strong>defines</strong>, according to the kind of define<br /><br />- In custom <strong>types</strong>&#160;</p>
+<p>- In specific frequently used and typical cross-module defines, like <strong>apache::vhost</strong>, <strong>mysql::grant</strong> and similar.</p>
+<p>Different levels of 'standard sets' might be defined, so that modules' authors can support only a subset of them and always be free, to add custom parameters that enhance and enrich any specific module.</p>
+<p>Such Standards are not intended to set rules on how modules should be done, but how they should interface with others: we are basically talking about the names of the parameters to expose and the relative function, not how they are implemented.&#160;</p>
+<p>Moreover <em>suggesting</em>&#160;some parameters may help the same module's reusability features and generally enhance the average quality of the modules around and ease their integration.</p>
+<p>Benefits of some standard modules interfaces are quite obvious, but let me recall you some of them:</p>
+<p>- <strong>Better user experience</strong> (modules are easier to use and understand)&#160;
+</p>
+<p>- <strong>Quicker and more reliable</strong> <strong>Puppet</strong> manifests <strong>development</strong> (for basic functions you can expect predictable parameters)</p>
+<p>- More <strong>coherent</strong> and error proof Puppet setups&#160;</p>
+<p>- <strong>Better interoperability</strong> among different modules</p>
+<p>In longer terms further benefits may emerge, like:</p>
+<p>- A PuppetLabs and/or Community driven <strong>central repository</strong> of well tested and features rich <strong>unique</strong> Standard modules</p>
+<p>- The possibility to have an <strong>unified approach to smoke testing</strong> of common features&#160;</p>
+<p>- The possibility to have web front-ends and <strong>ENC </strong>that<strong> leverage</strong> on the standardized parameters&#160;</p>
+<p>- Easier <strong>integration</strong> with <strong>superclasses</strong> that expose their own parameters and use different modules to build up full applications stacks</p>
+<h2>Samples and references to spark the discussion&#160;</h2>
+<p>To talk about standard naming in abstract may lead to long and pointless speculations, so I'd rather show you some examples of what could be these minimal standards.</p>
+<p>Consider them as a draft, a proposal, some scribbled ideas not necessarily on how modules should be done (even if I personally think they are good modules layouts) but on how the same interfaces (parameters) can be implemented in different ways:</p>
+<p><a href="https://github.com/example42/puppet-stdmod">https://github.com/example42/puppet-stdmod</a></p>
+<p><a href="https://github.com/example42/puppet-stdmodalt">https://github.com/example42/puppet-stdmodalt</a>&#160;</p>
+<p>They reproduce the typical package-service-configuration file example, different examples (and relevant "standard" parameters) may be defined for different kind of modules (for example modules based on Java applications, for which some Java specific parameters may be added).</p>
+<p>A <strong>draft proposal</strong> for&#160;standard naming conventions&#160;<a href="https://docs.google.com/document/d/1D4OqEI5iuGJe63ODU91N6rnFKcxVAg1sAWbaQrGBlWA/edit?usp=sharing" title="Puppet Modules Standards - draft">can be discussed on this Google doc</a>, for&#160;the moment it can work, I suppose.</p>
+<p>&#160;If you want to comment or contribute send me your Gmail account.</p>
+<h2>Some notes</h2>
+<p>- The parameters used in the main class might be questionable and not all necessarily required: you may decide to implement only a part of them, eventually finding a convention to identify differnet levels of "Modules Standards coverage" and of course you can add other parameters more specific to the managed application. The idea is not to have all modules made in the same ways, but to leverage a set of common parameters.</p>
+<p>- Consider the parameters used in the above modules, or described in the Google document a <strong>&#160;draft for version 0.0.1</strong>.&#160;</p>
+<p>- Some of the parameters are particularly useful for a proper module reusability: leaving to the user freedom on out to populate the main configuration file (**<strong>source</strong>** and **<strong>template</strong>** (or **<strong>content</strong>**) parameters) or the whole configuration directory, when it exists (**<strong>dir_source</strong>**, **<strong>dir_recurse</strong>**, **<strong>dir_purge</strong>**) covers a great part of what you typically need to customize the module and, most of all, it doesn't force any specific approach on how you manage your configuration files: use can provide it via static source files, custom templates or other methods (for example with custom concats)&#160;</p>
+<p>- A parameter like **<strong>options</strong>** which expects an hash of any kind of configuration elements for a specific application, when used with a properly structured **<strong>template</strong>** adds another huge layer of customizability that allows you to pass any module specific configuration parameter without actually modifying the module&#160;
+</p>
+<p>- Parameters like **<strong>ensure</strong>**, **<strong>version</strong>**, **<strong>status</strong>** and **autorestart** allows you to manage partial application or also removal of resources provided by the module and to better manage the behavior of the service provided the the module, covering some specific but not so rare use cases.&#160;
+</p>
+<p>- Parameters like **<strong>noops</strong>** and **<strong>audits</strong>** allows dry runs of a single module or better fit for Puppet Enterprise Compliance features.</p>
+<p>- Parameters like **<strong>my_class</strong>** and **<strong>dependency_class</strong>** allow automatic loading of custom classes, either to extend (not necessarily inheriting) the resources provided by the module or by giving more freedom on how to manage dependencies.</p>
+<p>This is an approach to module's interoperability which deserves some explanation.</p>
+<h2>Interoperability matters</h2>
+<p>A good basic rule for a module is that it should manage only the application it provides.</p>
+<p>For example a Wordpress module should not manage apache/nginx, php and mysql, as there are specific modules for them.</p>
+<p>At the same time if you want to provide a working Wordpress module you must somehow manage resources related to other modules, such as virtual host files or database grants.&#160;</p>
+<p>This hasn't been really solved in the modules ecosystem, the <strong>Modulefile</strong> is useful to automatically manage dependencies for modules but it hasn't solved the issue on how to happily have different modules behave well together without dependencies conflicts.&#160;</p>
+<p>A *<strong>part</strong>* of the solution may be the adoption of a parameter like **<strong>dependency_class</strong>** which defines the names of a class that contains all the external dependencies the module has.</p>
+<p>By default its value should be blank or a class inside the same module that uses modules and resources chosen by the module's author, but the same resources can be provided in any way by the module's users passing a different custom class name where these dependencies are managed.
+
+That would allow the possibility for users to bypass some troublesome dependencies and work around them in the most fitting way.</p>
+<p>This behavior might be also reflected in some additional parameter for the Modulefile, for example considering the key **dependency** only for required modules dependencies (modules like stdlib, for example) and an alternative key, such as **<strong>soft-dependency</strong>** where are placed the modules used in the (customizable) dependency class.
+Via the **puppet module** tool you might then decide if to install only (hard) dependencies or also soft dependencies.</p>
+<p>This is just a proposal, which, together with standard naming, may improve modules' reusability and interoperability.</p>
+<h2>What now?</h2>
+<p>Talking with different puppeteers and modules authors I realized that frustration in a seamless usage of external modules is rather wide and that forking and keeping local copies of public modules is much more common than upstream contribution.</p>
+<p>This results in large waste of time, less code reuse and less general quality of modules.</p>
+<p>To introduce a Standard naming recommendations for Modules is not the only solution but may significantly help the modules ecosystem.</p>
+<p>Implementation details (selection of what parameters should be considered standard and how they are named) can be discussed in public, among PuppetLabs engineers, modules authors and users (the proposed links are proposal which might be useful as a starting point, feel free to comment the code on GitHub or contribute to the Google doc) and I personally think that the approach may be based on small but steady steps, without wasting too much time upfront into edge-cases or implementations that would require relevant changes to Puppet code that would greatly delay adoption (there are still many 2.6 or earlier PuppetMasters around, proposals strictly related to changes in Puppet code would get years to find large adoption).</p>
+<p>I also personally think that only <strong>PuppetLabs</strong>&#160;has the moral and effective authority to &#160;propose and promote Module Standards , sharing suggestions and ideas with the <strong>community</strong>.</p>
+<p>The little stone is launched, once again: methods, modalities, implementations and approaches are all to be discussed, but, really, <em><strong>there's not so much to do</strong></em>:<br /><br />the Holy Grail of Puppet modules interoperability and reusability is not impossible, major improvements can be done just with few <strong>naming conventions</strong>.</p>
+<p><em>Are we ready to define them?</em></p>
+:ET

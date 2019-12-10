@@ -1,0 +1,130 @@
+I"a <p>We have already talked in our blog about the PSICK project, both the <a href="https://github.com/example42/psick" target="_blank">control-repo</a> and the <a href="https://github.com/example42/puppet-psick" target="_blank">Puppet module</a>.</p>
+
+<p>Here and in our next posts we will get deeper in how to use the reusable profiles of the Psick module.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>Psick is a module you can get from the forge, if you install it form the command line all its dependencies are resolved:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet module install example42-psick
+</code></pre></div></div>
+
+<p>When used inside a control repo, you need to explicitly state its dependencies in your Puppetfile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mod 'puppetlabs-stdlib', :latest
+mod 'example42/psick', :latest
+mod 'example42/tp', :latest
+mod 'example42/tinydata', :latest
+</code></pre></div></div>
+
+<p>In a production environment we will likely specify fixed and tested versions, the current latest version of the above modules are:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mod 'puppetlabs-stdlib', :5.1.0
+mod 'example42/psick', :0.5.8
+mod 'example42/tp', :v2.3.1
+mod 'example42/tinydata', :v0.3.2
+</code></pre></div></div>
+
+<p>Some psick modules can support other third party component modules, refer to each psick class documentation for details on additional prerequisite modules.</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>Once you have psick among your modules you can include any of its profiles using whatever method you have to classify nodes.</p>
+
+<p>You have to include first the main psick class, which is safe and harmless as it does nothing by default but act as entrypoint for some common variables used by psick profiles.</p>
+
+<p>Usage inside manifests then can be like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include psick
+include psick::&lt;profile&gt;
+</code></pre></div></div>
+
+<p>You can consider psick classes as reusable profiles: they have the characteristic of a profile as they wrap resources from other modules to accomplish specific functions, but they are conceived in a way that they can be reused and adapted to different (common) use cases.</p>
+
+<p>You can cherry pick and use the ones you want instead of writing a custom profile (which might eventually need an additional component module and its dependencies) for every case where a psick profile fits your situation.</p>
+
+<p>Usage of psick profiles is similar to the one of classes from existing modules: you classify nodes with the relevant class name, and then use hiera to configure it via it’s parameters.</p>
+
+<h2 id="base-and-applications-profiles">Base and applications profiles</h2>
+
+<p>Psick comes with a wide like of base profiles for common settings, here are the most significant ones:</p>
+
+<ul>
+  <li>psick::hosts - Manage /etc/hosts</li>
+  <li>psick::motd - Manage /etc/motd and /etc/issue</li>
+  <li>psick::nfs - Manage NFS client and server</li>
+  <li>psick::sudo - Manage sudo configuration</li>
+  <li>psick::sysctl - Manage sysctl settings</li>
+  <li>psick::firewall - Manage firewalling</li>
+  <li>psick::openssh - tp profile and keygen define</li>
+  <li>psick::hardening - Manage system hardening</li>
+  <li>psick::network - Manage networking</li>
+  <li>psick::puppet - Manage Puppet components</li>
+  <li>psick::users - Manage users</li>
+  <li>psick::time - Manage time and timezones</li>
+</ul>
+
+<p>There are also several other application specific profiles, where it’s generally possible to choose what module to use to manage the actual application (if a popular public module or Tiny Puppet):</p>
+
+<ul>
+  <li>psick::ansible - Manage Ansible installation</li>
+  <li>psick::aws - Manage AWS client tools and VPC setup</li>
+  <li>psick::bolt - Manage Bolt installation</li>
+  <li>psick::docker - Docker installation and build tools</li>
+  <li>psick::foreman - Foreman installation</li>
+  <li>psick::git - Git installation and configuration</li>
+  <li>psick::gitlab - GitLab installation and config</li>
+  <li>psick::mariadb - Manage Mariadb</li>
+  <li>psick::mysql - Manage Mysql</li>
+  <li>psick::mongo - Manage Mongo</li>
+  <li>psick::php - Manage php and modules</li>
+  <li>psick::oracle - Manage Oracle prereq and setup</li>
+  <li>psick::sensu - Manage Sensu</li>
+</ul>
+
+<h2 id="tp-profiles">tp profiles</h2>
+
+<p>TP profiles in psick are profiles which are generated automatically, they all share the same structure (and parameters)  offering a consistent user interface. They, of course, use Tiny Puppet defines (tp::install and tp::conf) to manage the relevant applications.</p>
+
+<p>All tp profiles in psick have names like <code class="highlighter-rouge">psick::&lt;app&gt;::tp</code>, and are generated with pdk using this <a href="https://github.com/example42/pdk-module-template-tp-profile">template</a>.</p>
+
+<p>You can generate a new tp profile, by running on the psick module:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/bin/tp_profile.generate.sh nginx
+</code></pre></div></div>
+
+<p>will create the class <code class="highlighter-rouge">psick::nginx::tp</code></p>
+
+<p>On the upstream psick module, currently, only a <a href="https://github.com/example42/puppet-psick/blob/master/bin/tp_profile_mass_update.txt">limited list</a> of application have their own tp profile. Feel free to request more application specific tp profiles.</p>
+
+<p>TP encourages the usage of the template + options hash pattern, ad has some generic templates usable for common file structures. So, for example, to manage openssh with psick , we can:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include psick::openssh::tp
+</code></pre></div></div>
+
+<p>by default a tp profile installs the relevant application but doesn’t configure it. In order to manage configuration files you have to set parameters as follows (in this example we use a generic template where each key value of the options hash is written as <code class="highlighter-rouge">&lt;key&gt; &lt;value&gt;</code> which is a valid format for OpenSSH confiuration):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::tp::resources_hash:
+  tp::conf:
+    openssh:
+      template: 'psick/generic/spaced.erb'
+      options_hash:
+        Protocol: 2
+        PermitRootLogin: 'no'
+        Subsystem: 'sftp /usr/libexec/openssh/sftp-server'
+</code></pre></div></div>
+
+<p>Here, by including the <code class="highlighter-rouge">psick::openssh::tp</code> profile we have Openssh package installed and the relevant service started. We configure it using the <code class="highlighter-rouge">resources_hash</code> parameter, common in all tp profiles, where for each configuration file to manage via <code class="highlighter-rouge">tp::conf</code>, or whole directories to manage with <code class="highlighter-rouge">tp::dir</code>, we specify name, and content (by using parameters like <code class="highlighter-rouge">source</code>, <code class="highlighter-rouge">content</code>, <code class="highlighter-rouge">template</code> or <code class="highlighter-rouge">epp</code>) and a custom <code class="highlighter-rouge">options_hash</code> where any parameter, referred in the used template, looked up in deep merge mode, can be managed via Hiera.</p>
+
+<p>The whole logic of the tp profiles is to expose parameters that allow to directly configure tp defines via Hiera.</p>
+
+<p>If you know exactly how to configure your application, and its setup is based on a standard package + configuration files + service pattern, then tp, either used within your profiles on via a psick tp profile, can be a solid alternative to the usage of a dedicated component module.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This is the first post of a series about the profiles shipped with the psick module.</p>
+
+<p>After this general introduction we are going, in the next posts, to see more details on how to use these profiles for common system configurations.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

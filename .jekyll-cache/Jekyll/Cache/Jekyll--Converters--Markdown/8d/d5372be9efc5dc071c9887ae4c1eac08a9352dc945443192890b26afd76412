@@ -1,0 +1,407 @@
+I"kf<h3 id="example42-puppet-tutorial---part-1">example42 Puppet Tutorial - Part 1</h3>
+
+<p>This is the first post of a series of articles covering an introduction to Puppet.</p>
+
+<p>I start with Puppet agent installation and how to use Puppet and Facter to analyse a system. Next topics are the introduction to the Puppet programming language (DSL), how to setup a central Puppet master and how to connect Puppet agents to a Puppet master.</p>
+
+<p>The second part will cover Puppet modules, code logic and variables and how to add external facts to your systems. Besides this I will introduce parameters and the concept of separating code and data by using hiera.</p>
+
+<p>The third part will explain how to make use of upstream Puppet libraries when describing your own infrastructure, how to best classify nodes and where to place the code.</p>
+
+<p>At the last posting I will combine what I have shown and how to make use of the example42 <a href="https://github.com/example42/psick.git">PSICK control repository</a>, the <a href="https://github.com/example42/puppet-psick.git">PSICK module</a> and the <a href="https://github.com/example42/psick-hieradata">PSICK hieradata</a>.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#example42-puppet-tutorial---part-1" id="markdown-toc-example42-puppet-tutorial---part-1">example42 Puppet Tutorial - Part 1</a>    <ul>
+      <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a></li>
+      <li><a href="#puppet-installation" id="markdown-toc-puppet-installation">Puppet installation</a></li>
+      <li><a href="#puppet-and-facter" id="markdown-toc-puppet-and-facter">Puppet and Facter</a></li>
+      <li><a href="#start-with-puppet-dsl" id="markdown-toc-start-with-puppet-dsl">Start with Puppet DSL</a></li>
+      <li><a href="#puppet-apply" id="markdown-toc-puppet-apply">Puppet apply</a></li>
+      <li><a href="#puppet-ca-and-puppet-agents" id="markdown-toc-puppet-ca-and-puppet-agents">Puppet CA and Puppet agents</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="introduction">Introduction</h4>
+
+<p><a href="https://puppet.com">Puppet</a> is a client-server based configuration management solution written in Ruby (Agent) and Java (Server).
+When using Puppet, you write a declarative description of your systems and infrastructure. This means that you are not providing information on how to change something, but you describe the desired configuration state, e.g. by providing the complete configuration file.</p>
+
+<p>The declarative description is done by using resource types like <code class="highlighter-rouge">user</code>, <code class="highlighter-rouge">group</code>, <code class="highlighter-rouge">package</code>, <code class="highlighter-rouge">file</code>, <code class="highlighter-rouge">service</code>, <code class="highlighter-rouge">cron</code>, <code class="highlighter-rouge">mount</code>. We are going to explain these within this posting.</p>
+
+<p>Your infrastructure description must be written in Puppet <a href="https://en.wikipedia.org/wiki/Domain-specific_language">DSL</a> code. The files in which you place your code are called Puppet manifests.</p>
+
+<p>Puppet allows you to run even without a central Puppet server. This usage of Puppet is called Masterless Puppet and will be our starting point - even for setting up our Puppet server.</p>
+
+<p>The Puppet server can only run on Linux based systems (see <a href="https://puppet.com/docs/puppetserver/latest/services_master_puppetserver.html#supported-platforms">Puppetserver Supported Platforms</a>). The Puppet agent supports a large variety of <a href="https://puppet.com/docs/puppet/latest/system_requirements.html">different operating systems</a> like Linux, Windows, OS X and macOS, Juniper, Arista, BSD.</p>
+
+<h4 id="puppet-installation">Puppet installation</h4>
+
+<p>You start with installing Puppet agent on a Linux system. This tutorial uses CentOS 7, descriptions on how to install Puppet agent on other Linux distributions can be found on the <a href="https://puppet.com/docs/puppet/latest/puppet_platform.html">Puppet Platform</a> website.</p>
+
+<p>As the first system also will become your Puppet server, you have to take care on proper hardware sizing. A Puppet server should have at least 2-4 GB of RAM and at least 1-2 CPU cores. The hard disk should have enough space to hold your code, plus information and reports from your agents. Usually Puppet recommends 100 GB free space. Further information can be found on the <a href="https://puppet.com/docs/puppetserver/latest/install_from_packages.html">Puppet Server Installation</a> page.</p>
+
+<p>Note: in larger environments (more than 400 nodes) a Puppet server should have 4-12 cores and 12 to 24 GB RAM.</p>
+
+<p>Some Linux distributions have Puppet packages added to their repositories. Usually the shipped versions are outdated - sometimes even without security fixes from Puppet.</p>
+
+<p>At the time of writing this posting, Puppet has recently released version 5.5.
+You will therefor use the Puppet repositories to install the agent using root user account:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+</code></pre></div></div>
+
+<p>Now you can install the Puppet Agent package:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum -y install puppet-agent
+</code></pre></div></div>
+
+<p>The Puppet Agent package installs into <code class="highlighter-rouge">/opt/puppetlabs</code> directory and has everything the Puppet Agent needs bundled inside:</p>
+
+<ul>
+  <li>ruby</li>
+  <li>openssl</li>
+</ul>
+
+<p>The configuration files for Puppet agent are located in <code class="highlighter-rouge">/etc/puppetlabs/puppet</code>. The main configuration file is the <code class="highlighter-rouge">puppet.conf</code> file. You will leave this file untouched as you also want to manage the Puppet setup in an automated way.</p>
+
+<h4 id="puppet-and-facter">Puppet and Facter</h4>
+
+<p>Now you already have everything required to start playing and working with Puppet.</p>
+
+<p>The Puppet binary is located at <code class="highlighter-rouge">/opt/puppetlabs/puppet/bin/puppet</code>. The installer provides a profile.d snippet in <code class="highlighter-rouge">/etc/profile.d/puppet-agent.sh</code> which add the puppet binary path to the PATH environment variable. You can either log out and log in again or refresh your shell by running <code class="highlighter-rouge">exec bash</code>.</p>
+
+<p>The puppet binary has several subcommands like <code class="highlighter-rouge">agent</code>, <code class="highlighter-rouge">apply</code>, <code class="highlighter-rouge">describe</code>, <code class="highlighter-rouge">resource</code>, <code class="highlighter-rouge">...</code>.</p>
+
+<p>A complete list of commands can be found when running <code class="highlighter-rouge">puppet --help</code>.</p>
+
+<p>At the beginning you use the <code class="highlighter-rouge">puppet describe</code> command. This command prints the documentation which is part of the Puppet code. When running <code class="highlighter-rouge">puppet describe --list</code> you will receive a list of all available resource types on your system. At the moment these will be the built in <a href="https://puppet.com/docs/puppet/latest/type.html">Puppet Types</a>.</p>
+
+<p>You can either refer to the online documentation or print the documentation using <code class="highlighter-rouge">puppet describe &lt;resource type&gt;</code>.</p>
+
+<p>As you now know about existing resource types, you are able to use the <code class="highlighter-rouge">puppet resource</code> command to read existing resources and print them in Puppet DSL code.</p>
+
+<p>Read a user resource:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># puppet resource user root
+user { 'root':
+  ensure           =&gt; 'present',
+  comment          =&gt; 'root',
+  gid              =&gt; 0,
+  home             =&gt; '/root',
+  password         =&gt; '$1$FQDy6m9T$5JJ5fqv9ylivZNQIj5Eet0',
+  password_max_age =&gt; 99999,
+  password_min_age =&gt; 0,
+  shell            =&gt; '/bin/bash',
+  uid              =&gt; 0,
+}
+</code></pre></div></div>
+
+<p>Read a package resource:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">#</span> <span class="n">puppet</span> <span class="n">resource</span> <span class="k">package</span> <span class="n">puppet</span><span class="p">-</span><span class="n">agent</span>
+<span class="k">package</span> <span class="p">{</span> <span class="s1">'puppet-agent'</span><span class="p">:</span>
+  <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="s1">'5.5.0-1.el7'</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Read a file resource:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># puppet resource file /etc/motd
+file { '/etc/motd':
+  ensure   =&gt; 'file',
+  content  =&gt; '{md5}d41d8cd98f00b204e9800998ecf8427e',
+  ctime    =&gt; '2017-09-11 18:34:44 +0000',
+  group    =&gt; 0,
+  mode     =&gt; '0644',
+  mtime    =&gt; '2013-06-07 14:31:32 +0000',
+  owner    =&gt; 0,
+  selrange =&gt; 's0',
+  selrole  =&gt; 'object_r',
+  seltype  =&gt; 'etc_t',
+  seluser  =&gt; 'system_u',
+  type     =&gt; 'file',
+}
+</code></pre></div></div>
+
+<p>Read a service resource:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># puppet resource service puppet
+service { 'puppet':
+  ensure =&gt; 'stopped',
+  enable =&gt; 'false',
+}
+</code></pre></div></div>
+
+<p>Read a mount resource:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># puppet resource mount /
+mount { '/':
+  ensure  =&gt; 'mounted',
+  device  =&gt; '/dev/mapper/VolGroup00-LogVol00',
+  dump    =&gt; '0',
+  fstype  =&gt; 'xfs',
+  options =&gt; 'defaults',
+  pass    =&gt; '0',
+  target  =&gt; '/etc/fstab',
+}
+</code></pre></div></div>
+
+<p>As you can see Puppet always uses the same layout and syntax for resources:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;resource_type&gt; { '&lt;resource title&gt;':
+  parameter  =&gt; 'value',
+  parameter2 =&gt; 'other value',
+}
+</code></pre></div></div>
+
+<p>This pattern is named a “resource type declaration”.</p>
+
+<p>Another important utility which is part of the puppet agent package is <code class="highlighter-rouge">facter</code>. <code class="highlighter-rouge">facter</code> collects different system information covering hardware (RAM, CPU, manufacturer), network (interfaces, IPv4 and IPv4 addresses), operating system (name, version) and many more.</p>
+
+<p>You can print the whole set of information by running <code class="highlighter-rouge">facter</code> on the command line as root user.
+A single element can be read when adding the fact name: <code class="highlighter-rouge">facter os</code>, <code class="highlighter-rouge">facter networking</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># facter os
+{
+  architecture =&gt; "x86_64",
+  family =&gt; "RedHat",
+  hardware =&gt; "x86_64",
+  name =&gt; "CentOS",
+  release =&gt; {
+    full =&gt; "7.4.1708",
+    major =&gt; "7",
+    minor =&gt; "4"
+  },
+  selinux =&gt; {
+    config_mode =&gt; "enforcing",
+    config_policy =&gt; "targeted",
+    current_mode =&gt; "enforcing",
+    enabled =&gt; true,
+    enforced =&gt; true,
+    policy_version =&gt; "28"
+  }
+}
+</code></pre></div></div>
+
+<h4 id="start-with-puppet-dsl">Start with Puppet DSL</h4>
+
+<p>Now let’s start using Puppet and prepare the system to become our Puppet master.</p>
+
+<p>At the moment there are only a couple of things to do: install the package <code class="highlighter-rouge">puppetserver</code> and start the process. Let’s additionally place the information that this is the puppet server into <code class="highlighter-rouge">/etc/motd</code>.
+You are now writing your first Puppet manifest:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">#</span> <span class="p">/</span><span class="n">root</span><span class="p">/</span><span class="n">puppetserver</span><span class="p">.</span><span class="n">pp</span>
+<span class="p">#</span> <span class="n">install</span> <span class="n">puppetserver</span> <span class="k">package</span>
+<span class="k">package</span> <span class="p">{</span> <span class="s1">'puppetserver'</span><span class="p">:</span>
+  <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="p">#</span> <span class="n">ensure</span> <span class="n">that</span> <span class="n">puppetserver</span> <span class="n">is</span> <span class="n">running</span> <span class="k">and</span> <span class="n">started</span> <span class="n">at</span> <span class="n">reboot</span>
+<span class="n">service</span> <span class="p">{</span> <span class="s1">'puppetserver'</span><span class="p">:</span>
+  <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">running</span><span class="p">,</span>
+  <span class="n">enable</span> <span class="p">=&gt;</span> <span class="nb">true</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="p">#</span> <span class="n">put</span> <span class="n">information</span> <span class="n">into</span> <span class="n">motd</span>
+<span class="n">file</span> <span class="p">{</span> <span class="s1">'/etc/motd'</span><span class="p">:</span>
+  <span class="n">ensure</span>  <span class="p">=&gt;</span> <span class="n">file</span><span class="p">,</span>
+  <span class="n">content</span> <span class="p">=&gt;</span> <span class="s2">"This is Puppet Server</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>As you can see I have omitted the single quotes around the words <code class="highlighter-rouge">present</code>, <code class="highlighter-rouge">running</code> and <code class="highlighter-rouge">true</code>.
+Maybe it is obvious why I am not quoting the bool value. But what about the others? There are some special words within Puppet which do not need quoting. Mostly these are <a href="https://ruby-doc.org/core-2.2.0/Symbol.html">Ruby Symbols</a>.</p>
+
+<p>At the file resource I am managing the content. This is easy to do for small configuration files, but leads to hard to read Puppet code when it comes to larger configuration files. In Part 2 I will introduce another solution for providing file content.</p>
+
+<p>But how do you now “execute” the manifest we have written?</p>
+
+<p>First: in Puppet you never “execute” something. Instead you want to apply a specific declaration onto a system. This is done by Puppet first parsing the manifest and rendering it into a catalog. This process is called “catalog compile”.
+No worries, this is not binary code, the Puppet compiler returns minified JSON to the Puppet agent, who will then start working on the returned catalog.</p>
+
+<h4 id="puppet-apply">Puppet apply</h4>
+
+<p>As you are not (yet) having a Puppet master you must run Puppet in masterless mode. This is possible by running <code class="highlighter-rouge">puppet apply</code> and providing the filename.</p>
+
+<p>Prior installing and starting Puppet master process you need to ensure that the DNS settings are correct and that time is set correctly:</p>
+
+<p>You can use the <code class="highlighter-rouge">hostnamectl</code> utility to set a hostname ans add an entry to your puppetmaster /etc/hosts file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hostnamectl set-hostname puppetmaster.example42.training
+echo "127.0.0.1 puppetmaster.example42.training &gt;&gt; /etc/hosts
+</code></pre></div></div>
+
+<p>Now you can verify DNS resolution:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ping -c1 $(facter networking.fqdn)
+PING puppetmaster.example42.training (127.0.0.1) 56(84) bytes of data.
+64 bytes from localhost (127.0.0.1): icmp_seq=1 ttl=64 time=0.026 ms
+
+--- puppetmaster.example42.training ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.026/0.026/0.026/0.000 ms
+</code></pre></div></div>
+
+<p>Next you need to verify correct time setting:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum install -y ntpdate
+ntpdate pool.ntp.org
+</code></pre></div></div>
+
+<p>Now we can start the Puppet master installation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># puppet apply /root/puppetserver.pp
+Notice: Compiled catalog for puppetmaster.example42.training in environment production in 0.69 seconds
+Notice: /Stage[main]/Main/Package[puppetserver]/ensure: created
+Notice: /Stage[main]/Main/Service[puppetserver]/ensure: ensure changed 'stopped' to 'running'
+Notice: /Stage[main]/Main/File[/etc/motd]/content: content changed '{md5}d41d8cd98f00b204e9800998ecf8427e' to '{md5}c3f33391f7d0d397055190ac0c96cbf8'
+Notice: Applied catalog in 75.65 seconds
+</code></pre></div></div>
+
+<p>Now you have Puppet server process listening on Port 8140 and you can start adding other systems to your Puppet server.</p>
+
+<p>But there is one more thing: what happens if you run the puppet apply command again?</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># puppet apply /root/puppetserver.pp
+Notice: Compiled catalog for puppetmaster.example42.training in environment production in 0.67 seconds
+Notice: Applied catalog in 0.14 seconds
+</code></pre></div></div>
+
+<p>As you can see, nothing happens. This concept is called <a href="https://en.wikipedia.org/wiki/Idempotence">idempotence</a>. Puppet will always first check the actual system state, compare it with the desired declarative state and only perform actions in case that there is a mismatch.</p>
+
+<h4 id="puppet-ca-and-puppet-agents">Puppet CA and Puppet agents</h4>
+
+<p>Puppet uses client SSL certificates to authenticate and authorise Puppet agent connections to the Puppet server process. Per default the Puppet server uses a self signed CA to retrieve certificate signing requests and sign certificates.</p>
+
+<p>Information about the Puppet CA can be read using the <code class="highlighter-rouge">puppet cert</code> command.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># puppet cert list --all
++ "puppetmaster.example42.training" (SHA256) D3:F3:44:8D:AE:13:CC:AB:FE:F0:DA:74:13:64:7A:44:09:92:23:CF:90:A4:73:17:5F:35:6C:70:14:64:9B:A8 (alt names: "DNS:puppet", "DNS:puppetmaster.example42.training")
+</code></pre></div></div>
+
+<p>You can even read the CA by using the print parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet cert print puppetmaster.example42.training
+[... output truncated ...]
+</code></pre></div></div>
+
+<p>Now you are able to connect your first node to the Puppet master. There are some prerequisites that must be accomplished first which are the same as the ones you needed to ensure prior installing the puppetserver:</p>
+
+<ol>
+  <li>Network setup</li>
+  <li>DNS/Hostname</li>
+  <li>Time settings</li>
+</ol>
+
+<p>We set the hostname:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hostnamectl set-hostname agent1.example42.training
+echo "&lt;your IP&gt; agent1.example42.training" &gt;&gt; /etc/hosts
+</code></pre></div></div>
+
+<p>And we set the time:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum install -y ntpdate
+ntpdate pool.ntp.org
+</code></pre></div></div>
+
+<p>Now you must either have correct DNS setup or you can add the puppetmaster IP and hostname to /etc/hosts file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo "&lt;master IP&gt;  puppetmaster.example42.training &gt;&gt; /etc/hosts
+ping -c1 puppetmaster.example42.training
+</code></pre></div></div>
+
+<p>Now you are installing the puppet agent repository and package:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+yum -y install puppet-agent
+</code></pre></div></div>
+
+<p>Now you are able to use the <code class="highlighter-rouge">puppet agent</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet agent --test
+Info: Creating a new SSL key for agent1.example42.training
+Error: Could not request certificate: Failed to open TCP connection to puppet:8140 (getaddrinfo: Name or service not known)
+Exiting; failed to retrieve certificate and waitforcert is disabled
+</code></pre></div></div>
+
+<p>Please note the <code class="highlighter-rouge">--test</code> parameter!! When running <code class="highlighter-rouge">puppet agent</code> with no further option, the agent will fork from shell and run in background permanently, “waking” himself every 30 minutes.</p>
+
+<p>The <code class="highlighter-rouge">--test</code> option ensures that the agent process stays in foreground and is running one time only.</p>
+
+<p>You receive an information that the agent has created an SSL certificate, but it can not connect to the master. When no Puppet master is configured the Puppet agent will try to connect to a system with name “puppet”.</p>
+
+<p>As your Puppet server uses another hostname, you must provide information regarding the DNS name of the puppetserver. You can either provide the information on command line, using the <code class="highlighter-rouge">--server</code> option:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet agent --test --server puppetmaster.example42.training
+</code></pre></div></div>
+
+<p>or add the configuration to the puppet.conf file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/puppet/puppet.conf
+# This file can be used to override the default puppet settings.
+# See the following links for more details on what settings are available:
+# - https://docs.puppetlabs.com/puppet/latest/reference/config_important_settings.html
+# - https://docs.puppetlabs.com/puppet/latest/reference/config_about_settings.html
+# - https://docs.puppetlabs.com/puppet/latest/reference/config_file_main.html
+# - https://docs.puppetlabs.com/puppet/latest/reference/configuration.html
+[agent]
+server = puppetmaster.example42.training
+</code></pre></div></div>
+
+<p>Now you can run the <code class="highlighter-rouge">puppet agent</code> command again:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet agent --test
+Info: Caching certificate for ca
+Info: csr_attributes file loading from /etc/puppetlabs/puppet/csr_attributes.yaml
+Info: Creating a new SSL certificate request for agent1.example42.training
+Info: Certificate Request fingerprint (SHA256): 4A:30:16:96:14:01:3E:B6:2D:5A:3A:E7:B4:FE:C9:2D:FC:76:1C:AC:39:15:50:E1:88:A3:3C:8A:39:9E:5D:13
+Info: Caching certificate for ca
+Exiting; no certificate found and waitforcert is disabled
+</code></pre></div></div>
+
+<p>This time you received one error message, claiming that ‘no certificate found’. This information comes from the Puppet master.</p>
+
+<p>Switch back to your Puppet master and check for information regarding certificates using the <code class="highlighter-rouge">puppet cert</code> command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet cert --list
+  "agent1.example42.training" (SHA256) 4A:30:16:96:14:01:3E:B6:2D:5A:3A:E7:B4:FE:C9:2D:FC:76:1C:AC:39:15:50:E1:88:A3:3C:8A:39:9E:5D:13
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">puppet cert --list</code> command shows you outstanding certificate signing requests. Now you can sign the request:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet cert --sign agent1.example42.training
+Signing Certificate Request for:
+  "agent1.example42.training" (SHA256) 4A:30:16:96:14:01:3E:B6:2D:5A:3A:E7:B4:FE:C9:2D:FC:76:1C:AC:39:15:50:E1:88:A3:3C:8A:39:9E:5D:13
+Notice: Signed certificate request for agent1.example42.training
+Notice: Removing file Puppet::SSL::CertificateRequest agent1.example42.training at '/etc/puppetlabs/puppet/ssl/ca/requests/agent1.example42.training.pem'
+</code></pre></div></div>
+
+<p>Now the agent run on your node will work:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet agent --test
+Info: Caching certificate for agent1.example42.training
+Info: Caching certificate_revocation_list for ca
+Info: Caching certificate for agent1.example42.training
+Info: Using configured environment 'production'
+Info: Retrieving pluginfacts
+Info: Retrieving plugin
+Info: Retrieving locales
+Info: Caching catalog for agent1.example42.training
+Info: Applying configuration version '1523190091'
+Info: Creating state file /opt/puppetlabs/puppet/cache/state/state.yaml
+Notice: Applied catalog in 0.01 seconds
+</code></pre></div></div>
+
+<p>Congratulations. You have now a working setup between your agent and your master and you can run the agent permanently:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service puppet start
+Redirecting to /bin/systemctl start puppet.service
+</code></pre></div></div>
+
+<p>For now the node has no configuration on the Puppet server and therefor will not have anything managed. This is dealt with in the next tow. Stay tuned.</p>
+
+<p>In the next posting we will dig deeper into Puppet DSL, how to write flexible Puppet code instead of writing per node Puppet code, how to make use of existing Puppet module libraries how to deal with slight differences between systems and how to store Puppet code and Puppet data.</p>
+
+<p>Martin Alfke</p>
+
+:ET

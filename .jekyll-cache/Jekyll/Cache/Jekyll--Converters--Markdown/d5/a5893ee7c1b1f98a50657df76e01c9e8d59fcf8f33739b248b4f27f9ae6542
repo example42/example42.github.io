@@ -1,0 +1,180 @@
+I"�!<p>Beaker has become the de-facto standard utility for Puppet code acceptance testing.</p>
+
+<p>Like the figure from <a href="https://en.wikipedia.org/wiki/Beaker_(Muppet)">The Muppet Show</a> the Puppet tooling “…is a magnet for disaster”.
+In this specific case we want to find out whether a catalog can be applied to a system successfully.
+In addition to that the Muppet figure has even more qualification for breaking things: “he routinely experiences mishaps such as being blown up, electrocuted, eaten by large monsters, or afflicted with awkward side effects caused by Dr. Bunsen Honeydew’s experiments. Beaker communicates in a nervous, high-pitched squeak that sounds like “Mee-mee-mee mee”” (quote taken from Wikipedia Beaker Muppet - see link above).</p>
+
+<p>I also like the name for the tool, as we sometimes re-use the “Mee-mee-mee” spelling to a person telling you that something is not working.</p>
+
+<h3 id="beaker-installation">Beaker installation</h3>
+
+<p>Puppet beaker allows for unattended CI based testing and acts as a frontend for Vagrant, AWS, Google Compute, VMware/Vsphere, Docker and others hypervisors and a <code class="highlighter-rouge">puppet apply</code> command. Please see the <a href="https://github.com/puppetlabs/beaker/tree/master/docs/how_to/hypervisors">beaker documentation on hypervisors</a> for additional information on hypervisors.</p>
+
+<p>Within this posting I want to explain how we at example42 use beaker for acceptance testing in control-repositories like <a href="https://github.com/example42/psick">PSICK</a>.</p>
+
+<p>Installing beaker is usually done by adding a few lines to your Gemfile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Beaker
+group :acceptance do
+  gem 'beaker'
+  gem 'beaker-rspec'
+  gem 'beaker-hiera'
+  gem 'beaker-puppet_install_helper'
+end
+</code></pre></div></div>
+
+<p>All standard beaker hypervisor extensions are a dependency to the beaker gem. Please note that beaker uses the <a href="https://github.com/fog/fog">fog libraries</a> for cloud access which causes a long list of dependencies.</p>
+
+<h3 id="beaker-nodesets">Beaker nodesets</h3>
+
+<p>Next we need to add node descriptions providing information on operating system and releases to run tests on.
+These are placed into the <code class="highlighter-rouge">spec/acceptance/nodesets/</code> folder.</p>
+
+<p>Here we usually see the first difference between acceptance tests on control-repositories versus acceptance testing on modules:</p>
+
+<p>Within modules one wants to test, whether the single code base is working as expected on all supported operating systems. For a control-repository one wants to test multiple different system roles on a few operating systems.</p>
+
+<p>Let’s continue testing control-repositories on CentOS 7. The nodeset configuration consists of the following two files:</p>
+
+<p>First we generate the nodeset for testing on docker:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># spec/acceptance/nodesets/default.yml
+HOSTS:
+  centos7-box:
+    platform: el-7-x86_64
+    hypervisor: docker
+    docker_cmd: '["/usr/sbin/init"]'
+    docker_image_commands:
+      - 'yum install -y crontabs initscripts iproute openssl sysvinit-tools tar wget which ss'
+      - 'systemctl mask getty@tty1.service'
+    docker_preserve_image: true
+    mount_folders:
+      controlrepo:
+        host_path: .
+        container_path: /tmp/production
+        opts: ro
+CONFIG:
+  type: foss
+</code></pre></div></div>
+
+<p>Now we add the nodeset for testing on vagrant:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># spec/acceptance/nodesets/vagrant.yml
+HOSTS:
+  centos-7-x64:
+    roles:
+      - agent
+    platform: el-7-x86_64
+    box: centos/7
+    hypervisor: vagrant
+    mount_folders:
+      controlrepo:
+        host_path: ../../../
+        container_path: /tmp/production
+        opts: ro
+CONFIG:
+  type: foss
+</code></pre></div></div>
+
+<h3 id="beaker-running-instance-preparation">Beaker running instance preparation</h3>
+
+<p>The images we are using do not have puppet agent package installed. Installation and preparation of the started images is configured in the <code class="highlighter-rouge">spec/spec_helper_acceptance.rb</code> file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># spec/spec_helper_acceptance.rb
+require 'beaker-rspec'
+require 'beaker/puppet_install_helper'
+
+# Instal PC1 puppet 4 agent packages
+run_puppet_install_helper
+
+RSpec.configure do |c|
+  # Readable test descriptions
+  c.formatter = :documentation
+  # preare each system after starting the image:
+  hosts.each do |host|
+    # remove obsolete global hiera.yaml
+    on(host, '/usr/bin/test -f /etc/puppetlabs/puppet/hiera.yaml &amp;&amp; /bin/rm -f /etc/puppetlabs/puppet/hiera.yaml || echo true')
+    # remove existing production environment
+    on(host, '/usr/bin/test -d /etc/puppetlabs/code/environments/production &amp;&amp; /bin/rm -fr /etc/puppetlabs/code/environments/production || echo true')
+    # re-create production environment directory
+    on(host, '/usr/bin/test ! -d /etc/puppetlabs/code/environments/production &amp;&amp; mkdir -p /etc/puppetlabs/code/environments/production || echo true')
+    # copy control-repo
+    on(host, 'cp -r /tmp/production/{.git,environment.conf,hiera.yaml,hieradata,manifests,site,modules}  /etc/puppetlabs/code/environments/production/')
+  end
+end
+</code></pre></div></div>
+
+<h3 id="beaker-serverspec-tests">Beaker serverspec tests</h3>
+
+<p>Next one can add serverspec tests for specific roles:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># spec/acceptance/puppetmaster_spec.rb
+require 'spec_helper_acceptance'
+
+describe 'puppetmaster' do
+  let(:manifest) {
+    &lt;&lt;-EOS
+      include role::puppetmaster
+    EOS
+  }
+  it 'should run first time with changes and without errors' do
+    result = apply_manifest(manifest, :catch_failures =&gt; true)
+    expect(@result.exit_code).to eq 2
+  end
+  it 'should run a second time without changes' do
+    result = apply_manifest(manifest, :catch_changes =&gt; true)
+    expect(@result.exit_code).to eq 0
+  end
+  # here one can add more serverspec tests
+end
+</code></pre></div></div>
+
+<p>Now we need to changes the default beaker acceptance testing rake task as we want to run tests on a control-repository.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Rakefile
+# beaker is designed to run all tests on multiple nodes
+# we have another use case: run single tests on one host, then next test on new fresh host
+Rake::Task[:beaker].clear
+RSpec::Core::RakeTask.new(:beaker) do |config|
+  puts 'dont use beaker, use beaker_roles:&lt;role&gt; or all_roles instead'
+  abort
+end
+
+# iterate over acceptance tests and create namespaced rake tasks
+namespace :beaker_roles do
+  # find all acceptance tests
+  Dir.glob("spec/acceptance/*_spec.rb") do |acceptance_test|
+    # find role part of file name
+    test_name = acceptance_test.split('/').last.split('_spec').first
+    RSpec::Core::RakeTask.new(test_name) do |t|
+      t.rspec_opts = ['--color']
+      t.pattern = acceptance_test
+    end
+  end
+end
+</code></pre></div></div>
+
+<h3 id="running-beaker-and-acceptance-tests">Running beaker and acceptance tests</h3>
+
+<p>Now we can run the acceptance tests:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle exec rake beaker_roles:puppetmaster
+</code></pre></div></div>
+
+<p>This command only uses the <code class="highlighter-rouge">default.yml</code> nodeset.
+If we want to use the <code class="highlighter-rouge">vagrant.yml</code> nodeset we must tell beaker to do so by providing an environment variable:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BEAKER_set=vagrant bundle exec rake beaker_roles:puppetmaster
+</code></pre></div></div>
+
+<p>In addition to <code class="highlighter-rouge">BEAKER_set</code> there are some other useful environment variables:
+Usually beaker deletes the container/virtual machine after running tests (even after failed tests). To keep the instance alive just add <code class="highlighter-rouge">BEAKER_destroy=no</code> environment variable.</p>
+
+<p>If one needs more information on what is happening during beaker running, it is possible to enable debug mode by specifying <code class="highlighter-rouge">BEAKER_debug=true</code></p>
+
+<p>Happy testing on your control-repository.</p>
+
+<p>example42 wishes everybody a happy Christmas.</p>
+
+<p>Martin Alfke</p>
+:ET

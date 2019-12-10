@@ -1,0 +1,58 @@
+I"�	<p>Securing important and sensitive information with Puppet is a long time issue.</p>
+
+<p>There are at least three different locations where one has to deal with securing information.</p>
+
+<p>The most well known is the Hiera data store, where many people today use <strong>hiera-eyaml</strong> to encrypt values using a public-private key pair.</p>
+
+<p>The next one is the catalog itself, where the Puppet server places data unencrypted inside. Ben Ford from Puppet provided a solution using <strong>node_encrypt</strong> module.</p>
+
+<p>The third one is the Puppet report. Here we see file diffs, showing old and new password.</p>
+
+<p>This is the topic we are dealing in today’s Puppet Tip.</p>
+
+<p>Let’s start with the data type:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class profile::db (
+  Sensitive $password,
+){
+  file { '/etc/.db_password':
+    ensure  =&gt; file,
+    content =&gt; $password,
+  }
+}
+</code></pre></div></div>
+
+<p>Within hiera one specifies the key-value pair:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+profile::db::password: ENC[PKCS7,Y22exl+O...]
+</code></pre></div></div>
+
+<p>But on the next Puppet agent run, we will receive an error message:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error: Could not retrieve catalog from remote server: Error 500 on SERVER: 
+Server Error: Evaluation Error: Error while evaluating a Function Call, 
+Class[Profile::Db]: parameter 'password' expects a Sensitive value, got 
+String (file: /etc/puppetlabs/code/environments/production/manifests/
+site.pp, line: 31, column: 3) on node master.example42.training
+</code></pre></div></div>
+
+<p>We need to inform hiera, that we want to receive the value as Sensitive data type by adding a lookup option:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+lookup_options:
+  profile::db::password:
+    convert_to: "Sensitive"
+    
+profile::db::password: ENC[PKCS7,Y22exl+O...]
+</code></pre></div></div>
+
+<p>Any data which is based on Sensitive data type, will not be shown in a catalog diff:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Notice: /Stage[main]/Profile::Db/File[/etc/.db_password]/ensure: changed [redacted] to [redacted]
+</code></pre></div></div>
+
+<p>example42 wishes everybody safety and success</p>
+
+<p>Martin Alfke</p>
+:ET

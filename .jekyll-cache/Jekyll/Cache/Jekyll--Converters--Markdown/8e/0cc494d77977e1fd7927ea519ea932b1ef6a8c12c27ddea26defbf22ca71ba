@@ -1,0 +1,25 @@
+I"g<p>exec { ‘touch /tmp/foo’: }</p>
+
+<p>Ouch. Exec resource abusing seems to be an often used pattern.</p>
+
+<p>Consider an Exec resource being an emergency exit. It is a powerful resource type that offers you to do almost anything to a system.</p>
+
+<p>But please keep in mind that with great power comes great responsibility.</p>
+
+<p>You (as the author of the Exec resource type declaration) are responsible for idempotency and error handling.</p>
+
+<p>Best practice is to have an Exec resource for one-time commands only. This does not refer to a single puppet run, but throughout the life cycle of the system.</p>
+
+<p>Don’t forget to make use of the exec resource type parameters for idempotency:</p>
+
+<ul>
+  <li>onlyif</li>
+  <li>unless</li>
+  <li>refreshonly</li>
+  <li>creates</li>
+</ul>
+
+<p>And don’t forget to set the path parameter.</p>
+
+<p>Martin Alfke</p>
+:ET

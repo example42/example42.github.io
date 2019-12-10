@@ -1,0 +1,123 @@
+I"<p>With Puppet 4.10.5 and 5.0.2 a fix for a missing functionality was released: <a href="https://docs.puppet.com/puppet/5.0/hiera_merging.html#deep">sort_merged_arrays lookup option</a>.</p>
+
+<p>In earlier versions of Puppet this was named ‘sort_merge_arrays’ but lacked the functionality.</p>
+
+<p>Unluckily Puppet did not build the fix with backward compatibility.</p>
+
+<p>When using ‘sort_merge_arrays’ the following will happen:</p>
+
+<ul>
+  <li>Puppet 4.10.4/5.0.1 or earlier: success - but no functionality</li>
+  <li>Puppet 4.10.5/5.0.2 or later: compiler failure</li>
+</ul>
+
+<p>When using ‘sort_merged_arrays’ the following will happen:</p>
+
+<ul>
+  <li>Puppet 4.10.4/5.0.1 or earlier: compiler failure</li>
+  <li>Puppet 4.10.5/5.0.2 or later: success - with functionality</li>
+</ul>
+
+<p>How to work around this version dependent functionality when providing code for multiple Puppet versions?</p>
+
+<p>We have a <a href="https://github.com/example42/psick/pull/133">pull request</a> on GitHub with a really ugly hack:</p>
+
+<ol>
+  <li>identify version of Puppet and set a variable</li>
+  <li>use this variable as a hierarchy in hiera.yaml</li>
+  <li>add new hierarchy with corrected spelling of sort_merged_arrays</li>
+</ol>
+
+<p>Let’s look at details:</p>
+
+<p>manifests/site.pp</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Puppet 4.10.4 and older had a typo in sort_merged_array lookup option
+# to allow functinonality we add a new hierarchy to profile hiera.yaml where we use the wrong name
+if versioncmp('4.10.4', $facts['puppetversion']) &gt;= 0 {
+  $fix_sort_merge = '4'
+} else {
+  $fix_sort_merge = undef
+}
+</code></pre></div></div>
+
+<p>site/profile/hiera.yaml</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+version: 5
+
+defaults:
+  datadir: data
+  data_hash: yaml_data
+
+hierarchy:
+  - name: "In module hierarchy"
+    paths:
+      - "%{facts.virtual}.yaml"
+      - "%{facts.os.name}-%{facts.os.release.major}.yaml"
+      - "%{facts.os.name}.yaml"
+      - "%{facts.os.family}-%{facts.os.release.major}.yaml"
+      - "%{facts.os.family}.yaml"
+      - "common%{fix_sort_merge}.yaml"
+      - "common.yaml"
+</code></pre></div></div>
+
+<p>site/profile/data/common.yaml</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lookup_options:
+  "^profile::(.*)::(.*)_hash$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merged_arrays: true
+  "^profile::(.*)::(.*)::(.*)_hash$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merged_arrays: true
+  "^profile::(.*)::(.*)_list$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merged_arrays: true
+  "^profile::(.*)::(.*)::(.*)_list$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merged_arrays: true
+</code></pre></div></div>
+
+<p>site/profile/common4.yaml</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+lookup_options:
+  "^profile::(.*)::(.*)_hash$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merge_arrays: true
+  "^profile::(.*)::(.*)::(.*)_hash$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merge_arrays: true
+  "^profile::(.*)::(.*)_list$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merge_arrays: true
+  "^profile::(.*)::(.*)::(.*)_list$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merge_arrays: true
+</code></pre></div></div>
+
+<p>All this is already part of a PR for <a href="https://github.com/example42/psick">PSICK</a>.</p>
+
+<p>We are interested to learn about any other - less ugly - solution.</p>
+
+<p>We wish successful unit and integration tests on your control-repositories.</p>
+
+<p>Martin Alfke</p>
+:ET

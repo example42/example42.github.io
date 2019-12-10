@@ -1,0 +1,175 @@
+I"k%<p>Our tour of the ready to use profiles of the psick module continues this week with management of DNS entries for the resolver, and of the content of /etc/hosts file.</p>
+
+<p>These are the previous posts of this series:</p>
+
+<ul>
+  <li>
+    <p><a href="https://www.example42.com/2018/11/12/psick_profiles_part_1_overview/" target="_blank">Part 1 - Overview</a> of the psick module and its reusable profiles.</p>
+  </li>
+  <li>
+    <p><a href="https://www.example42.com/2018/11/19/psick_profiles_part_2_proxy_and_hostname_settings/" target="_blank">Part 2 - Proxy and Hostname</a> settings with psick profiles.</p>
+  </li>
+  <li>
+    <p><a href="https://www.example42.com/2018/12/03/psick_profiles_part_3_openssh/" target="_blank">Part 3 - OpenSSH</a> settings, keys, configs management.</p>
+  </li>
+  <li>
+    <p><a href="https://www.example42.com/2018/12/10/psick_profiles_part_4_users/" target="_blank">Part 4 - Users</a> management.</p>
+  </li>
+</ul>
+
+<h2 id="managing-etchosts">Managing /etc/hosts</h2>
+
+<p>Psick module provides 3 different classes to manage the contents of <code class="highlighter-rouge">/etc/hosts</code>:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">psick::hosts::file</code>: Manage /etc/hosts via a file resource</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">psick::hosts::dynamic</code>: Manage /etc/hosts dynamically using exported resources</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">psick::hosts::resource</code>: Manage /etc/hosts content via Puppet native <code class="highlighter-rouge">host</code> resource type</p>
+  </li>
+</ul>
+
+<h3 id="using-psickhostsfile">Using <code class="highlighter-rouge">psick::hosts::file</code></h3>
+
+<p>This class just manages /etc/hosts as a file, you can customise the template to use for the content of this file and an array of entries to add to it.</p>
+
+<p>To use this approach, just classify your nodes with with profile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include psick::hosts::file
+</code></pre></div></div>
+
+<p>Then it can be configured via Hiera with the following settings:</p>
+
+<p>The erb template to use to manage the content of /etc/hosts (default value is <code class="highlighter-rouge">psick/hosts/file/hosts.erb</code>):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hosts::file::template: profile/hosts/hosts.erb
+</code></pre></div></div>
+
+<p>The ip address (default is the value of <code class="highlighter-rouge">$::psick::primary_ip</code> which defaults to the fact <code class="highlighter-rouge">$::networking['ip']</code>), the short hostname (defaults to fact <code class="highlighter-rouge">$::hostname</code>) and the domain (defaults to fact <code class="highlighter-rouge">$::domain</code>) to use to identify the local node in /etc/hosts:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hosts::file::ipaddress: 10.12.13.14
+psick::hosts::file::domain: example42.com
+psick::hosts::file::hostname: my_server
+</code></pre></div></div>
+
+<p>An array of custom extra lines to add to <code class="highlighter-rouge">/etc/hosts</code> (default: []), each element of the array should contain the expected text in each extra line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hosts::file::extra_hosts:
+- 10.12.13.15	puppet puppet.example42.com
+- 10.12.13.20	other_server other_server.example42.com
+</code></pre></div></div>
+
+<h3 id="using-psickhostsdynamic">Using <code class="highlighter-rouge">psick::hosts::dynamic</code></h3>
+
+<p>This class manages /etc/hosts automatically and dynamically: each server managed by Puppet exports its own host entry (via Puppet <code class="highlighter-rouge">host</code> resource) and collects the ones of all the other nodes.</p>
+
+<p>The class provides options to customise IP and alias to export for a node, if to actually export the host entry and a special “magic var” which can be used to divide nodes in different groups (within each group hosts’ entries are exported and collected).</p>
+
+<p>This class is alternative to the others, it requires Store configs enabled on the Puppet Server (so, consequently, the usage of PuppetDB in not too ancient setups) and can be used with a simple:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include psick::hosts::dynamic
+</code></pre></div></div>
+
+<p>In small setups this could be enough to have /etc/hosts automatically managed with all the entries of all the nodes.</p>
+
+<p>It’s possible anyway to customise some entries. For example the ip address (default <code class="highlighter-rouge">$::ipaddress</code>) and the array of aliases (default <code class="highlighter-rouge">[ $::hostname</code> ] to use when exporting the local host’s info):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hosts::dynamic::dynamic_ip: 10.12.13.14
+psick::hosts::dynamic::dynamic_alias:
+  - my_server
+  - my_server.example42.com
+  - my_server_other_alias
+</code></pre></div></div>
+
+<p>It’s also possible to control if and how to export and collect the node’s host entry.</p>
+
+<p>It’s possible to set a string that allows to group together nodes: all nodes having this magic var set collect and export host resources only for nodes using the same magic var:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hosts::dynamic::dynamic_magicvar: intranet
+</code></pre></div></div>
+
+<p>If we don’t want to collect in any place the host entry of a node we can set, for it (default value is false, so each node exports a valid and collectable host resource):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hosts::dynamic::dynamic_exclude: true
+</code></pre></div></div>
+
+<p>Since /etc/hosts entries are managed via exported <code class="highlighter-rouge">host</code> Puppet resources, it’s also possible to specify an Hash of custom additional entries to add to the host file. This makes sense if we want to add references to hosts or devices not managed by Puppet. The syntax of the hash to use maps the available arguments of the host resource (<code class="highlighter-rouge">puppet describe host</code> for a full list):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hosts::dynamic::extra_hosts:
+  firewall.example42.com:
+    ip: 10.12.13.1
+    target: /etc/hosts # (Default)
+    host_aliases:
+      - firewall
+      - fw.example42.com
+  san.example42.com:
+    ip: 10.12.13.250
+    host_aliases:
+      - san
+</code></pre></div></div>
+
+<h3 id="using-psickhostsresource">Using <code class="highlighter-rouge">psick::hosts::resource</code></h3>
+
+<p>This is the third alternative to manage /etc/hosts. It’s just a wrapper that exposes an Hiera controllable entry point for Puppet <code class="highlighter-rouge">host</code> resource. This is alternative to the previous profiles and has to be classified as the others:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include psick::hosts::resource
+</code></pre></div></div>
+
+<p>Configuration the is done via an Hash of hosts resources similar to what we have seen for <code class="highlighter-rouge">psick::hosts::dynamic::extra_hosts</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hosts::resource::hosts:
+  firewall.example42.com:
+    ip: 10.12.13.1
+    target: /etc/hosts # (Default)
+    host_aliases:
+      - firewall
+      - fw.example42.com
+  san.example42.com:
+    ip: 10.12.13.250
+    host_aliases:
+      - san
+</code></pre></div></div>
+
+<h2 id="managing-dns-resolver">Managing DNS resolver.</h2>
+
+<p>To manage the contents of <code class="highlighter-rouge">/etc/resolver</code> you can use the <code class="highlighter-rouge">psick::dns::resolver</code> profile. Classify it with something equivalent to :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include psick::dns::resolver
+</code></pre></div></div>
+
+<p>And then configure on Hiera both the template to use and its entries.</p>
+
+<p>To manage the template to use (default is ‘psick/dns/resolver/resolv.conf.erb’) and the actual path of the resolver file (default is ‘/etc/resolv.conf’):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::dns::resolver::resolver_path: /etc/resolv.conf
+psick::dns::resolver::resolver_template: profile/resolver/resolv.conf.erb
+</code></pre></div></div>
+
+<p>To manage the actual typical configuration settings of resolv.conf:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::dns::resolver::nameservers:
+  - 1.1.1.1
+  - 8.8.8.8
+psick::dns::resolver::options:
+  - attempts: 2
+  - timeout: 2
+  - rotate
+psick::dns::resolver::search:
+  - example42.com
+  - lab.example42.com  
+psick::dns::resolver::domain: example42.com
+psick::dns::resolver::sortlist:
+  - 130.155.160.0/255.255.240.0
+  - 130.155.0.0
+</code></pre></div></div>
+
+<p>That’s all for today. As we have seen, for the most common use cases, on Linux systems, Psick provides ready to use profiles to manage the content of /etc/hosts and /etc/resolv.conf without the need of fetching dedicated modules.</p>
+
+<p>Have fun with Puppet, Life, Universe and Everything.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

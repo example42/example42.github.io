@@ -1,0 +1,201 @@
+I"#<p>Spec tests are a common way to test whether your Puppet code either has no errors causing the compiler to stop or whether your Puppet code does things in the right way.
+Usually spec tests are done at different levels:</p>
+
+<ol>
+  <li>Lint testing</li>
+  <li>Unit Testing</li>
+  <li>Acceptance Testing</li>
+</ol>
+
+<p>Lint tests check if the Puppet code follows the Puppet <a href="https://docs.puppet.com/puppet/5.0/style_guide.html">style guide</a>.
+Within unit tests we use <a href="https://rspec-puppet.com">rspec-puppet</a>. Rspec-puppet compiles a Puppet catalog in a sandbox and checks if the catalog is compiled successfully and contains all required resources.
+Acceptance tests are used to deploy a machine, apply the Puppet code and verify system settings. For acceptance testing we use <a href="https://github.com/puppetlabs/beaker/wiki">beaker</a> which is a wrapper around <a href="https://www.vagrantup.com/">vagrant</a> or <a href="https://www.vagrantup.com/">docker</a> and <a href="http://serverspec.org/">serverspec</a>.</p>
+
+<p>Lint tests are easy to deploy and run. All you need is the following files:</p>
+<ul>
+  <li>Gemfile</li>
+  <li>Rakefile</li>
+</ul>
+
+<p>We are re-using the puppetlabs_spec_helper gem as this brings most what we need.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Gemfile
+source ENV['GEM_SOURCE'] || "https://rubygems.org"
+gem 'puppetlabs_spec_helper'
+
+# optional lint extensions (see https://voxpupuli.org/plugins/#puppet-lint)
+gem 'puppet-lint-appends-check',
+:git =&gt; 'https://github.com/voxpupuli/puppet-lint-appends-check.git',
+:require =&gt; false
+gem 'puppet-lint-classes_and_types_beginning_with_digits-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-classes_and_types_beginning_with_digits-check.git',
+  :require =&gt; false
+gem 'puppet-lint-empty_string-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-empty_string-check.git',
+  :require =&gt; false
+gem 'puppet-lint-file_ensure-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-file_ensure-check.git',
+  :require =&gt; false
+gem 'puppet-lint-leading_zero-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-leading_zero-check.git',
+  :require =&gt; false
+#gem 'puppet-lint-numericvariable', # has issues with new puppet-lint release
+#    :git =&gt; 'https://github.com/fiddyspence/puppetlint-numericvariable.git',
+#    :require =&gt; false
+gem 'puppet-lint-resource_reference_syntax',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-resource_reference_syntax.git',
+  :require =&gt; false
+gem 'puppet-lint-spaceship_operator_without_tag-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-spaceship_operator_without_tag-check.git',
+  :require =&gt; false
+gem 'puppet-lint-trailing_comma-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-trailing_comma-check.git',
+  :require =&gt; false
+gem 'puppet-lint-undef_in_function-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-undef_in_function-check.git',
+  :require =&gt; false
+gem 'puppet-lint-unquoted_string-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-unquoted_string-check.git',
+  :require =&gt; false
+gem 'puppet-lint-variable_contains_upcase',
+  :git =&gt; 'https://github.com/fiddyspence/puppetlint-variablecase.git',
+  :require =&gt; false
+gem 'puppet-lint-version_comparison-check',
+  :git =&gt; 'https://github.com/voxpupuli/puppet-lint-version_comparison-check.git',
+  :require =&gt; false
+</code></pre></div></div>
+
+<p>Within the Rakefile you must enable the puppet-lint rake task:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Rakefile
+require 'puppetlabs_spec_helper/rake_tasks'
+</code></pre></div></div>
+
+<p>In the spec/spec_helper.rb file we enable the puppetlabs_spec_helper module spec helper:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># spec/spec_helper.rb
+require 'puppetlabs_spec_helper/module_spec_helper'
+</code></pre></div></div>
+
+<p>Puppet-lint will check for a manifests and modules directory to read puppet manifests and checks for style guide.</p>
+
+<p>But within a control-repository the files to test are not inside the modules directory, but inside the site directory. As we can not overwrite this default behavior we generate a new lint rake task in the Rakefile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Rakfile
+require 'puppetlabs_spec_helper/rake_tasks'
+
+exclude_paths = %w(
+  vendor/**/*
+  spec/**/*
+  modules/**/*
+  pkg/**/*
+  tests/**/*
+)
+
+Rake::Task[:lint].clear
+PuppetLint::RakeTask.new(:lint) do |config|
+  # Pattern of files to ignore
+  config.ignore_paths = exclude_paths
+  # Pattern of files to check, defaults to `**/*.pp`
+  config.pattern = ['manifests/**/*.pp', 'site/**/*.pp']
+  # List of checks to disable
+  config.disable_checks = ['140chars', 'relative', 'class_inherits_from_params_class']
+  # Should the task fail if there were any warnings, defaults to false
+  config.fail_on_warnings = true
+  # Print out the context for the problem, defaults to false
+  #config.with_context = true
+  # Log Format
+  #config.log_format = '%{path}:%{line}:%{check}:%{KIND}:%{message}'
+end
+</code></pre></div></div>
+
+<p>Unit tests need to know where to find the upstream modules which we have in Puppetfile within the control-repo.
+We don’t fetch these from upstream source as this would need to have Puppetfile and .fixtures.yml files synced or either one automatically generated.</p>
+
+<p>Instead we have chosen to re-use the modules which must be installed using r10k:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>r10k puppetfile install -v
+</code></pre></div></div>
+
+<p>Within the spec/spec_helper.rb file we set the modulepath to ‘site’ and ‘modules’:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
+
+RSpec.configure do |c|
+  c.module_path = File.join(fixture_path, 'modules/site') + ':' + File.join(fixture_path, 'modules/r10k')
+  c.manifest_dir = File.join(fixture_path, '../../manifests')
+  c.manifest = File.join(fixture_path, '../../manifests/site.pp')
+  c.hiera_config = File.join(fixture_path, '../../hiera.yaml')
+  c.fail_fast = true
+end
+</code></pre></div></div>
+
+<p>The .fixtures.yml just ensures that all directories are in place:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fixtures:
+  symlinks:
+      site: "#{source_dir}/site"
+      r10k: "#{source_dir}/modules"
+</code></pre></div></div>
+
+<p>Now rspec-puppet needs a test. The most simple one just checks if a catalog is successfully created:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># spec/classes/profile_apache_spec.rb
+describe 'profile::apache' do
+  context 'catalog compile' do
+    it { should compile.with all_deps }
+  end
+end
+</code></pre></div></div>
+
+<p>Next we want acceptance tests. Usually beaker was created to run acceptance tests on modules.
+Modules have a multiple tests running on supported operating systems. Beaker reuses a VM it has created for all tests.</p>
+
+<p>Within a control-repo we want a fresh state on every test, as we have single tests which should run on a fresh os every time.</p>
+
+<p>First we need the beaker gem:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Gemfile
+group :system_tests do
+  gem 'beaker'
+  gem 'beaker-rspec'
+end
+</code></pre></div></div>
+
+<p>In Rakefile we disable the default beaker task. Next we generate a new task which will iterate over our acceptance tests:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Rakefile
+Rake::Task[:beaker].clear
+RSpec::Core::RakeTask.new(:beaker) do |config|
+  puts 'dont use beaker, use beaker_roles:&lt;role&gt; or all_roles instead'
+  abort
+end
+
+namespace :beaker_roles do
+  Dir.glob("spec/acceptance/*_spec.rb") do |acceptance_test|
+    test_name = acceptance_test.split('/').last.split('_spec').first
+    RSpec::Core::RakeTask.new(test_name) do |t|
+      t.rspec_opts = ['--color']
+      t.pattern = acceptance_test
+    end
+  end
+end
+</code></pre></div></div>
+
+<p>To allow all tests running in parallel we generate a multitask in Rakefile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>all_roles = []
+Rake.application.in_namespace(:beaker_roles) do |beaker_roles_namespace|
+  beaker_roles_namespace.tasks.each do |beaker_roles_tasks|
+    all_roles &lt;&lt; beaker_roles_tasks
+  end
+end
+multitask :all_roles =&gt; all_roles
+</code></pre></div></div>
+
+<p>All this is already part of <a href="https://github.com/example42/psick">PSICK</a></p>
+
+<p>We wish successful unit and integration tests on your control-repositories.</p>
+
+<p>Martin Alfke</p>
+:ET

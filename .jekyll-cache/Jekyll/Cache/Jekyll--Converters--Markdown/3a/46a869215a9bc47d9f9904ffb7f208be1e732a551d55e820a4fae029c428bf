@@ -1,0 +1,196 @@
+I"*#<p>At <a href="https://puppet.com/community/events/puppetconf/puppetconf-2017">PuppetConf2017</a> the <a href="https://puppet.com/products/puppet-bolt">bolt</a> task runner was released and made public.</p>
+
+<p>Bolt uses the concept of Puppet tasks to allow workflow based system management, which was missing in Puppet since ages.</p>
+
+<p>Puppet itself uses the declarative state configuration model, describing the final state of a system. With declarative description it was always a pain adding workflow based configurations like application updates or running maintenance tasks only at specific times. Bolt fills this gap.</p>
+
+<p>With bolt one can run any kind of:</p>
+
+<ul>
+  <li>upload files to a system</li>
+  <li>run any remote command</li>
+  <li>run any script</li>
+  <li>run a Puppet task</li>
+  <li>run a Puppet plan</li>
+</ul>
+
+<p>Connection to remote systems is done either via ssh or WinRM. Other connectors can be added to bolt upstream development. At the moment there is no API available to add additional connectors to bolt via some kind of bolt plugin.
+The ssh access must be configured in advance prior being able to make use of bolt. Access can be configured as unprivileged user using sudo commands. Bolt just needs to know which credentials to use.</p>
+
+<p>Credentials for ssh can be placed in your ssh config file (<code class="highlighter-rouge">~/.ssh/config</code>). Credentials for Windows systems are provided on command line using the user (<code class="highlighter-rouge">--user</code>) and the password (<code class="highlighter-rouge">--password</code>) parameter.</p>
+
+<p>Which systems bolt should connect to must be provided on cli with nodes (<code class="highlighter-rouge">--nodes</code>) parameter. As of now, no node groups can be specified.</p>
+
+<h2 id="upload-files">Upload files</h2>
+
+<p>Uploading files to a number of systems is easy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bolt file upload /local/file /remote/file --nodes www.domain.com,mail.domain.com
+</code></pre></div></div>
+
+<p>For Windows system the nodes must be given using the winrm URI:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bolt file upload /local/file /remote/file --nodes winrm://win.domain.com,server.domain.com --user Administrator --password &lt;password&gt;
+</code></pre></div></div>
+
+<h2 id="running-remote-commands">Running remote commands</h2>
+
+<p>Running remote commands is easy. Just tell bolt which remote command to execute:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bolt command run 'yum -y update' --nodes www.domain.com,mail.domain.com
+</code></pre></div></div>
+
+<h2 id="running-scripts">Running scripts</h2>
+
+<p>Bolt is able to use a local script, copy it to the mentioned nodes and run it there:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bolt script run ~/update_system.sh --nodes www.domain.com,mail.domain.com
+</code></pre></div></div>
+
+<p>Please note that there is a difference to file upload: the script will be removed after execution.</p>
+
+<h2 id="writing-and-running-tasks">Writing and running tasks</h2>
+
+<p>Tasks are something different. Tasks are part of modules and are placed into the (<code class="highlighter-rouge">tasks</code>) directory. When running tasks with bolt, one must specify the task and the module name space and the module path:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bolt task run &lt;modulename&gt;::&lt;taskname&gt; --nodes &lt;node list&gt; --modules &lt;modulepath&gt;
+</code></pre></div></div>
+
+<p>Additionally tasks may use parameters to switch action or behavior or to provde any kind of data.</p>
+
+<p>e.g.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bolt task run application::update_app apppath=/opt/app --nodes db.domain.com --modules ~/workspace/modules
+</code></pre></div></div>
+
+<p>The mentioned task (<code class="highlighter-rouge">application::update_app</code>) can be found within the application modules task directory in the update_app file.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>modules/
+  \- application/
+    \- tasks/
+      \- update_app
+</code></pre></div></div>
+
+<p>A task must have an according .json file which documents the task and uses Puppet 4 data types on parameters:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># modules/application/tasks/update_app.json
+{
+  "description": "Update application",
+  "supports_noop": false,
+  "input_method": "environment",
+  "parameters": {
+    "apppath": {
+      "description": "Path to application",
+      "type": "Optional[String[1]]"
+    }
+  }
+}
+</code></pre></div></div>
+
+<p>Within the task the parameter is used as environment variable with PT_ prefix:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># modules/application/tasks/update_app
+#!/usr/bin/env bash
+if [ -z "$PT_apppath" ]; then
+  apppath=$PT_apppath
+else
+  apppath='/opt/app'
+fi
+pushd $apppath
+  git reset hard --master
+  git fetch --all
+  git pull origin master
+popd
+</code></pre></div></div>
+
+<p>When setting a parameter is mandatory, one can just use the task variable:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nv">updurl</span><span class="o">=</span><span class="nv">$PT_updurl</span> <span class="c"># will fail if no data was given</span>
+<span class="nb">pushd</span> <span class="nv">$apppath</span>
+  /opt/app/update.sh <span class="nv">$updurl</span>
+<span class="nb">popd</span>
+</code></pre></div></div>
+
+<p>When having many parameters it will become a nightmare to provide all on command line. One can place parameters and their valies to a .json file;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># params.json
+{
+  "updurl": "git@git.domain.com/application.git",
+  "apppath": "/opt/app"
+}
+</code></pre></div></div>
+
+<p>Now you just must tell bolt that it should use the params.json file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bolt task run application::update_app --nodes db.domain.com --modules ~/workspace/modules --params @params.json
+</code></pre></div></div>
+
+<h2 id="writing-und-running-plans">Writing und running plans</h2>
+
+<p>Plans combine multiple tasks. Think about the following problem:</p>
+
+<p>Update of an application requires you to do the following steps:</p>
+
+<ul>
+  <li>disable node on loadbalancer</li>
+  <li>wait for last request to be served</li>
+  <li>update application</li>
+  <li>restart web server</li>
+  <li>check functionality</li>
+  <li>re-enable node on loadbalancer</li>
+</ul>
+
+<p>Plans are - similar to tasks - part of a module and located in the (<code class="highlighter-rouge">plans</code>) directory.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>modules/
+  \- application/
+    \- plans/
+      \- update.pp
+</code></pre></div></div>
+
+<p>we use the above mentioned example and generate a puppet plan:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># modules/application/plans/update.pp
+plan application::update (
+  String $lbserver  = 'lb.domain.com',
+  String $maxtime   = '60',
+  String $updurl    = 'ssh://git@git.domain.com/application.git',
+  String $apppath   = '/opt/app',
+  String $chkscript = '/opt/app/bin/check',
+){
+  # 'execute' tasks
+  run_task('application::disable_node', $lbserver)
+  run_task('application::wait_last_conn', $maxtime)
+  run_task('application::update_app', $updurl, $apppath)
+  run_task('application::restart_app', $maxtime)
+  run_task('application::check_app', $chkscript)
+  run_task('application::enable_node', $lbserver)
+}
+</code></pre></div></div>
+
+<p>Usually we want error handling in plans. Please check <a href="https://puppet.com/docs/bolt/0.5/writing_plans.html#handling-plan-function-results">writing plans</a> for details.</p>
+
+<p>Now the bolt plan command can be used:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bolt plan run application::update --modules &lt;modulepath&gt; 
+</code></pre></div></div>
+
+<p>Check the <a href="https://puppet.com/docs/bolt/0.5/writing_tasks.html">task docs</a> and <a href="https://puppet.com/docs/bolt/0.5/writing_plans.html">plan docs</a> on additional topics like</p>
+
+<ul>
+  <li>enable no-op mode on tasks</li>
+  <li>use different plan execution functions:
+    <ul>
+      <li>commands, scripts or other plans, uploading files</li>
+    </ul>
+  </li>
+  <li>input and output of tasks</li>
+  <li>using tasks input and output from and to plans</li>
+  <li>converting scripts to tasks</li>
+</ul>
+
+<p>Happy hacking on bolt.</p>
+
+<p>Martin Alfke</p>
+:ET

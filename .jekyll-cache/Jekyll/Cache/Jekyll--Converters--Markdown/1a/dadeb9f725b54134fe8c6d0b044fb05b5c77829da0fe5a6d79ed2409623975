@@ -1,0 +1,79 @@
+I"<p>When we develop our Puppet code it’s useful to have the possibility to test the effect of what we are doing on real systems, running Puppet on them, using our code under development, and seeing what happens without the need to commit anything.</p>
+
+<p>Traditional testing methods based on spec tests don’t verify the actual effect of our code on systems (they analyse the generated catalog to verify if it has the expected resources), we need to run real code on real operating systems.</p>
+
+<p>Vagrant is the perfect tool for this and we can use it in our Puppet development setup.</p>
+
+<p>We’ve <a href="#http://www.example42.com/2017/05/08/a-psick-vagrant-experience/">already talked</a> about how we use Vagrant on <a href="https://github.com/example42/psick/">PSICK</a>, Example42’s sample Control repo [generator], but that’s a rather complex setup, with multiple Vagrant environments, a simple to use configuration file to use for each one of them, and multiple approaches to Puppet run.</p>
+
+<p>If you want all the work done, just use PSICK, or copy from it the <code class="highlighter-rouge">vagrant</code> directory and the script <code class="highlighter-rouge">bin/puppet_install.sh</code> (used to install Puppet in certain VMs).</p>
+
+<p>Let’s review here, instead, the basic principles and what has to be done to setup Vagrant testing from within our control-repo.</p>
+
+<p>First we have to create a <code class="highlighter-rouge">Vagrantfile</code>, here we can configure one of more VMs to work on.</p>
+
+<p>Then we have to decide how we want to run Puppet within the VMs, we have different options here:</p>
+
+<ul>
+  <li>
+    <p>(1) Run Puppet in <code class="highlighter-rouge">apply</code> mode, without using any Puppet Server. This is the simplest approach (we don’t need a dedicated Puppet server to point to) but it fully simulates our real server setup , without further efforts, only if the following conditions are met:</p>
+
+    <ul>
+      <li>
+        <p>We are not using an External Node Classifier or we can simulate in the Vagrant environment what the ENC provides (classes to include, parameters to set)</p>
+      </li>
+      <li>
+        <p>We don’t rely on PuppetDB to manage resources in our catalog, that is we don’t use exported resources and we don’t use functions, like <code class="highlighter-rouge">puppetdb_query</code> that interrogate PuppetDB directly. If we are in these conditions we have to provide some workaround for machines running in Vagrant.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>(2) Run Puppet in <code class="highlighter-rouge">agent</code> mode, using a Puppet Master running in our Vagrant environment. This is a valid alternative, which may cope with PuppetDB but may presents a few additional challenges:</p>
+
+    <ul>
+      <li>
+        <p>If we use an ENC on our live Puppet Server, we must configure accordingly our Vagrant Puppet Server</p>
+      </li>
+      <li>
+        <p>We have to mount on the Vagrant Puppet Server our local control-repo, so that the files it serves come directly from the host where we are developing (in this case is absolutely necessary to disable catalog caching in <code class="highlighter-rouge">environment.conf</code>).</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>On PSICK you can see both approaches used in different Vagrant environments under <code class="highlighter-rouge">vagrant/environments</code>.</p>
+
+<p>Other alternatives, like running Vagrant in agent mode pointing to an existing external Puppet Server, may be tried, as long as it’s preserved the basic principle of being able to test our code before committing it (so we should either develop directly on the Puppet Server, using a dedicated environment, our mount there via NFS or similar, our local development directory).</p>
+
+<p>Let’s concentrate on the <em>apply</em> scenario, as using puppet agent implies that we are able to setup a Puppet Server on Vagrant which reproduces the same conditions we have on the real infrastructure.</p>
+
+<p>Besides the apparent limitations, listed earlier, such approach is possible in many different cases, as long as we care of:</p>
+
+<ul>
+  <li>
+    <p>Setting with provisioning a script either <a href="https://github.com/example42/psick/blob/production/vagrant/bin/vagrant-setfacts.sh">external facts</a> or <a href="https://github.com/example42/psick/blob/production/vagrant/bin/vagrant-settrustedfacts.sh">trusted facts</a>  before running Puppet, if they are needed to classify nodes or are used in our <code class="highlighter-rouge">hiera.yaml</code> hierarchies.</p>
+  </li>
+  <li>
+    <p>Running Puppet in apply mode passing all the arguments we need to point our local Hiera data, and use the modules in the control-repo. For example <a href="https://github.com/example42/psick/blob/production/vagrant/bin/papply.sh">this one</a>.</p>
+  </li>
+  <li>
+    <p>Be sure we have, on our VMs all the gems and tools needed to compile a catalog, so Puppet, of course, and eventual extra gems (<a href="https://github.com/example42/psick/blob/production/vagrant/bin/vagrant-setup_papply.sh">example</a>)</p>
+  </li>
+  <li>
+    <p>Mount on the VM (better if in Read Only mode) the control repo directory we are developing on, under <code class="highlighter-rouge">/etc/puppetlabs/code/environments/production</code> (or link the “usual” /vagrant directory or change the puppet apply command to point to the correct local path).</p>
+  </li>
+  <li>
+    <p>Have the modules listed in our <code class="highlighter-rouge">Puppetfile</code> deployed on our development workstation (it’s enough to run <code class="highlighter-rouge">r10k puppetfile install</code> from the main control-repo directory to populate accordingly its <code class="highlighter-rouge">modules</code> subdirectory)</p>
+  </li>
+  <li>
+    <p>If we use Hiera-eyaml and we don’t want to place our private key on developers’ workstations, we can just override eventual encrypted data in common Hiera files with unencrypted data, in the Hiera layers specific for development hostnames or for a <code class="highlighter-rouge">devel</code> tier.</p>
+  </li>
+  <li>
+    <p>If we use exported resources or functions that query PuppetDB, provide exceptions when the code is evaluated under Vagrant (usually this can be done checking if the value of the <code class="highlighter-rouge">virtual</code> fact matches <code class="highlighter-rouge">Virtualbox</code>, as this is the most comment hypervisor used in Vagrant.)</p>
+  </li>
+</ul>
+
+<p>Generally testing code under Vagrant in Puppet apply mode is easier and doesn’t require particular workarounds when our control-repo is <em>self-contained</em>: it contains all the information we need to classify and configure nodes, eventually basing it on facts that can be easily added, as we’ve seen it before, during Vagrant provisioning.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

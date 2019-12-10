@@ -1,0 +1,72 @@
+I"�<p>Note: This is an updated and improved version of the <a href="https://www.example42.com/2017/01/09/anatomy-of-a-puppet-control-repo/">Tip of the Week 2 - Anatomy of a Puppet control-repo</a>.</p>
+
+<p>A Puppet control-repo is a [git] repository that contains the files you expect to have in your directory environment (for example <code class="highlighter-rouge">/etc/puppetlabs/code/environments/production</code> for the default production environment) which provides whatever you need to manage your infrastructure.</p>
+
+<h3 id="the-standard-control-repo">The standard control-repo</h3>
+
+<p>A control repo is typically composed of:</p>
+
+<ul>
+  <li>
+    <p>The <code class="highlighter-rouge">manifests</code> directory where are placed the first files that the Puppet server parses when compiling catalogs for clients. Here you typically have the <code class="highlighter-rouge">site.pp</code> file (but other manifests with different names can be seamlessly added) where you can set top scope variables, resource defaults, and eventually have node statements to define what classes should be included in your nodes (nodes classification can be done in several different ways, using the <code class="highlighter-rouge">node</code> statement is just one of them).</p>
+  </li>
+  <li>
+    <p>The <code class="highlighter-rouge">hieradata</code> (or <code class="highlighter-rouge">data</code>) directory which contains Hiera data files. The name of the directory is completely arbitrary, even if these are a sort of standard de facto. This same directory could not even exists in the unlikely case you are not using Hiera, or if you use Hiera with backends which don’t store data in normal (typically yaml or json) files. Hiera data can also be placed in a separated dedicated repository, eventually a “fake module” to load via <code class="highlighter-rouge">Puppetfile</code> so you might have it outside the control-repo, and have different people who might access the Hiera data and the control-repo code.</p>
+  </li>
+  <li>
+    <p>The <code class="highlighter-rouge">hiera.yaml</code> file configures the Hiera backed and the hierarchies to use for the environment</p>
+  </li>
+  <li>
+    <p>The <code class="highlighter-rouge">modules</code> directory contains Puppet modules. Typically you don’t place themselves directly in your control-repo but define them in the <code class="highlighter-rouge">Puppetfile</code> and then deploy them with either r10k or Librarian Puppet.</p>
+  </li>
+  <li>
+    <p>You will probably have to develop custom modules (your role and profile modules, your site specific ones). You can decide to place them in dedicated repositories, and add them to your Puppetfile, or keep them in your same control-repo. In this case it makes sense to place them in a separated directory, such as <code class="highlighter-rouge">site</code>, in order to differentiate external modules, defined in the Puppetfile, from the local ones.</p>
+  </li>
+  <li>
+    <p>The <code class="highlighter-rouge">environment.conf</code> file, which configures your environment: where the modules are placed, the caching timeout and eventually a script that returns a custom configuration version.</p>
+  </li>
+</ul>
+
+<p>You can find an <a href="https://github.com/puppetlabs/control-repo">essential skeleton for a control-repo</a>, from Puppet.</p>
+
+<h3 id="the-psick-additions">The PSICK additions</h3>
+
+<p>Example42’s <a href="https://github.com/example42/psick">PSICK</a> is a Puppet control repo with superpowers. It contains all the above directories and something more:</p>
+
+<ul>
+  <li>
+    <p>The <code class="highlighter-rouge">vagrant</code> directory contains different Vagrant environments with the relevant toolset that can be used to locally test the same control-repo. They are fully customizable by editing the <code class="highlighter-rouge">config.yaml</code> file in each Vagrant environment.</p>
+  </li>
+  <li>
+    <p>Files for building Docker images locally are under the <code class="highlighter-rouge">docker</code> directory.</p>
+  </li>
+  <li>
+    <p><a href="http://www.fabfile.org">Fabric</a> tasks are defined in the <code class="highlighter-rouge">fabfile</code> directory.</p>
+  </li>
+  <li>
+    <p>Documentation is stored under <code class="highlighter-rouge">docs</code></p>
+  </li>
+  <li>
+    <p>The <code class="highlighter-rouge">bin</code> directory contains several scripts for various Puppet master activites. Many of them can be invoked via Fabric or are used in the CI pipelines.</p>
+  </li>
+  <li>
+    <p>The files <code class="highlighter-rouge">.gitlab-ci.yml</code>, <code class="highlighter-rouge">Jenkinsfile</code> and <code class="highlighter-rouge">.travis.yml</code> are used to configure CI pipelines for Puppet code on different tools</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Rakefile</code>, <code class="highlighter-rouge">Gemfile</code> and the <code class="highlighter-rouge">spec/</code> directory are needed to run control-repo unit and integration tests</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Dangerfile</code> configures the <a href="https://danger.systems">Danger</a> bot based which automatically send comments based on control-repo changes</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">metadata.json</code> was added to be able to use pdk within the control-repo.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">psick</code> command can be used to create a new control-repo based on the Puppet standard (and essential) one, or example42’s big, fat, rich, psick one.</p>
+  </li>
+</ul>
+
+<p>Besides these additions, PSICK can be used as a normal Puppet control repo, and it fully follows its conventions and rules.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

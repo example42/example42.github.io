@@ -1,0 +1,221 @@
+I"C3<p><a href="https://github.com/example42/puppet-tp">Tiny Puppet</a> is a single Puppet module that can replace virtually any other single application module.</p>
+
+<p>Consider it as another Puppet abstraction layer, where we abstract the interface to the management of whole applications.</p>
+
+<p>I’ve been thinking about a similar solution for years, since when I started to create reusable modules based on a common template (all the “NextGen” version of Example42 modules).</p>
+
+<p>Now it’s reality.</p>
+
+<p>We usually deal with different kind of modules:</p>
+
+<p>A- Public modules that manage single applications (apache, openssh, redis …)</p>
+
+<p>B - Custom local modules that manage applications in the way we need</p>
+
+<p>C - Public modules that manage application stacks with multiple components (they are rare, think about shared and reusable profiles)</p>
+
+<p>D - Local site modules where we place our custom resources and logic (site, profiles, $project …)</p>
+
+<p>Tiny Puppet can be used as replacement or complementary for modules as in point A and B.</p>
+
+<p>It features:</p>
+
+<ul>
+  <li>
+    <p>Quick, easy to use, standard, coherent, powerful interface to the managed resources</p>
+  </li>
+  <li>
+    <p>Out of the box and easily expandable support for most common Operating Systems</p>
+  </li>
+  <li>
+    <p>Support of a quickly and easily growing <a href="https://github.com/example42/puppet-tp/tree/master/data">list of applications</a>.</p>
+  </li>
+  <li>
+    <p>Smooth coexistence with any existing Puppet modules setup: you decide what to manage</p>
+  </li>
+  <li>
+    <p>Quick and easy integration tests</p>
+  </li>
+</ul>
+
+<p>It is intended to be used in modules that operate at an higher abstraction layer (as the ones in points C and D) where we assemble and use different application modules to achieve the setup we need.</p>
+
+<p>With Tiny Puppet the installation of an application is as easy as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp::install { 'nginx': }
+</code></pre></div></div>
+
+<p>And, once installed, you can configure it with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp::conf { 'nginx':
+  template     =&gt; 'site/nginx/nginx.conf.erb',
+  options_hash =&gt; hiera('nginx::options_hash'),
+}
+</code></pre></div></div>
+
+<p>Tiny Puppet can do a lot more, though, for example you can populate any custom directory from a Git repository (it requires Puppet Labs’ vcsrepo module):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp::dir { '/opt/apps/my_app':
+  source      =&gt; 'https://git.example.42/apps/my_app/',
+  vcsrepo     =&gt; 'git',
+}
+</code></pre></div></div>
+
+<p>All the reusability features explored and implemented during the years in Example42 modules have been ported to TP, for example you have multiple (alternate) options on how to provide a configuration file (the following example shows them all, but you can use only one of them at once):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp::conf { 'nginx':
+  content  =&gt; 'My file content',
+  template =&gt; 'site/nginx/nginx.conf.erb',
+  epp      =&gt; 'site/nginx/nginx.conf.epp',
+  source   =&gt; 'puppet:///modules/site/nginx/nginx.conf',
+}
+</code></pre></div></div>
+
+<p>You can override the specific data (file paths, packages and services names and so on) for a given application:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp::install { 'nginx':
+  settings_hash  =&gt; {
+    package_name =&gt; 'my_nginx',
+    service_name =&gt; 'my_nginx',
+  },
+}
+</code></pre></div></div>
+
+<p>Tiny Puppet can handle virtually any application which may be installed via the local OS package manager, you can manage eventual custom repositories providing a custom class where you configure them:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp::install { 'elasticsearch':
+  dependency_class =&gt; 'site/elasticsearch/repo.pp',
+}
+</code></pre></div></div>
+
+<p>For some applications, a default extra repository is automatically added, you can disable this automatic lookup for a repository with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp::install { 'elasticsearch':
+  auto_repo =&gt; false,
+}
+</code></pre></div></div>
+
+<p>and you can configure you own repo with the <code class="highlighter-rouge">tp::repo</code> define.</p>
+
+<h4 id="use-cases">Use cases</h4>
+
+<p>You may wonder how Tiny Puppet manages all the application specific resources, such as Apache VirtualHosts, or Mysql Grants.</p>
+
+<p>Well, it doesn’t.</p>
+
+<p>Tiny Puppet manages packages, services and files, it provides a standard and easy to use interface to them, it adds OS abstraction and a lot of collateral frills, but everything is done by common, general use, defines which are feed by application specific data.</p>
+
+<p>Currently (but there are plans for that) it doesn’t manage explicitly application specific configuration options (such as Apache’s DocumentRoot, ServerName…): you don’t have explicit parameters to handle them, but you cana manage them as pure (Hiera) data with your own templates and the <code class="highlighter-rouge">options_hash</code> parameter.</p>
+
+<p>Tiny Puppet’s expected user is the System Administrator who knows how to configure his/her files and doesn’t want to study/import a new module just to provide resources and configure things in the desired way.</p>
+
+<p>Tiny Puppet can cohexist with any other Puppet setup, its only mandatory dependency is PuppetLabs’ <code class="highlighter-rouge">stdlib</code> module. Then you can decide for which application to use it or a dedicated module.</p>
+
+<p>You can even choose, in some cases, to use both tp and a dedicated module to manage some applications (for example using an existing mysql module to manage grants and tp to manage the installation and configuration of Mysql).</p>
+
+<h4 id="integration-testing-done-easy">Integration testing done easy</h4>
+
+<p>If you want to give Tiny Puppet a try, you can use the Vagrant environment delivered in its repo, which allows quick testing of an application on different OS.</p>
+
+<p>You need/should install some Vagrant plugins and Librarian Puppet:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/example42/puppet-tp
+cd puppet-tp
+vagrant status
+vagrant plugin install vagrant-cachier # Recommended for caching downloads
+vagrant plugin install vagrant-vbguest # Recommended for have updated VirtualBox Tools
+gem install librarian-puppet # Needed for the following command
+librarian-puppet install --puppetfile Puppetfile --path vagrant/modules/public
+
+vagrant up Centos7
+bin/test.sh nginx Centos7
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">bin/test.sh</code> script can be used to run acceptance tests for all the applications on different VMs, for example to test the installation of apache on Debian7 you can run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/test.sh apache Debian7
+</code></pre></div></div>
+
+<p>Tests are based on a simple script that can be customised either directly from the <code class="highlighter-rouge">tp::install</code> define:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tp::install { 'activemq':
+  test_enable              =&gt; true,
+  test_acceptance_template =&gt; 'site/activemq/test.erb',
+}
+</code></pre></div></div>
+
+<p>or using the <code class="highlighter-rouge">tp::test</code> define.</p>
+
+<p>Such a script would be placed, by default, in <code class="highlighter-rouge">/etc/tp/test/activemq</code> and might be used in any automation pipeline you want.</p>
+
+<h4 id="compatibility-matrix">Compatibility Matrix</h4>
+<p>In the <a href="https://github.com/example42/puppet-tp/tree/master/acceptance"><code class="highlighter-rouge">acceptance</code></a> directory you can give a look at the current compatibility matrix of different applications on different OS.</p>
+
+<p>The files you see there are the result of the execution of commands like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/test.sh all Debian7 acceptance
+</code></pre></div></div>
+
+<p>which runs the installation, the execution of a test script and the uninstallation of all the applications defined in <code class="highlighter-rouge">data</code>.</p>
+
+<p>The compatibility matrix is going to be reviewed and fixed with time, currently we have 275 successes and 165 failures on 5 different OS for the 88 supported applications (consider that some of the failures are due to recoverable or trivial reasons such as missing repos, incorrect test scripts, incorrect application data for an OS, problems with running serially all the tests on the same machine…).</p>
+
+<h4 id="adding-support-for-new-applications-or-os">Adding support for new applications or OS</h4>
+
+<p>Most of Tiny Puppet’s magic is done by the <a href="https://github.com/example42/puppet-tp/tree/master/lib/puppet/parser/functions/tp_lookup.rb"><code class="highlighter-rouge">tp_lookup</code></a> function which retrieves all the settings for an application from the <a href="https://github.com/example42/puppet-tp/tree/master/data"><code class="highlighter-rouge">data</code></a>
+directory using a Hiera-like lookup method based on a dedicated <code class="highlighter-rouge">hiera.yaml</code> file present in each application subdirectory.</p>
+
+<p>Bacically to add support for a new application you can simply add a new directory in <a href="https://github.com/example42/puppet-tp/tree/master/data"><code class="highlighter-rouge">data</code></a> and populate it accordingly, or, even more easily, run the script <a href="https://github.com/example42/puppet-tp/tree/master/bin/moduledata_clone.sh"><code class="highlighter-rouge">bin/moduledata_clone.sh</code></a>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/moduledata_clone.sh -m test -n courier
+</code></pre></div></div>
+
+<p>This this create a <code class="highlighter-rouge">courier</code> directory in <code class="highlighter-rouge">data/</code> based on the contents of the <code class="highlighter-rouge">test</code> directory (I use it as a “sane” starting template). Then, obviously you may have to edit the files in the <code class="highlighter-rouge">courier</code> subdir to match different operating systems settings.</p>
+
+<h4 id="the-present-and-the-future">The present and the future</h4>
+
+<p>Tiny Puppet works like a charm on every system with Ruby 1.9.3 or higher, this means that you Puppet Master should run on:</p>
+
+<ul>
+  <li>Ubuntu 14.04</li>
+  <li>Debian 7</li>
+  <li>RedHat 7 and derivatives</li>
+</ul>
+
+<p>and it needs some extra steps (namely the installation of Ruby 1.9.x) on other distros like:</p>
+
+<ul>
+  <li>Ubuntu 12.04</li>
+  <li>Debian 6</li>
+  <li>RedHat 6 and derivatives</li>
+</ul>
+
+<p>Note, however, that this applies only for the Puppet Master node, where the catalog is compiled, on your clients, unless they run in masterless mode, you may run any other OS.</p>
+
+<p>Some applications have already support for FreeBSD, OpenBSD and Solaris and, as we have seen, it’s quite easy and quick to enlarge support coverage.</p>
+
+<p>Future developments will evolve around:</p>
+
+<ul>
+  <li>Support and tuning of different applications on different OS</li>
+  <li>Refactoring of the <code class="highlighter-rouge">tp_lookup</code> function to work on Ruby 1.8.7</li>
+  <li>Allow variables interpolation in the data files</li>
+  <li>Automatic management of firewalling and monitoring</li>
+  <li>Management of multiple instances of a given application</li>
+  <li>Support for infile line-based configuration (<code class="highlighter-rouge">tp::line</code>)</li>
+  <li>Command line interface to query, check and diagnose the status of the installed applications</li>
+  <li>Addition of application specific configuration options and templates</li>
+</ul>
+
+<p>I’m quite excited about the future implications, power and impact of Tiny Puppet.</p>
+
+<p>The Example42 modules set is going to incorporate Tiny Puppet and will remove from the master branch dozens of component application modules, while introducing reusable higher abstraction modules (I call them stacks, because they are different from profiles as commonly designed and used).</p>
+
+<p>If you don’t care at all about Example42 modules you are forgiven, give it a try in your local site modules and see if it can be useful in some cases where you want the job done in a quick, easy and predictable way.</p>
+
+<p>If you have additions, fixes, suggestions or request for the support of new OS or applications, please use  <a href="https://github.com/example42/puppet-tp/tree/master/">GitHub</a>.</p>
+
+<p>Happy smart puppettizing with Tiny Puppet.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

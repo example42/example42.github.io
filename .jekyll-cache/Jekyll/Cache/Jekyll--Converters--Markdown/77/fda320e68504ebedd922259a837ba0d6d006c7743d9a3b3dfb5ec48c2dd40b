@@ -1,0 +1,97 @@
+I",<p>Example42 Puppet modules have been around since 2009, they have lived different generations.</p>
+
+<p>It’s time for a new one, the 4th. Almost a revolution.</p>
+
+<p>Let me give an historical perspective.</p>
+
+<p>The <a href="https://github.com/example42/puppet-modules/tree/1.0">first generation of example42 Puppet modules</a> introduced a set of features that were quite uncommon for the times:</p>
+
+<ul>
+  <li>
+    <p>Support of multiple OS, based on a dedicated params class</p>
+  </li>
+  <li>
+    <p>Possibility to remove (decommission) the resources managed by the module</p>
+  </li>
+  <li>
+    <p>Abstraction and automation of firewalling and monitoring (Optional)</p>
+  </li>
+  <li>
+    <p>Awesome (IMHO) integration with Puppi 1.0 (Optional)</p>
+  </li>
+</ul>
+
+<p>The reference layout of this first generation was done in pre Puppet 2.6 times, when there weren’t parametrized classes and the modules ecosystem was basically a collection of OS specific recipes.</p>
+
+<p>With Puppet 2.x many things changed and modules’ classes could finally have parameters that allow much wider customizations. At the <a href="http://www.example42.com/2012/01/03/the-next-generation-of-example42-puppet-modules/">beginning of 2012</a> started the release of the <a href="https://github.com/example42/puppet-modules/tree/2.0">second version</a> of modules, the <em>NextGen</em> edition. They were far more advanced and featured:</p>
+
+<ul>
+  <li>
+    <p>Alternative ways to manage configurations (templates, static files, whole dirs… )</p>
+  </li>
+  <li>
+    <p>Extreme customization options (for example it was possible to manage Puppet Enterprise with the normal OSS puppet module, handling all the different packages names and paths)</p>
+  </li>
+  <li>
+    <p>A standard parameters set, common across modules</p>
+  </li>
+  <li>
+    <p>Better separation of custom code, data and files from module repo</p>
+  </li>
+  <li>
+    <p>Use of different skeletons for quick creation of full featured modules according to their nature</p>
+  </li>
+  <li>
+    <p>The params_lookup() function, provided by the Puppi module. Used for each class parameter. It partly  anticipated the behavior of Puppet 3’s Hiera data bindings and actually allowed even more flexible lookup options.</p>
+  </li>
+</ul>
+
+<p>In this occasion independent git repos for each module were introduced with the main <a href="https://github.com/example42/puppet-modules">puppet-modules</a> repo linking them as submodules.</p>
+
+<p>Support for Puppi 2 was introduced, but ultimately failed, since Puppi 2 was never finished.</p>
+
+<p>NextGen modules have been used for several years, across different Puppet versions and, I like to think, have in some parts influenced some design patterns in other modules.</p>
+
+<p>In the meantime the modules ecosystem was getting better and better and it was impossible for a single person, mostly working on his free time, to deliver quality comparable to the best modules around.</p>
+
+<p>It started a somehow decaying phase, where Puppet and its modules continued to grow, but work on Example42 modules became stale: the NextGen modules were starting to feel their age.</p>
+
+<p>With the intention to <a href="http://www.example42.com/2013/09/27/talking-about-evolution/">change this tendency</a> it was opened an example42 <a href="http://www.example42.com/2014/10/13/example42_goes_org/">GitHub organisation</a> with different maintainers taking care of specific modules.</p>
+
+<p>The plan was to work on a <a href="https://github.com/example42/puppet-modules/tree/3.0">third generation</a> of modules without the params_lookup dependency (since it was somehow redundant having Puppet 3 data bindings) and with a more modern layout. It was launched the <a href="https://github.com/stdmod">stdmod initiative</a> with the intention of introducing naming standards in Puppet chaotic modules world.</p>
+
+<p>StdMod and this third generation never really took off, most of the modules are still based on the 2.0 layout and I personally failed in supporting properly the community and the contributors on GitHub.</p>
+
+<p>In the meantime it was started the work on <a href="http://www.tiny-puppet.com">Tiny Puppet</a> which somehow embodies all the standard features of example42 modules in a single module based on an <a href="https://github.com/example42/tinydata">external data module</a>, where it’s easy to add support for new OS and applications.</p>
+
+<p>So we arrive at current times, with an aged set of modules (most of them were designed even before the release of Puppet 3, four years ago), lack of proper motivation to support them, and better alternatives around.</p>
+
+<p>Time to take radical decisions for our fourth generation of Puppet modules:</p>
+
+<ul>
+  <li>
+    <p>A huge amount of modules have been deprecated. For specialized tasks there are better alternatives around, for common package, service, files management Tiny Puppet can do the same.</p>
+  </li>
+  <li>
+    <p>The repository layout has been overhauled: from a collection of submodules to a Puppet <strong>control-repo</strong> with a Puppetfile (with example42 and third party modules), sample local roles and profiles, sample Hiera data</p>
+  </li>
+  <li>
+    <p>Vagrant and (soon) Docker environments are added to the repo for testing Puppet code and data.</p>
+  </li>
+  <li>
+    <p>The repository is now more suitable as a starting point for a flexible and decently structured Puppet infrastructure.</p>
+  </li>
+</ul>
+
+<p>Work has just begun, a modules set is developed over time. Most of the current modules are still in their “NextGen” layout and all of them should work on Puppet 2, 3 and 4.</p>
+
+<p>Fourth generation is for Puppet 4.</p>
+
+<p>The sample profiles in the puppet-modules repository work only on Puppet 4, backwards compatibility may be preserved in the single component modules.</p>
+
+<p>In the next months we will see how this generation evolves, I have reasons to believe that it will be luckier than the previous also because something has changed in the meantime: there a company behind example42, not just a single person.</p>
+
+<p>Per Aspera ad Astra</p>
+
+<p>Alessandro Franceschi</p>
+:ET

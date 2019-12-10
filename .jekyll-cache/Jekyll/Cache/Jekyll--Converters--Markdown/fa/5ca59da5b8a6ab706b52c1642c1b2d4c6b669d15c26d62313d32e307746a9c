@@ -1,0 +1,146 @@
+I"�<p>On the <a href="https://www.example42.com/2018/11/12/psick_profiles_part_1_overview/" target="_blank">first post</a> of our series on Psick profiles we introduced the psick module and had an overview of its reusable profiles.</p>
+
+<p>On the <a href="https://www.example42.com/2018/11/19/psick_profiles_part_2_proxy_and_hostname_settings/" target="_blank">second one </a> we described how to manage hostname and proxy settings with the existing psick profiles.</p>
+
+<p>In this post we are going to review the resources that psick module provides to manage OpenSSH.</p>
+
+<p>The main <code class="highlighter-rouge">psick::openssh</code> profile, if included, installs openssh via Tiny Puppet (via the <code class="highlighter-rouge">psick::openssh::tp</code> class) and exposes parameters that act as entry points to configure other openssh related resources:</p>
+
+<ul>
+  <li>
+    <p>psick::openssh::configs_hash expects an hash (looked via Hiera in deep merge mode) of <code class="highlighter-rouge">psick::openssh::config</code> resources which permit the configuration of users’ <code class="highlighter-rouge">~/.ssh/config</code> file</p>
+  </li>
+  <li>
+    <p>psick::openssh::keygens_hash expects an hash (looked via Hiera in deep merge mode) of <code class="highlighter-rouge">psick::openssh::keygen</code> resources which runs the keygen command to generate ssh keypairs for users.</p>
+  </li>
+  <li>
+    <p>psick::openssh::keypairs_hash expects an hash (looked via Hiera in deep merge mode) of <code class="highlighter-rouge">psick::openssh::keypair</code> resources which allow to manage ssh keypairs for users.</p>
+  </li>
+  <li>
+    <p>psick::openssh::keyscans_hash expects an hash (looked via Hiera in deep merge mode) of <code class="highlighter-rouge">psick::openssh::keyscan</code> resources which make a ssh keyscan of remote nodes and add their ssh host key to users’ known hosts file.</p>
+  </li>
+</ul>
+
+<p>Let’s explore the mentioned resources, as they do commonly used operations.</p>
+
+<h2 id="define-psickopensshconfig-to-manage-users-ssh-configs">Define psick::openssh::config to manage users’ ssh configs</h2>
+
+<p>The ssh config file for single users can be managed with code as (the titles snd parameters used here can be expressed via Hiera with the previously described keys):</p>
+
+<p>The content of the file can be managed in different ways. With the source parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::config { 'al':
+  source =&gt; 'puppet:///modules/profile/openssh/al/config',
+}
+</code></pre></div></div>
+
+<p>With an explicit content parameter (alternative to source):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$sshconfig = @("SSHCONFIG"/L)
+Host *
+  ForwardAgent no
+  TCPKeepAlive yes
+| SSHCONFIG
+
+psick::openssh::config { 'al':
+  content =&gt; $sshconfig,
+}
+</code></pre></div></div>
+
+<p>Or also with the template parameter, which can be coupled with a custom set of settings via the options_hash parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::config { 'al':
+  template     =&gt; 'profile/openssh/user_config.erb',
+  options_hash =&gt; $ssh_parameters,
+}
+</code></pre></div></div>
+
+<p>Since we need to have the directory .ssh created, we can instruct the define to automatically create it for us. Default value is false to prevent issues with duplicated resources:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::config { 'al':
+  source =&gt; 'puppet:///modules/profile/openssh/users/al/config',
+  create_ssh_dir =&gt; true, # Default: false
+}
+</code></pre></div></div>
+
+<p>Note: All the psick::openssh:: defines have create_ssh_dir parameter, default value is false for all of them except psick::openssh::keypair.</p>
+
+<h2 id="define-psickopensshkeygen-to-create-ssh-keypairs">Define psick::openssh::keygen to create ssh keypairs</h2>
+
+<p>This define creates a ssh keypair using the ssh-keygen command. There are various options to manage where, how and for whom the ssh public and private keys have to created.</p>
+
+<p>The simplest use, is just to specify as title the username to create keypairs in the default paths ( ~/.ssh/id_rsa , ~/.ssh/id_rsa.pub):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::keygen { 'al': }
+</code></pre></div></div>
+
+<p>To customise the home, for example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::keygen { 'jenkins':
+  home =&gt; '/var/lib/jenkins'
+}
+</code></pre></div></div>
+
+<h2 id="define-psickopensshkeypair-to-manage-ssh-keypairs">Define psick::openssh::keypair to manage ssh keypairs</h2>
+
+<p>If we want to manage directly the contents of our ssh keys, instead of generating them with psick::openssh::keygen, we can use the define psick::openssh::keypair where we have different options to manage the content of the ssh keys.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::keypair { 'al':
+  private_key_content =&gt; lookup('ssh_private_key_al'),
+  public_key_source   =&gt; 'puppet:///modules/profile/openssh/al/id_rsa.pub'
+}
+</code></pre></div></div>
+
+<h2 id="define-psickopensshkeyscan-to-pre-fetch-ssh-host-keys">Define psick::openssh::keyscan to pre fetch ssh host keys</h2>
+
+<p>When you need to automate ssh connection you need to have the remote hosts’ ssh keys added to local users’ or system’s known_hosts file.</p>
+
+<p>Usually this is done at the first ssh connection to a new host, by accepting manually the remote host key, the psick::openssh::keyscan does this for us.</p>
+
+<p>Simple usage is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::keyscan { git.example.com:
+  user =&gt; 'jenkins',
+}
+</code></pre></div></div>
+
+<h2 id="sample-hiera-data-for-psickopenssh">Sample hiera data for psick::openssh</h2>
+
+<p>Here’s how Hiera data for an openssh configuration may look like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::openssh::tp::resources_hash:
+  tp::conf:
+    openssh:
+      template: 'psick/generic/spaced.erb'
+      options_hash:
+        Protocol: 2
+        PermitRootLogin: 'no'
+        Subsystem: 'sftp /usr/libexec/openssh/sftp-server'
+
+psick::openssh::configs_hash:
+  jenkins:
+    path: /var/lib/jenkins/.ssh/config
+    create_ssh_dir: true
+    options_hash:
+      Host puppet.lab.psick.io:
+        StrictHostKeyChecking: no
+        UserKnownHostsFile: /dev/null
+      Host puppet:
+        StrictHostKeyChecking: no
+        UserKnownHostsFile: /dev/null
+
+psick::openssh::keyscans_hash:
+  github.com:
+    user: jenkins
+    known_hosts_path: /var/lib/jenkins/.ssh/known_hosts
+
+
+psick::openssh::keygens_hash:
+  jenkins:
+  home: /var/lib/jenkins
+</code></pre></div></div>
+
+<p>Have fun with Puppet, Life, Universe and Everything.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

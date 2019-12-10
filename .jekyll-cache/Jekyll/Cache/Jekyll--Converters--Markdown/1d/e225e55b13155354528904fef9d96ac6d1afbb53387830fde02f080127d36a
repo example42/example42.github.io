@@ -1,0 +1,52 @@
+I"�<p>Example42’s <a href="https://github.com/example42/psick">psick control-repo</a> has several features which allows user to manage most of the typical infrastructure tasks easily.</p>
+
+<p>PSICK has a set of unit and acceptance tests already built in. Usually we want to test the Puppet version we have running in infrastructure and we want to test functionality with newer versions.</p>
+
+<h3 id="unit-testing">Unit Testing</h3>
+
+<p>Handling different Puppet versions on unit testing is done by reading an environment variable from <a href="https://github.com/example42/psick/blob/production/Gemfile#L39">Gemfile</a>.
+<a href="http://rspec-puppet.com/">rspec puppet</a> uses the Puppet version installed by bundler to compile and check catalogs.</p>
+
+<p>Running unit tests for different Puppet versions is easy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export PUPPET_GEM_VERSION='4.10.9'
+bundle install --path vendor
+bundle exec rake spec
+</code></pre></div></div>
+
+<p>Now let’s test Puppet 5:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export PUPPET_GEM_VERSION='5.3.3'
+bundle update puppet
+bundle exec rake spec
+</code></pre></div></div>
+
+<p>Unsetting the PUPPET_GEM_VERSION environment variable will use the latest Puppet version from rubygems.</p>
+
+<h3 id="acceptance-testing">Acceptance Testing</h3>
+
+<p>Acceptance testing is different.</p>
+
+<p>At PSICK we offer the possibility to use <a href="https://github.com/example42/psick/blob/production/spec/acceptance/nodesets/docker.yml">Docker containers</a> or <a href="https://github.com/example42/psick/blob/production/spec/acceptance/nodesets/vagrant.yml">Vagrant instances</a> for acceptance tests run by beaker. In both solutions the Puppet agent must be installed inside the instance. Usually we want to use the version we have running in our infrastructure.</p>
+
+<p>The beaker-puppet helper offers a new way on specifying Puppet versions to install. At PSICK we re-use the pattern from unit testing by specifying the PUPPET_GEM_VERSION environment variable:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export PUPPET_GEM_VERSION='4.10.8'
+bundle install --path vendor
+bundle exec rake beaker_roles:psick
+</code></pre></div></div>
+
+<p>Now we want to test latest Puppet 5 version:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export PUPPET_GEM_VERSION='~&gt; 5'
+bundle update puppet
+bundle exec rake beaker_roles:psick
+</code></pre></div></div>
+
+<p>The magic is in <a href="https://github.com/example42/psick/blob/production/spec/spec_helper_acceptance.rb#L9">PSICK spec/spec_helper_acceptance.rb</a> where we check for the Puppet version installed by bundler and pass proper attributes to beaker’s <code class="highlighter-rouge">install_puppet_agent_on</code> method.</p>
+
+<p>Happy hacking,</p>
+
+<p>Martin Alfke</p>
+
+:ET

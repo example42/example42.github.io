@@ -1,0 +1,231 @@
+I"�+<p>Hiera is the Puppet implementation of separating code from data. This concept allows you to describe your infrastructure in code and to let you put differences among your platform into the data source: e.g. different NTP servers or different password for databases.</p>
+
+<p>With Puppet 4.9 Hiera config version 5 was introduced.
+The new Hiera version allows you to place data globally, in environments and modules.</p>
+
+<p>As of Puppet 4.9.2 Hiera has the following data backends included:</p>
+<ul>
+  <li>yaml</li>
+  <li>json</li>
+  <li>eyaml (hiera-eyaml gem still required)</li>
+</ul>
+
+<p>This posting describes how to migrate from Hiera config version 3 to the new usage of Hiera data levels.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#location-of-hiera-configuration-file-and-data" id="markdown-toc-location-of-hiera-configuration-file-and-data">Location of Hiera configuration file and data</a>    <ul>
+      <li><a href="#global-data" id="markdown-toc-global-data">Global data</a></li>
+      <li><a href="#environment-data" id="markdown-toc-environment-data">Environment data</a></li>
+      <li><a href="#module-data" id="markdown-toc-module-data">Module data</a></li>
+    </ul>
+  </li>
+  <li><a href="#content-of-hiera-configuration-file" id="markdown-toc-content-of-hiera-configuration-file">Content of Hiera configuration file</a></li>
+  <li><a href="#migrating-from-hiera-to-lookup-function" id="markdown-toc-migrating-from-hiera-to-lookup-function">Migrating from hiera*() to lookup() function</a></li>
+  <li><a href="#how-to-upgrade-when-using-another-data-backend" id="markdown-toc-how-to-upgrade-when-using-another-data-backend">How to upgrade when using another data backend</a></li>
+</ul>
+
+<h2 id="location-of-hiera-configuration-file-and-data">Location of Hiera configuration file and data</h2>
+
+<p>With new version of Hiera you can have three different layers of data:</p>
+
+<ol>
+  <li>global data</li>
+  <li>environment data</li>
+  <li>module data</li>
+</ol>
+
+<h3 id="global-data">Global data</h3>
+
+<p>Global Hiera data are the same as they have been with the older Hiera version.
+Data in environments allow you to stage data and hiera config changes.
+Data in modules are a replacement for params pattern and inheritance.</p>
+
+<p>Global Hiera uses a global configuration file which must be placed in the Puppet configuration directory (usually <code class="highlighter-rouge">/etc/puppetlabs/puppet/hiera.yaml</code>).</p>
+
+<p>If you keep this configuration file in place, the provided Hiera data will have highest priority!
+<strong>Don’t forget to remove the global Hiera config file, once the migration has been finished.</strong></p>
+
+<p>The location of the global data is either in a separate directory (e.g. <code class="highlighter-rouge">/etc/puppetlabs/hieradata</code>) or already within your environments ( <code class="highlighter-rouge">/etc/puppetlabs/code/environments/${environment}/hieradata</code>).</p>
+
+<p>Consider migrating from a global path to an environment path prior migrating to new Hiera.</p>
+
+<h3 id="environment-data">Environment data</h3>
+
+<p>Next layer is environment data. The required Hiera configuration file is within each environment (e.g. <code class="highlighter-rouge">/etc/puppetlabs/puppet/code/environments/production/hiera.yaml</code>).
+Usually data are also placed within the environment in a <code class="highlighter-rouge">data</code> directory ( e.g. <code class="highlighter-rouge">/etc/puppetlabs/code/environment/production/data</code>).</p>
+
+<p>Please note that you can not copy your existing global hiera config file to an environment, You must use Hiera config version 5 in an environment hiera.yaml file.</p>
+
+<h3 id="module-data">Module data</h3>
+
+<p>On module level it is also possible to have a hiera configuration file at module root (e.g. <code class="highlighter-rouge">/etc/puppetlabs/code/environments/production/modules/ntp/hiera.yaml</code>).
+This layer is usually only used by module authors and you are encouraged to overwrite the provided data within your environment data.</p>
+
+<h2 id="content-of-hiera-configuration-file">Content of Hiera configuration file</h2>
+
+<p>In older hiera configuration files backends and hierarchies were separated settings. First you provided an array of used backends and then you listed the hierarchies. Backends were searched in order of occurrence in the configuration file and then the hierarchies got queried for data.</p>
+
+<p>The new hiera config allows you to specify backends globally (as default) or on a per hierarchy level.</p>
+
+<p>Let’s assume the following existing Hiera config v3 file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Hiera config v3
+:backends:
+  - eyaml
+  - yaml
+:yaml:
+  :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
+:eyaml:
+  :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
+  :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem
+  :pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem
+:hierarchy:
+  - "nodes/%{trusted.certname}"
+  - "location/%{facts.whereami}/%{facts.group}"
+  - "groups/%{facts.group}"
+  - "os/%{facts.os.family}"
+  - "common"
+:logger: console
+:merge_behavior: native
+:deep_merge_options: {}
+</code></pre></div></div>
+
+<p>With hiera config v5 the <code class="highlighter-rouge">:logger:</code>, <code class="highlighter-rouge">:merge_behavior:</code> and <code class="highlighter-rouge">:deep_merge_options:</code> settings are no longer used and can be removed.
+Next you have the option to specify default lookup options like <code class="highlighter-rouge">datadir</code> and the data backend.
+Afterwards the hierarchies get listed. Single hierarchies can make use of different data backends.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Hiera config v5
+version: 5
+defaults:
+  datadir: data
+  data_hash: yaml_data
+hierarchy:
+  - name: "Per-node data (yaml version)"
+    path: "nodes/%{trusted.certname}.yaml" # Add file extension
+    # Omitting datadir and data_hash to use defaults.
+
+  - name: "Per-group secrets"
+    path: "groups/%{facts.group}.eyaml"
+    lookup_key: eyaml_lookup_key
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem
+      pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem
+
+  - name: "Other YAML hierarchy levels"
+    paths: # Can specify an array of paths instead of a single one.
+      - "location/%{facts.whereami}/%{facts.group}.yaml"
+      - "groups/%{facts.group}.yaml"
+      - "os/%{facts.os.family}.yaml"
+      - "common.yaml"
+</code></pre></div></div>
+
+<p>As you can see it is now possible to group hierarchies which use the same backend.
+In this special case it is also possible to completely remove the <code class="highlighter-rouge">yaml</code> backend and simplify the configuration file, as the eyaml backend is also capable of returning unencrypted values:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Hiera config v5 - eyaml only
+version: 5
+defaults:
+  datadir: data
+  lookup_key: eyaml_lookup_key
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem
+      pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem
+
+hierarchy:
+  - name: "All hierarchies"
+    paths:
+      - "nodes/%{trusted.certname}.yaml" # Add file extension
+      - "location/%{facts.whereami}/%{facts.group}.yaml"
+      - "groups/%{facts.group}.yaml"
+      - "os/%{facts.os.family}.yaml"
+      - "common.yaml"
+</code></pre></div></div>
+
+<h2 id="migrating-from-hiera-to-lookup-function">Migrating from hiera*() to lookup() function</h2>
+
+<p>The new <code class="highlighter-rouge">lookup</code> function provides a huge amount of possible usages. The most impressing one is that the function will query hiera for lookup and merge options prior doing the real lookup on a key.</p>
+
+<p>First let’s get an overview on explicit lookup function usage:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>lookup type</th>
+      <th>hiera v3</th>
+      <th>hiera v5 with merge options hash</th>
+      <th>hiera v5 with Data type, default and merge option</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>single</td>
+      <td>hiera(‘key’)</td>
+      <td>lookup(‘key’)</td>
+      <td>lookup(‘key’, DataType)</td>
+    </tr>
+    <tr>
+      <td>array</td>
+      <td>hiera_array(‘array’)</td>
+      <td>lookup(‘array’, {merge =&gt; unique})</td>
+      <td>lookup(‘array’, Array, unique, [])</td>
+    </tr>
+    <tr>
+      <td>hash - first found values</td>
+      <td>hiera_hash(‘hash’)</td>
+      <td>lookup(‘hash’, {merge =&gt; hash})</td>
+      <td>lookup(‘hash’, Hash, hash, {} )</td>
+    </tr>
+    <tr>
+      <td>hash - merged values</td>
+      <td>hiera_hash(‘hash’)</td>
+      <td>lookup(‘hash’, {merge =&gt; deep})</td>
+      <td>lookup(‘hash’, Hash, deep, {} )</td>
+    </tr>
+    <tr>
+      <td>include</td>
+      <td>hiera_include(‘classes’)</td>
+      <td>lookup(‘classes’, {merge =&gt; unique}).include</td>
+      <td>lookup(‘classes’, Array, unique, [] ).include</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>If you have more complex decisions on when to do deep lookups, you have the option to place the lookup behaviour into your hiera data:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lookup_options:
+  'keyname':
+    merge: 'merge_option'
+</code></pre></div></div>
+
+<p>e.g.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># common.yaml
+lookup_options:
+  ntp::servers:
+    merge: 'unique'
+</code></pre></div></div>
+
+<p>Then you can always use the simple <code class="highlighter-rouge">lookup</code> function to query data.</p>
+
+<h2 id="how-to-upgrade-when-using-another-data-backend">How to upgrade when using another data backend</h2>
+
+<p>Hiera has changed the way how lookup backends are working. The old hiera 3 backends like hiera-mongodb and hiera-file are no longer working on hiera v5 in environment level. It is possible to use them on global level and specify the backend to use:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Only working on global hiera level
+- name: "Per-node data (MongoDB version)"
+  path: "nodes/%{trusted.certname}"      # No file extension
+  hiera3_backend: mongodb
+    options:    # Use old backend-specific options, changing keys to plain strings
+     connections:
+       dbname: hdata
+       collection: config
+       host: localhost
+</code></pre></div></div>
+
+<p>If you don’t want to use the global hiera level anymore, you must use hiera v5 style lookup functions. Ask the authors of the backend used, whether they are able to provide a hiera config 5 compatible solution.</p>
+
+<p>For file backend there is a <a href="https://github.com/voxpupuli/hiera-file/issues/23#issuecomment-384388992">solution posted at the GitHub issue</a>. Many thanks to <a href="https://github.com/igalic">Igor Galic</a> for the solution.</p>
+
+<p>Happy hacking,
+Martin Alfke</p>
+:ET

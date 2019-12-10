@@ -1,0 +1,142 @@
+I"�<p>On the <a href="" target="_blank">first post</a> of our series on Psick profiles we introduced the psick module and had an overview of its reusable profiles.</p>
+
+<p>In this post we are starting to review some handy psick profiles:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">psick::proxy</code> to configure proxy settings, on Linux system startup scripts, on gem and pip environments and in repo configurations for apt and yum</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">psick::hostname</code> to manage / enforce the system’s hostname both on Linux and Windows</p>
+  </li>
+</ul>
+
+<h2 id="managing-proxy-settings-with-psickproxy">Managing proxy settings with psick::proxy</h2>
+
+<p>To use it just include the class in your manifests (remember that):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include psick::proxy
+</code></pre></div></div>
+
+<p>or classify with the ENC of choice.</p>
+
+<p>Then, hiera configuration can be as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::proxy::proxy_server:
+  host: proxy.example.com
+  port: 3128
+  user: john    # Optional
+  password: xxx # Optional
+  no_proxy:
+    - localhost
+    - "%{::domain}"
+    - "%{::fqdn}"
+  scheme: http   # 
+</code></pre></div></div>
+
+<p>If you have included the psick class, you can set the same values using the general psick::servers hash, as this is the default value for the psick::proxy::proxy_server:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class psick::proxy ( [...]
+  Optional[Hash] $proxy_server     = $::psick::servers['proxy'],
+[...]
+</code></pre></div></div>
+
+<p>The above example has the same effect of:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::servers:
+  proxy:
+  host: proxy.example.com
+  port: 3128
+</code></pre></div></div>
+
+<p>You can customise the components for which proxy should be configured, here are the default params:</p>
+
+<p>Manage presence of proxy settings:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::proxy::ensure: present
+</code></pre></div></div>
+
+<p>Configure proxy settings for system’s gem environment:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::proxy::configure_gem: true
+</code></pre></div></div>
+
+<p>Configure proxy settings for Puppet’s gem environment:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::proxy::configure_puppet_gem: true
+</code></pre></div></div>
+
+<p>Configure proxy settings for PIP environment:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::proxy::configure_pip: true
+</code></pre></div></div>
+
+<p>Configure proxy settings for system. Exporting http_proxy variables in profile.d:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::proxy::configure_system: true
+</code></pre></div></div>
+
+<p>Configure proxy settings on package management tool (yum and apt supported):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::proxy::configure_repo: true
+</code></pre></div></div>
+
+<h2 id="managing-the-hostname-with-psickhostname">Managing the hostname with psick::hostname</h2>
+
+<p>Another profile for common use cases is psick::hostname which manages the server’s hostname both on Linux and Windows.</p>
+
+<p>It allows to set or reinforce hostname, fqdn and domain in local system configuration files on Linux and Windows.</p>
+
+<p>Class defaults are as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class psick::hostname (
+  String                $host                 = $::hostname,
+  Variant[Undef,String] $fqdn                 = $::fqdn,
+  Variant[Undef,String] $dom                  = $::domain,
+  String                $ip                   = $::ipaddress,
+  Boolean               $update_hostname      = true,
+  Boolean               $update_host_entry    = true,
+  Boolean               $update_network_entry = true,
+  Boolean               $update_cloud_cfg     = false,
+  Boolean               $no_noop              = false,
+) {
+</code></pre></div></div>
+
+<p>The update booleans have effect only on Linux and control where we want to set the hostname:</p>
+
+<ul>
+  <li>
+    <p>On /etc/hostname and via the hostname command (<code class="highlighter-rouge">update_hostname</code>)</p>
+  </li>
+  <li>
+    <p>With Puppet’s host resource (<code class="highlighter-rouge">update_host_entry</code>)</p>
+  </li>
+  <li>
+    <p>On /etc/sysconfig/network (only on RHEL derivatives) (<code class="highlighter-rouge">update_network_entry</code>)</p>
+  </li>
+  <li>
+    <p>On /etc/cloud/cloud.cfg.d/99_preserve_hostname.cfg (requires cloud config) (<code class="highlighter-rouge">update_cloud_cfg</code>)</p>
+  </li>
+</ul>
+
+<p>On Windows if $update_hostname is true and hostname is not the same configured, the <code class="highlighter-rouge">netdom renamecomputer</code> command is run.</p>
+
+<p>Usage is the usual, include in manifests (ie: in role classes):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include psick::proxy
+</code></pre></div></div>
+
+<p>Or via any other classification option you use.</p>
+
+<p>Configuration via hiera can be as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psick::hostname::host: my_host
+psick::hostname::fqdn: my_host.my_domain
+psick::hostname::dom: my_domain
+psick::hostname::ip: "%{::ipaddress}"
+</code></pre></div></div>
+
+<p>These are two of the several psick profiles for common uses. They are less complete than dedicated modules but can do most of the expected work without the need of additional modules, other than psick, keeping the whole psick philosofy of giving choice on what profiles to use and what to configure with them.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

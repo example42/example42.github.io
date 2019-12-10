@@ -1,0 +1,87 @@
+I"v<p>A few weeks ago we introduced version 4 of example42 Puppet modules with a radical change in the <a href="https://github.com/example42/control-repo">reference repository</a> layout.</p>
+
+<p>We’ve started to work on a <strong>Puppet 4 only compatible</strong> control-repo setup and we explored alternatives or optimizations to current best practices.</p>
+
+<p>The term “control-repo” is relatively recent in Puppet world but its function has been common for a while: a single place where we manage our whole Puppet setup: our data, our code, the public modules we use.</p>
+
+<p>Needless to say that a good stating control-repo is vital to a sane Puppet setup.</p>
+
+<p>What we present here is a sample modern, rich featured, opinionated and customizable Puppet control repo with:</p>
+
+<ul>
+  <li>
+    <p>Sample Hiera structure and data, using hiera-eyaml</p>
+  </li>
+  <li>
+    <p>Local profiles optimized for Puppet 4 usage.</p>
+  </li>
+  <li>
+    <p>Use of experimental Puppet 4 optimized modules based on new design principles</p>
+  </li>
+  <li>
+    <p>Multiple, easily customizable, Vagrant environments, where to test the same control-repo code</p>
+  </li>
+  <li>
+    <p>Docker integration: Data driven build images configuration and control-repo testing environments</p>
+  </li>
+  <li>
+    <p>Fabric integration for Puppet code development, testing and deployment</p>
+  </li>
+  <li>
+    <p>Tiny Puppet usage for extremely compact, consistent and readable code</p>
+  </li>
+</ul>
+
+<p>You can give it a try with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone git://github.com/example42/control-repo.git
+cd control-repo
+r10k puppetfile install -v
+</code></pre></div></div>
+
+<p>The starting code and data organization and nodes classification is intended to be adapted ad customized according to different needs. By default in <code class="highlighter-rouge">manifests/site.pp</code> it’s used a node-less classification based on 3 top scope variables, <code class="highlighter-rouge">$::role</code>, <code class="highlighter-rouge">$::env</code>, <code class="highlighter-rouge">$::zone</code>: they can be set as facts (as done in the provided Vagrant environments) or via an External Node Classifier.</p>
+
+<p>We don’t use role classes: the profiles to include in each node are defined via Hiera, using the <code class="highlighter-rouge">profiles</code> key. The sample hierarchy in <code class="highlighter-rouge">hiera.yaml</code> uses data in <code class="highlighter-rouge">hieradata</code>.</p>
+
+<p>In the local site profile class we manage the baseline of resources common to all nodes, and role specific ones.</p>
+
+<p>The public modules installed via r10k are from various sources, not only example42 ones.</p>
+
+<p>The control-repo code is far from being complete, we are experimenting design patterns for modules and this is an ongoing process. Just consider that you can, and actually should, decide what to use and what to change in the code, the data and the classification logic: the existing base code allows any customization in a totally data driven way.</p>
+
+<h3 id="control-repo-testing">Control repo testing</h3>
+
+<p>You can test the control repo code and data while you develop or in your Continuous Integration pipeline.</p>
+
+<p>We provide both Vagrant and Docker based testing environments and some Fabric tasks to work with them.</p>
+
+<p>To install the required vagrant plugins:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fab vagrant.setup
+</code></pre></div></div>
+
+<p>To see the status of the Vagrant environments in <code class="highlighter-rouge">vagrant/environments</code> (there are different ones for different purposes):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fab vagrant.status
+</code></pre></div></div>
+
+<p>To start and provision a Vagrant vm do something like (or run the relevant Vagrant commands in the chosen environment):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fab vagrant.up:vm=dev-local-docker-host-01
+fab vagrant.provision:vm=dev-local-docker-host-01
+</code></pre></div></div>
+
+<p>To build locally Docker images for different OS (using the data in <code class="highlighter-rouge">hieradata/role/docker_multios_build.yaml</code>)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fab docker.multios_build
+</code></pre></div></div>
+
+<p>To test a role on a Docker instance with puppet-agent preinstalled:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fab docker.provision:puppetrole=tpweb,image=centos-7
+</code></pre></div></div>
+
+<p>Developments on this control-repo and the example42 modules are going to proceed while we explore patterns for Puppet infrastructures based on Puppet 4 and beyond.</p>
+
+<p>Stay tuned, wonderful things happening here.</p>
+:ET

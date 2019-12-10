@@ -1,0 +1,45 @@
+I"<p>example42 trainers conducts the official Puppet Training courses since 2011.
+Since then Puppet has adopted best practices multiple times. These adoptions also had an impact on the official training courses material.</p>
+
+<h2 id="the-old-courses">The old courses</h2>
+
+<p>In the early days everybody was using a Linux based virtual machine on every attendee laptop.
+The last major update was done in 2016, when the course material switched to Puppet 4 and people used a Docker container to run their course exercises.
+Containers were provided by the trainer.
+Course management was built around a self developed tooling where attendees were able to create their account (which was then used in <a href="https://gitea.io/en-us/">Gitea</a>, Puppet Enterprise Console and to instantiate the containers).</p>
+
+<p>The training was fully focusing on Linux distributions and Windows was explained but not actively done. All attendees were asked to have knowledge in vim.</p>
+
+<p>Many attendees complained about to few active doings and to deep introduction into Puppet instead of providing a good starting point for building their infrastructure.</p>
+
+<h2 id="the-new-courses">The new courses</h2>
+
+<p>With the newest content change, Puppet renamed the Puppet Fundamentals Training to “Getting Started with Puppet”.</p>
+
+<h3 id="initialising-puppet-in-your-infrastructure">Initialising Puppet in your infrastructure</h3>
+
+<p>The new course setup is different. We start using <a href="https://puppet.com/docs/bolt/0.x/bolt.html">bolt</a> (the Puppet open source ad-hoc task utility) to install Puppet agent on non-managed systems within a cloud based setup. We still have a course management, but git server was switched from gitea to <a href="https://about.gitlab.com/">GitLab</a>.</p>
+
+<h3 id="step-by-step-declaration-of-your-infrastructure">Step-by-step declaration of your infrastructure</h3>
+
+<p>The whole training content is now built around a <a href="https://puppet.com/docs/pe/2018.1/control_repo.html">control repository</a>. Instead of coding everything by ourselves, we immediately introduce the Puppet Modules and the Roles and Profile pattern.</p>
+
+<p>In the base course we will not go too deep into the panning of a good <a href="https://puppet.com/docs/puppet/5.4/hiera_intro.html">hiera</a> setup (this is done in an advanced course), but we will use an existing hiera configuration to separate data from code.</p>
+
+<h3 id="on-premise-and-off-premise-usage-of-puppet">On-Premise and off-premise usage of Puppet</h3>
+
+<p>As the course is now cloud based, we will have hands-on exercises for managing Windows systems and different Linux distributions on AWS.
+This opens the course also for Windows administrators.</p>
+
+<h3 id="your-code-your-environment">Your code, your environment</h3>
+
+<p>People can now choose the IDE they prefer. Depending on existing knowledge it is now possible to either use VIM or Visual Studio Code.</p>
+
+<h2 id="training-availability">Training Availability</h2>
+
+<p>The new courses are available from Puppet starting at <a href="https://puppet.com/puppetizelive">Puppetize Live</a> in October 2018.</p>
+
+<p>example42 will switch to the new training courses after we have verified the setup, see our <a href="https://www.example42.com/#training">list of upcoming training courses</a>.</p>
+
+<p>Martin Alfke</p>
+:ET

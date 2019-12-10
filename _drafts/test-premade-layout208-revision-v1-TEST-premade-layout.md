@@ -1,0 +1,865 @@
+---
+id: 236
+title: TEST premade layout
+date: 2019-11-29T19:23:40+01:00
+author: ex42
+layout: revision
+guid: http://ex42.kulturbiz.com/208-revision-v1/
+permalink: /208-revision-v1/
+---
+<div class="et_pb_section et_pb_section_426 et_animated et_pb_with_background et_section_regular">
+  <div class="et_pb_row et_pb_row_501">
+    <div class="et_pb_column et_pb_column_1_2 et_pb_column_949  et_pb_css_mix_blend_mode_passthrough">
+      <div class="et_pb_module et_pb_text et_pb_text_643  et_pb_text_align_left et_pb_bg_layout_dark">
+        <div class="et_pb_text_inner">
+          <h1>
+            Learn to Code Websites, Apps & Games
+          </h1>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+      
+      <div class="et_pb_module et_pb_text et_pb_text_644  et_pb_text_align_left et_pb_bg_layout_light">
+        <div class="et_pb_text_inner">
+          <p>
+            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed molestie, velit ut eleifend sollicitudin, neque orci tempor nulla, id sagittis nisi ante nec arcu.
+          </p>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+      
+      <div class="et_pb_button_module_wrapper et_pb_button_131_wrapper  et_pb_module ">
+        <a class="et_pb_button et_pb_custom_button_icon et_pb_button_131 et_animated et_hover_enabled et_pb_bg_layout_light" href="#" data-icon="&#x45;">View Courses</a>
+      </div>
+    </div>
+    
+    <!-- .et_pb_column -->
+    
+    <div class="et_pb_column et_pb_column_1_2 et_pb_column_950  et_pb_css_mix_blend_mode_passthrough et-last-child">
+      <div class="et_pb_module et_pb_image et_pb_image_196 et_animated et-waypoint">
+        <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-01.png" alt="" title="" srcset="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-01.png 862w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-01-300x279.png 300w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-01-768x714.png 768w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-01-480x446.png 480w" sizes="(max-width: 862px) 100vw, 862px" /></span>
+      </div>
+    </div>
+    
+    <!-- .et_pb_column -->
+  </div>
+  
+  <!-- .et_pb_row -->
+</div>
+
+<!-- .et_pb_section -->
+
+<div class="et_pb_section et_pb_section_427 et_section_specialty">
+  <div class="et_pb_row">
+    <div class="et_pb_column et_pb_column_1_3 et_pb_column_951    et_pb_css_mix_blend_mode_passthrough">
+      <div class="et_pb_module et_pb_text et_pb_text_645 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+        <div class="et_pb_text_inner">
+          <h2>
+            WHY EXAMPLE42
+          </h2>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+      
+      <div class="et_pb_module et_pb_divider et_pb_divider_20 et_animated et_pb_divider_position_ et_pb_space">
+        <div class="et_pb_divider_internal">
+        </div>
+      </div>
+      
+      <div class="et_pb_module et_pb_text et_pb_text_646 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+        <div class="et_pb_text_inner">
+          <p>
+            We believe in Open Source, DevOps culture and knowledge sharing. We love Puppet and all the technologies that make IT operations smarter.
+          </p>
+          
+          <p>
+            We offer and share huge IT experience and world-class knowledge of Puppet software and DevOps practices.
+          </p>
+          
+          <p>
+            <strong>>> more about example42</strong>
+          </p>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+      
+      <div class="et_pb_button_module_wrapper et_pb_button_132_wrapper et_pb_button_alignment_left et_pb_module ">
+        <a class="et_pb_button et_pb_custom_button_icon et_pb_button_132 et_animated et_hover_enabled et_pb_bg_layout_light" href="#" data-icon="&#x45;">View All Courses</a>
+      </div>
+    </div>
+    
+    <!-- .et_pb_column -->
+    
+    <div class="et_pb_column et_pb_column_2_3 et_pb_column_952   et_pb_specialty_column  et_pb_css_mix_blend_mode_passthrough et-last-child">
+      <div class="et_pb_row_inner et_pb_row_inner_8 et_animated et_pb_gutters1">
+        <div class="et_pb_column et_pb_column_1_3 et_pb_column_inner et_pb_column_inner_16 et_pb_column_1_2">
+          <div class="et_pb_module et_pb_blurb et_pb_blurb_411 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+            <div class="et_pb_blurb_content">
+              <div class="et_pb_main_blurb_image">
+                <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/10/2019_logo_example42_RGB_square-e1573329469165.png" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+              </div>
+              
+              <div class="et_pb_blurb_container">
+                <h4 class="et_pb_module_header">
+                  <a href="#">Web Development</a>
+                </h4>
+                
+                <div class="et_pb_blurb_description">
+                  <p>
+                    Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- .et_pb_blurb_content -->
+          </div>
+          
+          <!-- .et_pb_blurb -->
+          
+          <div class="et_pb_module et_pb_blurb et_pb_blurb_412 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+            <div class="et_pb_blurb_content">
+              <div class="et_pb_main_blurb_image">
+                <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-icon_1.jpg" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+              </div>
+              
+              <div class="et_pb_blurb_container">
+                <h4 class="et_pb_module_header">
+                  <a href="#">Python</a>
+                </h4>
+                
+                <div class="et_pb_blurb_description">
+                  <p>
+                    Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- .et_pb_blurb_content -->
+          </div>
+          
+          <!-- .et_pb_blurb -->
+          
+          <div class="et_pb_module et_pb_blurb et_pb_blurb_413 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+            <div class="et_pb_blurb_content">
+              <div class="et_pb_main_blurb_image">
+                <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-icon_3.jpg" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+              </div>
+              
+              <div class="et_pb_blurb_container">
+                <h4 class="et_pb_module_header">
+                  <a href="#">UX Design</a>
+                </h4>
+                
+                <div class="et_pb_blurb_description">
+                  <p>
+                    Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- .et_pb_blurb_content -->
+          </div>
+          
+          <!-- .et_pb_blurb -->
+          
+          <div class="et_pb_module et_pb_blurb et_pb_blurb_414 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+            <div class="et_pb_blurb_content">
+              <div class="et_pb_main_blurb_image">
+                <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-icon_5.jpg" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+              </div>
+              
+              <div class="et_pb_blurb_container">
+                <h4 class="et_pb_module_header">
+                  <a href="#">Database Design</a>
+                </h4>
+                
+                <div class="et_pb_blurb_description">
+                  <p>
+                    Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- .et_pb_blurb_content -->
+          </div>
+          
+          <!-- .et_pb_blurb -->
+        </div>
+        
+        <!-- .et_pb_column -->
+        
+        <div class="et_pb_column et_pb_column_1_3 et_pb_column_inner et_pb_column_inner_17 et_pb_column_1_2 et-last-child">
+          <div class="et_pb_module et_pb_blurb et_pb_blurb_415 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+            <div class="et_pb_blurb_content">
+              <div class="et_pb_main_blurb_image">
+                <a href="#"><span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et-pb-icon">&#xe038;</span></span></a>
+              </div>
+              
+              <div class="et_pb_blurb_container">
+                <h4 class="et_pb_module_header">
+                  <a href="#">Javascript</a>
+                </h4>
+                
+                <div class="et_pb_blurb_description">
+                  <p>
+                    Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- .et_pb_blurb_content -->
+          </div>
+          
+          <!-- .et_pb_blurb -->
+          
+          <div class="et_pb_module et_pb_blurb et_pb_blurb_416 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+            <div class="et_pb_blurb_content">
+              <div class="et_pb_main_blurb_image">
+                <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-icon_2.jpg" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+              </div>
+              
+              <div class="et_pb_blurb_container">
+                <h4 class="et_pb_module_header">
+                  <a href="#">HTML & CSS</a>
+                </h4>
+                
+                <div class="et_pb_blurb_description">
+                  <p>
+                    Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- .et_pb_blurb_content -->
+          </div>
+          
+          <!-- .et_pb_blurb -->
+          
+          <div class="et_pb_module et_pb_blurb et_pb_blurb_417 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+            <div class="et_pb_blurb_content">
+              <div class="et_pb_main_blurb_image">
+                <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-icon_4.jpg" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+              </div>
+              
+              <div class="et_pb_blurb_container">
+                <h4 class="et_pb_module_header">
+                  <a href="#">Intro to Coding</a>
+                </h4>
+                
+                <div class="et_pb_blurb_description">
+                  <p>
+                    Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- .et_pb_blurb_content -->
+          </div>
+          
+          <!-- .et_pb_blurb -->
+          
+          <div class="et_pb_module et_pb_blurb et_pb_blurb_418 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+            <div class="et_pb_blurb_content">
+              <div class="et_pb_main_blurb_image">
+                <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-icon_6.jpg" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+              </div>
+              
+              <div class="et_pb_blurb_container">
+                <h4 class="et_pb_module_header">
+                  <a href="#">Apps & Games</a>
+                </h4>
+                
+                <div class="et_pb_blurb_description">
+                  <p>
+                    Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- .et_pb_blurb_content -->
+          </div>
+          
+          <!-- .et_pb_blurb -->
+        </div>
+        
+        <!-- .et_pb_column -->
+      </div>
+      
+      <!-- .et_pb_row_inner -->
+    </div>
+    
+    <!-- .et_pb_column -->
+  </div>
+  
+  <!-- .et_pb_row -->
+</div>
+
+<!-- .et_pb_section -->
+
+<div class="et_pb_section et_pb_section_428 et_pb_with_background et_section_regular">
+  <div class="et_pb_row et_pb_row_502 et_animated">
+    <div class="et_pb_column et_pb_column_1_2 et_pb_column_953  et_pb_css_mix_blend_mode_passthrough">
+      <div class="et_pb_module et_pb_image et_pb_image_197 et_animated et-waypoint">
+        <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-02.png" alt="" title="" srcset="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-02.png 800w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-02-300x281.png 300w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-02-768x720.png 768w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-02-480x450.png 480w" sizes="(max-width: 800px) 100vw, 800px" /></span>
+      </div>
+    </div>
+    
+    <!-- .et_pb_column -->
+    
+    <div class="et_pb_column et_pb_column_1_2 et_pb_column_954  et_pb_css_mix_blend_mode_passthrough et-last-child">
+      <div class="et_pb_module et_pb_text et_pb_text_647 et_animated  et_pb_text_align_left et_pb_bg_layout_dark">
+        <div class="et_pb_text_inner">
+          <h2>
+            Become an expert
+          </h2>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+      
+      <div class="et_pb_module et_pb_divider et_pb_divider_21 et_animated et_pb_divider_position_ et_pb_space">
+        <div class="et_pb_divider_internal">
+        </div>
+      </div>
+      
+      <div class="et_pb_module et_pb_text et_pb_text_648 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+        <div class="et_pb_text_inner">
+          <p>
+            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed molestie, velit ut eleifend sollicitudin, neque orci tempor nulla, id sagittis nisi ante nec arcu. Fusce porta bibendum convallis. Morbi fringilla sollicitudin scelerisque.
+          </p>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+      
+      <div class="et_pb_button_module_wrapper et_pb_button_133_wrapper  et_pb_module ">
+        <a class="et_pb_button et_pb_custom_button_icon et_pb_button_133 et_animated et_hover_enabled et_pb_bg_layout_light" href="#" data-icon="&#x45;">View All Courses</a>
+      </div>
+    </div>
+    
+    <!-- .et_pb_column -->
+  </div>
+  
+  <!-- .et_pb_row -->
+</div>
+
+<!-- .et_pb_section -->
+
+<div class="et_pb_section et_pb_section_429 et_section_regular">
+  <div class="et_pb_row et_pb_row_503">
+    <div class="et_pb_column et_pb_column_1_2 et_pb_column_955  et_pb_css_mix_blend_mode_passthrough">
+      <div class="et_pb_module et_pb_image et_pb_image_198 et_animated et-waypoint">
+        <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/Puppet-Logo-Amber-Black-sm.png" alt="" title="" srcset="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/Puppet-Logo-Amber-Black-sm.png 560w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/Puppet-Logo-Amber-Black-sm-300x106.png 300w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/Puppet-Logo-Amber-Black-sm-480x170.png 480w" sizes="(max-width: 560px) 100vw, 560px" /></span>
+      </div>
+      
+      <div class="et_pb_module et_pb_text et_pb_text_649 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+        <div class="et_pb_text_inner">
+          <h2>
+            WHY PUPPET?
+          </h2>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+      
+      <div class="et_pb_module et_pb_divider et_pb_divider_22 et_animated et_pb_divider_position_ et_pb_space">
+        <div class="et_pb_divider_internal">
+        </div>
+      </div>
+      
+      <div class="et_pb_module et_pb_text et_pb_text_650 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+        <div class="et_pb_text_inner">
+          <p>
+            IT operations can&#8217;t be managed manually. <strong>Automation</strong> is a prerequisite in modern IT, and <strong>Puppet</strong> allows to manage infrastructure as code, improving safety, consistency, and productivity.
+          </p>
+          
+          <p>
+            Puppet is an open-source software configuration tool that automates the administration of your data center. It is platform independent and runs on Linux, Unix, Unix-like and Microsoft Windows systems.
+          </p>
+          
+          <p>
+            You would like to know if you would benefit from Puppet?
+          </p>
+          
+          <p>
+            <strong>>> find out more about Puppet benefits</strong>
+          </p>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+    </div>
+    
+    <!-- .et_pb_column -->
+    
+    <div class="et_pb_column et_pb_column_1_2 et_pb_column_956  et_pb_css_mix_blend_mode_passthrough et-last-child">
+      <div class="et_pb_module et_pb_image et_pb_image_199 et_animated et-waypoint">
+        <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/2019_WhyPuppet_Pic01.jpg" alt="" title="" srcset="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/2019_WhyPuppet_Pic01.jpg 510w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/2019_WhyPuppet_Pic01-300x241.jpg 300w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/2019_WhyPuppet_Pic01-480x386.jpg 480w" sizes="(max-width: 510px) 100vw, 510px" /></span>
+      </div>
+    </div>
+    
+    <!-- .et_pb_column -->
+  </div>
+  
+  <!-- .et_pb_row -->
+  
+  <div class="et_pb_row et_pb_row_504">
+    <div class="et_pb_column et_pb_column_1_2 et_pb_column_957  et_pb_css_mix_blend_mode_passthrough">
+      <div class="et_pb_module et_pb_image et_pb_image_200 et_animated et-waypoint">
+        <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-04.png" alt="" title="" srcset="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-04.png 800w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-04-283x300.png 283w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-04-768x814.png 768w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-04-480x509.png 480w" sizes="(max-width: 800px) 100vw, 800px" /></span>
+      </div>
+    </div>
+    
+    <!-- .et_pb_column -->
+    
+    <div class="et_pb_column et_pb_column_1_2 et_pb_column_958  et_pb_css_mix_blend_mode_passthrough et-last-child">
+      <div class="et_pb_module et_pb_image et_pb_image_201 et_animated et-waypoint">
+        <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-iconArtboard-19-copy-9.jpg" alt="" title="" /></span>
+      </div>
+      
+      <div class="et_pb_module et_pb_text et_pb_text_651 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+        <div class="et_pb_text_inner">
+          <h2>
+            Build your portfolio
+          </h2>
+        </div>
+      </div>
+      
+      <!-- .et_pb_text -->
+      
+      <div class="et_pb_module et_pb_divider et_pb_divider_23 et_animated et_pb_divider_position_ et_pb_space">
+        <div class="et_pb_divider_internal">
+        </div>
+      </div>
+      
+      <div class="et_pb_module et_pb_text et_pb_text_652 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+        <div class="et_pb_text_inner">
+          <h4>
+            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+          </h4>
+          
+          <p>
+            Himenaeos. Sed molestie, velit ut eleifend sollicitudin, neque orci tempor nulla, id sagittis nisi ante nec arcu. Fusce porta bibendum convallis. Morbi fringilla sollicitudin scelerisque. In pellentesque</div> </div> <!-- .et_pb_text --></div> 
+            
+            <!-- .et_pb_column --></div> 
+            
+            <!-- .et_pb_row -->
+            
+            <div class="et_pb_row et_pb_row_505">
+              <div class="et_pb_column et_pb_column_1_2 et_pb_column_959  et_pb_css_mix_blend_mode_passthrough">
+                <div class="et_pb_module et_pb_image et_pb_image_202 et_animated et-waypoint">
+                  <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-iconArtboard-19-copy-10.jpg" alt="" title="" /></span>
+                </div>
+                
+                <div class="et_pb_module et_pb_text et_pb_text_653 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+                  <div class="et_pb_text_inner">
+                    <h2>
+                      Achieve your goals
+                    </h2>
+                  </div>
+                </div>
+                
+                <!-- .et_pb_text -->
+                
+                <div class="et_pb_module et_pb_divider et_pb_divider_24 et_animated et_pb_divider_position_ et_pb_space">
+                  <div class="et_pb_divider_internal">
+                  </div>
+                </div>
+                
+                <div class="et_pb_module et_pb_text et_pb_text_654 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+                  <div class="et_pb_text_inner">
+                    <h4>
+                      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+                    </h4>
+                    
+                    <p>
+                      Himenaeos. Sed molestie, velit ut eleifend sollicitudin, neque orci tempor nulla, id sagittis nisi ante nec arcu. Fusce porta bibendum convallis. Morbi fringilla sollicitudin scelerisque. In pellentesque</div> </div> <!-- .et_pb_text --></div> 
+                      
+                      <!-- .et_pb_column -->
+                      
+                      <div class="et_pb_column et_pb_column_1_2 et_pb_column_960  et_pb_css_mix_blend_mode_passthrough et-last-child">
+                        <div class="et_pb_module et_pb_image et_pb_image_203 et_animated et-waypoint">
+                          <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-05.png" alt="" title="" srcset="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-05.png 800w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-05-228x300.png 228w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-05-779x1024.png 779w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-05-768x1010.png 768w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-isometric-05-480x631.png 480w" sizes="(max-width: 800px) 100vw, 800px" /></span>
+                        </div>
+                      </div>
+                      
+                      <!-- .et_pb_column --></div> 
+                      
+                      <!-- .et_pb_row --></div> 
+                      
+                      <!-- .et_pb_section -->
+                      
+                      <div class="et_pb_section et_pb_section_430 et_pb_with_background et_section_regular">
+                        <div class="et_pb_row et_pb_row_506 et_pb_equal_columns">
+                          <div class="et_pb_column et_pb_column_1_2 et_pb_column_961  et_pb_css_mix_blend_mode_passthrough">
+                            <div class="et_pb_module et_pb_text et_pb_text_655 et_animated  et_pb_text_align_left et_pb_bg_layout_dark">
+                              <div class="et_pb_text_inner">
+                                <h3>
+                                  &#8222;<br /> My entire team was prototyping by the end of the first day!
+                                </h3>
+                              </div>
+                            </div>
+                            
+                            <!-- .et_pb_text -->
+                            
+                            <div class="et_pb_module et_pb_text et_pb_text_656 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+                              <div class="et_pb_text_inner">
+                                <p>
+                                  Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed molestie, velit ut eleifend sollicitudin, neque orci tempor nulla, id sagittis nisi ante nec arcu.
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <!-- .et_pb_text -->
+                            
+                            <div class="et_pb_module et_pb_blurb et_pb_blurb_419 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_dark">
+                              <div class="et_pb_blurb_content">
+                                <div class="et_pb_main_blurb_image">
+                                  <span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/testimonial-avatar.png" alt="" class="et-waypoint et_pb_animation_top" /></span>
+                                </div>
+                                
+                                <div class="et_pb_blurb_container">
+                                  <div class="et_pb_blurb_description">
+                                    <p>
+                                      <strong>John Smith,</strong> Divi Design Initiative
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <!-- .et_pb_blurb_content -->
+                            </div>
+                            
+                            <!-- .et_pb_blurb -->
+                          </div>
+                          
+                          <!-- .et_pb_column -->
+                          
+                          <div class="et_pb_column et_pb_column_1_2 et_pb_column_962 et_pb_section_parallax  et_pb_css_mix_blend_mode_passthrough et-last-child">
+                            <span class="et_parallax_bg_wrap"><span
+						class="et_parallax_bg"
+						style="background-image: url(http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-dot-bg.png);"
+					></span></span> 
+                            
+                            <div class="et_pb_module et_pb_image et_pb_image_204 et_animated et-waypoint">
+                              <span class="et_pb_image_wrap "><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-dots.png" alt="" title="" srcset="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-dots.png 607w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-dots-226x300.png 226w, http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-dots-480x637.png 480w" sizes="(max-width: 607px) 100vw, 607px" /></span>
+                            </div>
+                          </div>
+                          
+                          <!-- .et_pb_column -->
+                        </div>
+                        
+                        <!-- .et_pb_row -->
+                      </div>
+                      
+                      <!-- .et_pb_section -->
+                      
+                      <div class="et_pb_section et_pb_section_431 et_section_regular">
+                        <div class="et_pb_row et_pb_row_507">
+                          <div class="et_pb_column et_pb_column_1_3 et_pb_column_963  et_pb_css_mix_blend_mode_passthrough">
+                            <div class="et_pb_module et_pb_text et_pb_text_657 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+                              <div class="et_pb_text_inner">
+                                <h2>
+                                  FAQ
+                                </h2>
+                              </div>
+                            </div>
+                            
+                            <!-- .et_pb_text -->
+                            
+                            <div class="et_pb_module et_pb_divider et_pb_divider_25 et_animated et_pb_divider_position_ et_pb_space">
+                              <div class="et_pb_divider_internal">
+                              </div>
+                            </div>
+                            
+                            <div class="et_pb_module et_pb_text et_pb_text_658 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+                              <div class="et_pb_text_inner">
+                                <h4>
+                                  Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+                                </h4>
+                                
+                                <p>
+                                  Himenaeos. Sed molestie, velit ut eleifend sollicitudin, neque orci tempor nulla, id sagittis nisi ante nec arcu. Fusce porta bibendum convallis. Morbi fringilla sollicitudin scelerisque. In pellentesque</div> </div> <!-- .et_pb_text -->
+                                  
+                                  <div class="et_pb_button_module_wrapper et_pb_button_134_wrapper et_pb_button_alignment_left et_pb_module ">
+                                    <a class="et_pb_button et_pb_custom_button_icon et_pb_button_134 et_animated et_hover_enabled et_pb_bg_layout_light" href="#" data-icon="&#x45;">Contact Us</a>
+                                  </div></div> 
+                                  
+                                  <!-- .et_pb_column -->
+                                  
+                                  <div class="et_pb_column et_pb_column_1_3 et_pb_column_964  et_pb_css_mix_blend_mode_passthrough">
+                                    <div class="et_pb_module et_pb_blurb et_pb_blurb_420 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+                                      <div class="et_pb_blurb_content">
+                                        <div class="et_pb_main_blurb_image">
+                                          <span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et-pb-icon">&#xe064;</span></span>
+                                        </div>
+                                        
+                                        <div class="et_pb_blurb_container">
+                                          <h4 class="et_pb_module_header">
+                                            <span>Praesent non massa egestas? </span>
+                                          </h4>
+                                          
+                                          <div class="et_pb_blurb_description">
+                                            <p>
+                                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare in neque rutrum imperdiet. Quisque ante ante, lobortis at dapibus et, congue a orci. 
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <!-- .et_pb_blurb_content -->
+                                    </div>
+                                    
+                                    <!-- .et_pb_blurb -->
+                                    
+                                    <div class="et_pb_module et_pb_blurb et_pb_blurb_421 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+                                      <div class="et_pb_blurb_content">
+                                        <div class="et_pb_main_blurb_image">
+                                          <span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et-pb-icon">&#xe064;</span></span>
+                                        </div>
+                                        
+                                        <div class="et_pb_blurb_container">
+                                          <h4 class="et_pb_module_header">
+                                            <span>Quisque ante ante lobortis?</span>
+                                          </h4>
+                                          
+                                          <div class="et_pb_blurb_description">
+                                            <p>
+                                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare in neque rutrum imperdiet. Quisque ante ante, lobortis at dapibus et, congue a orci.
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <!-- .et_pb_blurb_content -->
+                                    </div>
+                                    
+                                    <!-- .et_pb_blurb -->
+                                    
+                                    <div class="et_pb_module et_pb_blurb et_pb_blurb_422 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+                                      <div class="et_pb_blurb_content">
+                                        <div class="et_pb_main_blurb_image">
+                                          <span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et-pb-icon">&#xe064;</span></span>
+                                        </div>
+                                        
+                                        <div class="et_pb_blurb_container">
+                                          <h4 class="et_pb_module_header">
+                                            <span>Lorem ipsum dolor sit?</span>
+                                          </h4>
+                                          
+                                          <div class="et_pb_blurb_description">
+                                            <p>
+                                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare in neque rutrum imperdiet. Quisque ante ante, lobortis at dapibus et, congue a orci.
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <!-- .et_pb_blurb_content -->
+                                    </div>
+                                    
+                                    <!-- .et_pb_blurb -->
+                                  </div>
+                                  
+                                  <!-- .et_pb_column -->
+                                  
+                                  <div class="et_pb_column et_pb_column_1_3 et_pb_column_965  et_pb_css_mix_blend_mode_passthrough et-last-child">
+                                    <div class="et_pb_module et_pb_blurb et_pb_blurb_423 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+                                      <div class="et_pb_blurb_content">
+                                        <div class="et_pb_main_blurb_image">
+                                          <span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et-pb-icon">&#xe064;</span></span>
+                                        </div>
+                                        
+                                        <div class="et_pb_blurb_container">
+                                          <h4 class="et_pb_module_header">
+                                            <span>Tis at dapibus et congue?</span>
+                                          </h4>
+                                          
+                                          <div class="et_pb_blurb_description">
+                                            <p>
+                                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare in neque rutrum imperdiet. Quisque ante ante, lobortis at dapibus et, congue a orci.
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <!-- .et_pb_blurb_content -->
+                                    </div>
+                                    
+                                    <!-- .et_pb_blurb -->
+                                    
+                                    <div class="et_pb_module et_pb_blurb et_pb_blurb_424 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+                                      <div class="et_pb_blurb_content">
+                                        <div class="et_pb_main_blurb_image">
+                                          <span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et-pb-icon">&#xe064;</span></span>
+                                        </div>
+                                        
+                                        <div class="et_pb_blurb_container">
+                                          <h4 class="et_pb_module_header">
+                                            <span>At dapibus et congue?</span>
+                                          </h4>
+                                          
+                                          <div class="et_pb_blurb_description">
+                                            <p>
+                                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare in neque rutrum imperdiet. Quisque ante ante, lobortis at dapibus et, congue a orci.
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <!-- .et_pb_blurb_content -->
+                                    </div>
+                                    
+                                    <!-- .et_pb_blurb -->
+                                    
+                                    <div class="et_pb_module et_pb_blurb et_pb_blurb_425 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+                                      <div class="et_pb_blurb_content">
+                                        <div class="et_pb_main_blurb_image">
+                                          <span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et-pb-icon">&#xe064;</span></span>
+                                        </div>
+                                        
+                                        <div class="et_pb_blurb_container">
+                                          <h4 class="et_pb_module_header">
+                                            <span> Sit Etiam porttitor ligula?</span>
+                                          </h4>
+                                          
+                                          <div class="et_pb_blurb_description">
+                                            <p>
+                                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare in neque rutrum imperdiet. Quisque ante ante, lobortis at dapibus et, congue a orci.
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <!-- .et_pb_blurb_content -->
+                                    </div>
+                                    
+                                    <!-- .et_pb_blurb -->
+                                  </div>
+                                  
+                                  <!-- .et_pb_column --></div> 
+                                  
+                                  <!-- .et_pb_row --></div> 
+                                  
+                                  <!-- .et_pb_section -->
+                                  
+                                  <div class="et_pb_section et_pb_section_432 et_animated et_pb_with_background et_section_regular">
+                                    <div class="et_pb_row et_pb_row_508">
+                                      <div class="et_pb_column et_pb_column_1_2 et_pb_column_966  et_pb_css_mix_blend_mode_passthrough">
+                                        <div class="et_pb_module et_pb_blurb et_pb_blurb_426 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+                                          <div class="et_pb_blurb_content">
+                                            <div class="et_pb_main_blurb_image">
+                                              <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-icon_2.jpg" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+                                            </div>
+                                            
+                                            <div class="et_pb_blurb_container">
+                                              <h4 class="et_pb_module_header">
+                                                <a href="#">Free Courses</a>
+                                              </h4>
+                                              
+                                              <div class="et_pb_blurb_description">
+                                                <p>
+                                                  Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla. Quisque sed augue tincidunt, posuere dui tempor.
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          
+                                          <!-- .et_pb_blurb_content -->
+                                        </div>
+                                        
+                                        <!-- .et_pb_blurb -->
+                                      </div>
+                                      
+                                      <!-- .et_pb_column -->
+                                      
+                                      <div class="et_pb_column et_pb_column_1_2 et_pb_column_967  et_pb_css_mix_blend_mode_passthrough et-last-child">
+                                        <div class="et_pb_module et_pb_blurb et_pb_blurb_427 et_animated  et_pb_text_align_left  et_pb_blurb_position_left et_pb_bg_layout_light">
+                                          <div class="et_pb_blurb_content">
+                                            <div class="et_pb_main_blurb_image">
+                                              <a href="#"><span class="et_pb_image_wrap"><img src="http://ex42.kulturbiz.com/wp-content/uploads/2019/11/coding-icon_8.jpg" alt="" class="et-waypoint et_pb_animation_top" /></span></a>
+                                            </div>
+                                            
+                                            <div class="et_pb_blurb_container">
+                                              <h4 class="et_pb_module_header">
+                                                <a href="#">Premium Courses</a>
+                                              </h4>
+                                              
+                                              <div class="et_pb_blurb_description">
+                                                <p>
+                                                  Duis egestas aliquet aliquet. Maecenas erat eros, fringilla et leo eget, viverra pretium nulla. Quisque sed augue tincidunt, posuere dui tempor.
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          
+                                          <!-- .et_pb_blurb_content -->
+                                        </div>
+                                        
+                                        <!-- .et_pb_blurb -->
+                                      </div>
+                                      
+                                      <!-- .et_pb_column -->
+                                    </div>
+                                    
+                                    <!-- .et_pb_row -->
+                                    
+                                    <div class="et_pb_row et_pb_row_509 et_pb_gutters2">
+                                      <div class="et_pb_column et_pb_column_1_2 et_pb_column_968  et_pb_css_mix_blend_mode_passthrough">
+                                        <div class="et_pb_module et_pb_text et_pb_text_659 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+                                          <div class="et_pb_text_inner">
+                                            <h2>
+                                              Ready to get started?
+                                            </h2>
+                                          </div>
+                                        </div>
+                                        
+                                        <!-- .et_pb_text -->
+                                        
+                                        <div class="et_pb_module et_pb_text et_pb_text_660 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+                                          <div class="et_pb_text_inner">
+                                            <p>
+                                              Get in touch, or create an account
+                                            </p>
+                                          </div>
+                                        </div>
+                                        
+                                        <!-- .et_pb_text -->
+                                      </div>
+                                      
+                                      <!-- .et_pb_column -->
+                                      
+                                      <div class="et_pb_column et_pb_column_1_4 et_pb_column_969  et_pb_css_mix_blend_mode_passthrough">
+                                        <div class="et_pb_button_module_wrapper et_pb_button_135_wrapper et_pb_button_alignment_left et_pb_module ">
+                                          <a class="et_pb_button et_pb_custom_button_icon et_pb_button_135 et_animated et_hover_enabled et_pb_bg_layout_light" href="#" data-icon="&#x45;">Create Account</a>
+                                        </div>
+                                      </div>
+                                      
+                                      <!-- .et_pb_column -->
+                                      
+                                      <div class="et_pb_column et_pb_column_1_4 et_pb_column_970  et_pb_css_mix_blend_mode_passthrough et-last-child">
+                                        <div class="et_pb_button_module_wrapper et_pb_button_136_wrapper et_pb_button_alignment_left et_pb_module ">
+                                          <a class="et_pb_button et_pb_custom_button_icon et_pb_button_136 et_animated et_hover_enabled et_pb_bg_layout_light" href="#" data-icon="&#x45;">Contact Us</a>
+                                        </div>
+                                      </div>
+                                      
+                                      <!-- .et_pb_column -->
+                                    </div>
+                                    
+                                    <!-- .et_pb_row -->
+                                  </div>
+                                  
+                                  <!-- .et_pb_section -->
+                                </p>

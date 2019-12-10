@@ -1,0 +1,75 @@
+I"<p>Starting with Puppet 4 on greenfield is easy.</p>
+
+<p>But how to upgrade from Puppet 3 to Puppet 4 with an existing codebase?</p>
+
+<p>To be honest: it depends.</p>
+
+<p>When you have a really old code base (e.g. you started using Puppet 2.6 or older) and you never adopted to new best practices you might reconsider a full rewrite from scratch. Don’t mess you new Puppet 4 infrastructure with old practices Puppet code.</p>
+
+<p>When you have constantly adopted to best practices and removed deprecations from your Puppet code base you are in the comfortable situation to use tools which help you ensuring that your code is working on Puppet 4, too.</p>
+
+<p>First you want to ensure that you are running the latest Puppet 3 Master version (3.8.x) and that your Agents are upgraded to the same version, too.</p>
+
+<p>There are several ways to identify whether your code works in the same way on Puppet 4:</p>
+
+<ul>
+  <li>check identical catalogs with Puppet 3 and 4</li>
+  <li>test by enabling the Puppet 4 parser on a Puppet 3 Master</li>
+  <li>integration testing with different Puppet versions</li>
+</ul>
+
+<p>Checking identical catalogs needs a Puppet code extension. You can choose between <a href="https://github.com/acidprime/puppet-catalog-diff">zack/catalog_diff</a> or <a href="https://github.com/github/octocatalog-diff">github/octocatalog_diff</a> or <a href="https://github.com/puppetlabs/puppetlabs-catalog_preview">puppetlabs/puppetlabs-catalog_preview</a>.</p>
+
+<p>All three tools will generate an overview on where the catalog contains differences.</p>
+
+<p>To make use of catalog_diff you might want to place a new Puppet 4 based Master in place. On your Puppet 3 Master you want to give access to facts and catalogs</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># allow the diff server to query facts
+path  /facts
+method find, search
+auth any
+allow diff.example.com
+
+# allow the diff server to retrieve any catalog
+path ~ ^/catalog/([^/]+)$
+method find
+allow $1
+allow diff.example.com
+</code></pre></div></div>
+
+<p>Now you can make use of the <code class="highlighter-rouge">puppet catalog</code> command.</p>
+
+<p>The output will tell you where differences in the catalog occur.
+e.g.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resource counts:
+  Old: 2
+  New: 2
+
+Catalogs contain the same resources by resource title
+
+
+Individual Resource differences:
+Old Resource:
+  file{"/tmp/foo":
+    content =&gt; d3b07384d113edec49eaa6238ad5ff00
+  }
+
+New Resource:
+  file{"/tmp/foo":
+    content =&gt; dbb53f3699703c028483658773628452
+  }
+</code></pre></div></div>
+
+<p>If you want to use puppetlabs catalog-preview tool you need latest Puppet 3.8 with two environments: your production environment with your working puppet code and a copy of that where you enable the future parser.</p>
+
+<p>Then you can run the Puppet preview command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet preview --preview-environment future_production &lt;nodename&gt;
+</code></pre></div></div>
+
+<p>‘future_production’ is the copy of your environment with future parser enabled.
+Puppet preview not only shows catalog diff, but also shows code deprecation warnings and many more.</p>
+
+<p>Martin Alfke</p>
+:ET

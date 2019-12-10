@@ -1,0 +1,810 @@
+I"��<h3 id="example42-puppet-tutorial---part-2">example42 Puppet Tutorial - Part 2</h3>
+
+<p>This is the second post of a series of articles covering an introduction to Puppet.
+Take your time digging through this posting as this a very dense summary with lots of information.</p>
+
+<p>In the <a href="https://www.example42.com/2018/04/09/puppet_tutorial_part_1/">first post</a> I started with Puppet agent installation and how to use Puppet and Facter to analyze your system. Next topics have been the introduction to the Puppet programming language (DSL), how to setup the central Puppet master and how to connect Puppet agents to the Puppet master.</p>
+
+<p>This posting will cover Puppet code location and structure like modules, code logic and variables and how to add external facts to your systems. Besides this I will introduce parameters and the concept of separating code and data by using hiera.</p>
+
+<p>The third part will explain how to make use of upstream Puppet libraries when describing your own infrastructure, how to best classify nodes and where to place the code.</p>
+
+<p>At the last posting I will combine what I have shown and explain how to make use of the example42 <a href="https://github.com/example42/psick.git">PSICK control repository</a>, the <a href="https://github.com/example42/puppet-psick.git">PSICK module</a> and the <a href="https://github.com/example42/psick-hieradata">PSICK hieradata</a>.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#example42-puppet-tutorial---part-2" id="markdown-toc-example42-puppet-tutorial---part-2">example42 Puppet Tutorial - Part 2</a>    <ul>
+      <li><a href="#puppet-code-location" id="markdown-toc-puppet-code-location">Puppet code location</a></li>
+      <li><a href="#modules-and-classes" id="markdown-toc-modules-and-classes">Modules and Classes</a></li>
+      <li><a href="#puppet-variables" id="markdown-toc-puppet-variables">Puppet Variables</a></li>
+      <li><a href="#puppet-code-logic" id="markdown-toc-puppet-code-logic">Puppet Code Logic</a></li>
+      <li><a href="#class-parameters" id="markdown-toc-class-parameters">Class Parameters</a></li>
+      <li><a href="#node-classification" id="markdown-toc-node-classification">Node classification</a></li>
+      <li><a href="#dynamic-configuration-files" id="markdown-toc-dynamic-configuration-files">Dynamic configuration files</a></li>
+      <li><a href="#separation-of-code-and-data" id="markdown-toc-separation-of-code-and-data">Separation of Code and Data</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="puppet-code-location">Puppet code location</h4>
+
+<p>Puppet code is placed on the Puppet master and is usally located in <code class="highlighter-rouge">/etc/puppetlabs/code/environments/production</code>.</p>
+
+<p>This directory has a special name: the “production environment path”. The name “production” refers to the state of your Puppet code, not to the stage of your systems.</p>
+
+<p>Think about the following scenario:</p>
+
+<p>The Ops Team is building an infrastructure in autmated way. The Dev Team uses this infrastructure. Where will the Ops Team test their changes? On the platform where the Dev Team is doing their work? What will happen if Ops breaks the infrastructure?</p>
+
+<p>In this case it is best, to see the Development platform as a stable infrastructure with SLA. But this means, that Ops must have a development platform by themselves.
+Let’s also rename the teams: Ops is now Infrastructure Development, Dev is now Application Development.</p>
+
+<p>You can visualize the differences by the following table:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Team</th>
+      <th>Infrastructure Development</th>
+      <th>Devevelopment</th>
+      <th>Testing</th>
+      <th>Production</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Application Development</td>
+      <td>-</td>
+      <td>Development</td>
+      <td>Testing</td>
+      <td>Production</td>
+    </tr>
+    <tr>
+      <td>Infrastructure Development</td>
+      <td>Development</td>
+      <td>Production</td>
+      <td>Production</td>
+      <td>Production</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Within the environment we have a strict naming convention of content:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/puppetlabs/code/environment/
+  \- production/
+    |- environment.conf  # &lt;- Here you configure your environment
+    |- manifests/
+    |  \- site.pp        # &lt;- Here you place the Node Classification
+    \- modules/
+        \- &lt;module&gt;      # &lt;- Here you place modules
+</code></pre></div></div>
+
+<h4 id="modules-and-classes">Modules and Classes</h4>
+
+<p>A module is a directory located in the <code class="highlighter-rouge">$modulepath</code> configured location. This configuration is done in <code class="highlighter-rouge">environment.conf</code> and has the following default setting:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>modulepath = ./modules:$basemodulepath
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">$basemodulepath</code> configuration is a Puppet default and is especially needed if you are using Puppet Enterprise.</p>
+
+<p>Best option is to see a module as a small part of your platform like ssh, ldap, apache, nginx, postfix, exim, mysql, postgresql, firewall, …</p>
+
+<p>Aditionally there are some modules which don’t configure anything, but which provide extensions to Puppet (e.g. stdlib, concat, inifile).</p>
+
+<p>A module has again a strict directory naming convention:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;module&gt;/
+  |- manifests/  # &lt;- Here you place your Puppet classes
+  |- files/      # &lt;- Here you place static configuration files
+  \- templates/  # &lt;- Here you place dynamic generated configuration files
+</code></pre></div></div>
+
+<p>Let’s start with the content of the manifests directory. Here you add classes. Classes are written in Puppet DSL (like the puppetserver.pp file from last weeks posting).</p>
+
+<p>There is just one more thing which is different to the puppetserver.pp file:
+In the puppetserver.pp file we directly placed Puppet DSL code. In a class we wrap this Puppet DSL content into a class definition:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">class</span> <span class="n">puppetserver</span> <span class="p">{</span>
+  <span class="k">package</span> <span class="p">{</span> <span class="s1">'puppetserver'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="n">service</span> <span class="p">{</span> <span class="s1">'puppetserver'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">running</span><span class="p">,</span>
+    <span class="n">enable</span> <span class="p">=&gt;</span> <span class="nb">true</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="n">file</span> <span class="p">{</span> <span class="s1">'/etc/motd'</span><span class="p">:</span>
+    <span class="n">ensure</span>  <span class="p">=&gt;</span> <span class="n">file</span><span class="p">,</span>
+    <span class="n">content</span> <span class="p">=&gt;</span> <span class="s2">"# This is puppetserver</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The difference: a class definition is part of your Puppet code and will only be added to a nodes catalog if a class declaration is added. Class declaration is a concept we explain in the next posting.</p>
+
+<p>This time I concentrate on the concept of classes, the DSL and the naming convention.</p>
+
+<p>Usually I refer to classes as parts of modules. Or better: classes are within the “namespace” of a module. The name of the module (to be more precise: the directory name) will always be part of the class. This allows you to easily identify to which module a class belongs to.</p>
+
+<p>Names of classes must follow a strict ruleset. There is one special class - the main class of a module, which is placed in a file called <code class="highlighter-rouge">init.pp</code>.</p>
+
+<p>Think about a SSH module:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/puppetlabs/code/environment/prpoduction/modules/ssh/
+  \- manifests/
+     \- init.pp    # &lt;- main class of ssh module
+</code></pre></div></div>
+
+<p>The init.pp file will start with the term “class” and then use the module name:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ssh {
+}
+</code></pre></div></div>
+
+<p>Inside of a class you can put Puppet DSL code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">class</span> <span class="n">ssh</span> <span class="p">{</span>
+  <span class="k">package</span> <span class="p">{</span> <span class="s1">'openssh-server'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="k">package</span> <span class="p">{</span> <span class="s1">'openssh-client'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="n">service</span> <span class="p">{</span> <span class="s1">'sshd'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">running</span><span class="p">,</span>
+    <span class="n">enable</span> <span class="p">=&gt;</span> <span class="nb">true</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This will ensure that you have an SSH daemon running with default configuration. I already showed how you can manage the content of a file. But placing the sshd_config file content inside the class will lead to bad readable code. Let’s assume that you want to deploy one version of sshd_config file to all systems. In this case you can use the source parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file { '/etc/ssh/sshd_config':
+  ensure =&gt; file,
+  source =&gt; 'puppet:///modules/ssh/sshd_config',
+}
+</code></pre></div></div>
+
+<p>Looking weird? I will explain:</p>
+
+<p>The parameter <code class="highlighter-rouge">source</code> will be part of the agents catalog. So the agent must learn where to get the desired file from. That is the reason why you specify an URI. The ‘puppet’ protocol is shorthand for https on port 8140 including client certificate (the default Puppet connectivity behavior). We omit the servername as we have that one configured in puppet.conf file. On the Puppet server you have a Puppet internal “mount point” available, pointing to the modules directory. Now you only must tell the Puppet server which module you are referring to and what is the filename inside the modules file directory.</p>
+
+<p>Please note that you must omit the files directory name!</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet:///modules/ssh/sshd_config
+&lt;protocol&gt;://&lt;server&gt;/modules/&lt;modulename&gt;/&lt;file in files directory&gt;
+</code></pre></div></div>
+
+<p>But what happens if the SSH daemon is already running? Puppet will ensure that the config file will get updated. But the service will continue running with the old configuration.</p>
+
+<p>In this case you must tell the service resource that it should restart upon config file changes. This is done by using a metaparameter.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file { '/etc/ssh/sshd_config':
+  ensure =&gt; file,
+  source =&gt; 'puppet:///modules/ssh/sshd_config',
+  notify =&gt; Service['sshd'],
+}
+</code></pre></div></div>
+
+<p>The notify parameter uses a reference to a declared resource type. The resource type is written with capital letter and afterwards you use the title in brackets.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Type['title']
+</code></pre></div></div>
+
+<p>Another solution is to use the chaining pattern:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>File['/etc/ssh/sshd_config'] ~&gt; Service['sshd']
+</code></pre></div></div>
+
+<p>Let’s put everything together:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">#</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">puppetlabs</span><span class="p">/</span><span class="n">code</span><span class="p">/</span><span class="n">environments</span><span class="p">/</span><span class="n">production</span><span class="p">/</span><span class="n">modules</span><span class="p">/</span><span class="n">ssh</span><span class="p">/</span><span class="n">manifests</span><span class="p">/</span><span class="n">init</span><span class="p">.</span><span class="n">pp</span>
+<span class="n">class</span> <span class="n">ssh</span> <span class="p">{</span>
+  <span class="k">package</span> <span class="p">{</span> <span class="s1">'openssh-server'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="k">package</span> <span class="p">{</span> <span class="s1">'openssh-client'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="n">file</span> <span class="p">{</span> <span class="s1">'/etc/ssh/sshd_config'</span><span class="p">:</span>
+   <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">file</span><span class="p">,</span>
+   <span class="n">source</span> <span class="p">=&gt;</span> <span class="s1">'puppet:///modules/ssh/sshd_config'</span><span class="p">,</span>
+   <span class="n">notify</span> <span class="p">=&gt;</span> <span class="n">Service</span><span class="p">[</span><span class="s1">'sshd'</span><span class="p">],</span>
+  <span class="p">}</span>
+  <span class="n">service</span> <span class="p">{</span> <span class="s1">'sshd'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">running</span><span class="p">,</span>
+    <span class="n">enable</span> <span class="p">=&gt;</span> <span class="nb">true</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And the configuration file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/code/environments/production/modules/ssh/files/sshd_config
+Port 22
+PermitRootLogin no
+PubkeyAuthentication yes
+AuthorizedKeysFile      .ssh/authorized_keys
+UsePAM yes
+UseDNS no
+Subsystem       sftp    /usr/libexec/openssh/sftp-server
+</code></pre></div></div>
+
+<h4 id="puppet-variables">Puppet Variables</h4>
+
+<p>But what if one system needs a different configuration? e.g. allow root access or switch port.
+This would require a second configuratoin file and a class adopted to only one specifc system.
+Or what if you must manage SSH on another UNIX system where paths are different?</p>
+
+<p>Puppet allows you to build flexible code by making use of variables. A variable in Puppet is easily identified by having a dollar sign: <code class="highlighter-rouge">$variable</code>.</p>
+
+<p>You can assign values to variables - but within a class you can not reassign the same variable a second time. Variables in Puppet are more like static artifacts and Puppet is not a scripting language.</p>
+
+<p>Next you can check variables whether they have a value, you can check for specifc values or for regular expressions.</p>
+
+<p>Check for variable having a value:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$var1 = false
+if $var1 {
+  # Puppet code
+} else {          # &lt;- else is optional
+  # Puppet code
+}
+</code></pre></div></div>
+
+<p>Checking a variable like in the example above will return true in the following cases:</p>
+
+<ol>
+  <li>the variable has the bool value <code class="highlighter-rouge">true</code></li>
+  <li>the variable has any content (Array, Hash String or even an empty string)</li>
+</ol>
+
+<p>Check for variable having specific value:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$var2 = 'dbmaster'
+if $var2 == 'dbmaster' {
+  # Puppet code
+}
+</code></pre></div></div>
+
+<p>Check for variable using regular expression</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$var3 = 'db22.domain.com'
+if $var ~= /^db\d+\.domain\.com$/ {
+  # Puppet code
+}    
+</code></pre></div></div>
+
+<h4 id="puppet-code-logic">Puppet Code Logic</h4>
+
+<p>Variables will be mostly used in Puppet code logic: use correct package names or file paths depending on Linux distribution name.</p>
+
+<p>This is where the <code class="highlighter-rouge">case</code> function will be useful:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>case $::facts['os']['name'] {
+  'CentOS', 'Amazon', 'RHEL': {
+    # Puppet code for RedHat based systems
+  }
+  'Ubuntu', 'Debian': {
+    # Puppet code for Debian based systems
+  }
+  'SLES': {
+    # Puppet code for SuSE based systems
+  }
+  default: {
+    # Optional default for any other OS
+  }
+}
+</code></pre></div></div>
+
+<p>What is this <code class="highlighter-rouge">$::facts['os']['name']</code> thing? Remeber post 1 when I was introducing <code class="highlighter-rouge">facter</code>?
+Facts are available to Puppet code within a special variable: <code class="highlighter-rouge">$::facts</code>. All data are stored as a hash inside this variable.</p>
+
+<p>On the command line you were using <code class="highlighter-rouge">facter os</code> or <code class="highlighter-rouge">facter os.name</code> to access specific facts. Within Puppet code you must use the <code class="highlighter-rouge">$::facts</code> variable and put the elements into brackets and quote them.</p>
+
+<p>You might want to add your own set of variables during system provisioning. e.g. information on which datacenter the system is running in, what is the usecase of the system and whether it is a development or production system.</p>
+
+<p>You can add these facts easily by placing files into a specific directory (<code class="highlighter-rouge">/etc/puppetlabs/facter/facts.d/</code>). Don’t worry, if the directory does not exist, just create it.</p>
+
+<p>In this directory you can place:</p>
+
+<ul>
+  <li>.yaml files - with yaml syntax</li>
+  <li>.json files - with json syntax</li>
+  <li>.txt files - with key=value syntax</li>
+</ul>
+
+<p>Now you can create information on your datacenter to a node:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/facter/facts.d/provision_facts.yaml
+---
+datacenter: 'london'
+application:
+  name: 'cms'
+  stage: 'dev'
+</code></pre></div></div>
+
+<p>You can query these facts by using <code class="highlighter-rouge">facter -p</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>facter -p datacenter
+london
+facter -p application
+{
+  "name" =&gt; "cms",
+  "stage" =&gt; "dev"
+}
+</code></pre></div></div>
+
+<p>Let’s get back to the Puppet code:</p>
+
+<p>Now we can rewrite the SSH class to also work on Debian systems:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">#</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">puppetlabs</span><span class="p">/</span><span class="n">code</span><span class="p">/</span><span class="n">environments</span><span class="p">/</span><span class="n">production</span><span class="p">/</span><span class="n">modules</span><span class="p">/</span><span class="n">ssh</span><span class="p">/</span><span class="n">manifests</span><span class="p">/</span><span class="n">init</span><span class="p">.</span><span class="n">pp</span>
+<span class="n">class</span> <span class="n">ssh</span> <span class="p">{</span>
+  <span class="k">case</span> <span class="p">$::</span><span class="n">facts</span><span class="p">[</span><span class="s1">'os'</span><span class="p">][</span><span class="s1">'family'</span><span class="p">]</span> <span class="p">{</span>
+    <span class="s1">'RedHat'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">$</span><span class="n">packages</span> <span class="p">=</span> <span class="p">[</span><span class="s1">'openssh-server'</span><span class="p">,</span> <span class="s1">'openssh-client'</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="s1">'Debian'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">$</span><span class="n">packages</span> <span class="p">=</span> <span class="p">[</span><span class="s1">'ssh'</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">package</span> <span class="p">{</span> <span class="p">$</span><span class="n">packages</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="n">file</span> <span class="p">{</span> <span class="s1">'/etc/ssh/sshd_config'</span><span class="p">:</span>
+   <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">file</span><span class="p">,</span>
+   <span class="n">source</span> <span class="p">=&gt;</span> <span class="s1">'puppet:///modules/ssh/sshd_config'</span><span class="p">,</span>
+   <span class="n">notify</span> <span class="p">=&gt;</span> <span class="n">Service</span><span class="p">[</span><span class="s1">'sshd'</span><span class="p">],</span>
+  <span class="p">}</span>
+  <span class="n">service</span> <span class="p">{</span> <span class="s1">'sshd'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">running</span><span class="p">,</span>
+    <span class="n">enable</span> <span class="p">=&gt;</span> <span class="nb">true</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here we use another thing within Puppet: at a title you are able to use an array. Puppet internally will split the array up into single package resource type declarations.</p>
+
+<h4 id="class-parameters">Class Parameters</h4>
+
+<p>But how do you deal with a single node to allow root ssh access?</p>
+
+<p>You have multiple possible solutions like creating an external fact on the node, and check for existance of the fact. But that is highly unflexible. Instead you can use class parameters.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/code/environments/production/modules/ssh/manifests/init.pp
+class ssh (
+  Boolean $permit_root = true,
+){
+  # Puppet code
+}
+</code></pre></div></div>
+
+<p>At the parameter we specify the expected data type and we provide a default value.</p>
+
+<p>But how to now declare the class?</p>
+
+<h4 id="node-classification">Node classification</h4>
+
+<p>The most simple approach (on small platforms) is the manifest based node classification. Remeber the environment directory structure where I showed the <code class="highlighter-rouge">manifests</code> directory with <code class="highlighter-rouge">site.pp</code> file inside? THis is the place where you will place information on your nodes.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/code/environments/production/manifests/site.pp
+
+node 'agent1.example42.training' {
+}
+</code></pre></div></div>
+
+<p>There are two ways on how to inform the Puppet server that he should add a class to the node’s catalog:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>include ssh or
+
+class { 'ssh':
+}
+</code></pre></div></div>
+
+<p>When using the second approach, you are able to specify class parameters:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class { 'ssh':
+  permit_root =&gt; true,
+}
+</code></pre></div></div>
+
+<h4 id="dynamic-configuration-files">Dynamic configuration files</h4>
+
+<p>Now we must ensure that Puppet uses the provided parameter inside a configuration file. Which means the configuration file must be built during Puppet catalog compilation. This is where templates come into place.</p>
+
+<p>Puppet templates are plain text files which use opening (<code class="highlighter-rouge">&lt;%</code>) and closing (<code class="highlighter-rouge">%&gt;</code>) tags to identify where the template engine should do something. The content within the tags is just Puppet DSL code.</p>
+
+<p>Templates are - like files - part of the module, but are not in the files folder, but in the templates directory. Modern Puppet uses the EPP template engine which requires that templates must have the file ending <code class="highlighter-rouge">.epp</code>.</p>
+
+<p>In this case you want the template engine to check for the value of the parameter <code class="highlighter-rouge">permit_root</code> and set the correct configuration value:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/code/environments/production/modules/ssh/templates/sshd_config.epp
+Port 22
+&lt;% if $ssh::permit_root { %&gt;
+PermitRootLogin yes
+&lt;% } else { %&gt;
+PermitRootLogin no
+&lt;% } %&gt;
+PubkeyAuthentication yes
+AuthorizedKeysFile      .ssh/authorized_keys
+UsePAM yes
+UseDNS no
+Subsystem       sftp    /usr/libexec/openssh/sftp-server
+</code></pre></div></div>
+
+<p>Using the template is different to using a static file. At the static file we were managing the <code class="highlighter-rouge">source</code>. Now you must manage the <code class="highlighter-rouge">content</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file { '/etc/ssh/sshd_config':
+  ensure  =&gt; file,
+  content =&gt; epp('ssh/sshd_config.epp'),
+}
+</code></pre></div></div>
+
+<p>The template validation takes place on the Puppet master while compiling the catalog. So there is no need to specify the protocol or the server or telling the server that it should look in a module. You only specify the module and the name of the file in the templates directory.</p>
+
+<p>This will give you the following Puppet code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">#</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">puppetlabs</span><span class="p">/</span><span class="n">code</span><span class="p">/</span><span class="n">environments</span><span class="p">/</span><span class="n">production</span><span class="p">/</span><span class="n">modules</span><span class="p">/</span><span class="n">ssh</span><span class="p">/</span><span class="n">manifests</span><span class="p">/</span><span class="n">init</span><span class="p">.</span><span class="n">pp</span>
+<span class="n">class</span> <span class="n">ssh</span> <span class="p">(</span>
+  <span class="k">Boolean</span> <span class="p">$</span><span class="n">permit_root</span> <span class="p">=</span> <span class="nb">true</span><span class="p">,</span>
+<span class="p">){</span>
+  <span class="k">case</span> <span class="p">$::</span><span class="n">facts</span><span class="p">[</span><span class="s1">'os'</span><span class="p">][</span><span class="s1">'family'</span><span class="p">]</span> <span class="p">{</span>
+    <span class="s1">'RedHat'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">$</span><span class="n">packages</span> <span class="p">=</span> <span class="p">[</span><span class="s1">'openssh-server'</span><span class="p">,</span> <span class="s1">'openssh-client'</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="s1">'Debian'</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">$</span><span class="n">packages</span> <span class="p">=</span> <span class="p">[</span><span class="s1">'ssh'</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">package</span> <span class="p">{</span> <span class="p">$</span><span class="n">packages</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+  <span class="p">}</span>
+  <span class="n">file</span> <span class="p">{</span> <span class="s1">'/etc/ssh/sshd_config'</span><span class="p">:</span>
+   <span class="n">ensure</span>  <span class="p">=&gt;</span> <span class="n">file</span><span class="p">,</span>
+   <span class="n">content</span> <span class="p">=&gt;</span> <span class="n">epp</span><span class="p">(</span><span class="s1">'ssh/sshd_config.epp'</span><span class="p">),</span>
+   <span class="n">notify</span>  <span class="p">=&gt;</span> <span class="n">Service</span><span class="p">[</span><span class="s1">'sshd'</span><span class="p">],</span>
+  <span class="p">}</span>
+  <span class="n">service</span> <span class="p">{</span> <span class="s1">'sshd'</span><span class="p">:</span>
+    <span class="n">ensure</span> <span class="p">=&gt;</span> <span class="n">running</span><span class="p">,</span>
+    <span class="n">enable</span> <span class="p">=&gt;</span> <span class="nb">true</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="separation-of-code-and-data">Separation of Code and Data</h4>
+
+<p>But what if you have a large number of systems and each system needs to get configured slightly different. In this case it will become a nightmare when you add each node individually to <code class="highlighter-rouge">manifests/site.pp</code> file or by writing specific puppet code.</p>
+
+<p>This is where Hiera jumps in.
+Hiera allows you to do data lookups, so you can separate code from data.</p>
+
+<p>Think about the following Puppet code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ssh {
+  case $::facts['datacenter'] {
+    'amsterdam': {
+      case $::certname {
+        'gateway.ams.example42.training': {
+          $permit_root = false
+        }
+        'default': {
+          $permit_root = true
+        }
+      }
+      $ssh_port = '22'
+      $ssh_listen = 'enp0s3'
+    }
+    'london': {
+      if $::certname == 'firewall.lon.example42.training' {
+        $permit_root = false
+      } else {
+        if $::certname = 'devel.lon.example42.training {
+          $permit_root = true
+        }
+      }
+      $ssh_port = '222'
+      $ssh_lisen = 'any'
+    }
+  }
+  file { '/etc/ssh/sshd_config':
+    ensure  =&gt; file,
+    content =&gt; epp('ssh/sshd_config.epp'),  # &lt;- template uses variables from above
+  }
+}
+</code></pre></div></div>
+
+<p>Looks like nightmare? Yes, this is nightmare. Let’s start using hiera:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ssh {
+  $permit_root = lookup('permit_root', Boolean, first, false)
+  $ssh_port = lookup('ssh_port', String, first, '22')
+  $ssh_listen = lookup('ssh_listen', String, first, 'enp0s3')
+  file { '/etc/ssh/sshd_config':
+    ensure  =&gt; file,
+    content =&gt; epp('ssh/sshd_config.epp'),  # &lt;- template uses variables from above
+  }
+}
+</code></pre></div></div>
+
+<p>Puppet code now looks cleaner. But where have you hidden the data?
+First: you need a Hiera configuration file located in <code class="highlighter-rouge">/etc/puppetlabs/code/environment/production/hiera.yaml</code>.
+Within the hiera.yaml file, one specifies different layers of data.</p>
+
+<p>Think of hiera layers being a huge ‘chessboard’. At the default ‘chessboard’ every field means a key and has the value written on it.
+With every hiera layer, hiera looks whether it has another ‘chessboard’ which can be placed over the default one. The new layer ‘chessboard’ has some elements unset, which means, you can look through the layer and you see the data from the default ‘chessboard’, some data are overwritten.</p>
+
+<p>I try to visualize (the effective data are printed in <strong>bold</strong></p>
+
+<ol>
+  <li>node agent.ams.example42.training</li>
+</ol>
+
+<ul>
+  <li>Datacenter: Amsterdam</li>
+  <li>Certname: agent.ams.example42.training</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>permit_root</th>
+      <th>ssh_port</th>
+      <th>ssh_listen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Common Data</td>
+      <td>false</td>
+      <td><strong>22</strong></td>
+      <td>any</td>
+    </tr>
+    <tr>
+      <td>Amsterdam Data</td>
+      <td><strong>true</strong></td>
+      <td>—</td>
+      <td><strong>enp0s3</strong></td>
+    </tr>
+    <tr>
+      <td>Node Data</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+
+<ol>
+  <li>node gateway.ams.example42.training</li>
+</ol>
+
+<ul>
+  <li>Datacenter: Amsterdam</li>
+  <li>Certname: gateway.ams.example42.training</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>permit_root</th>
+      <th>ssh_port</th>
+      <th>ssh_listen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Common Data</td>
+      <td>false</td>
+      <td><strong>22</strong></td>
+      <td>any</td>
+    </tr>
+    <tr>
+      <td>Amsterdam Data</td>
+      <td>true</td>
+      <td>—</td>
+      <td><strong>enp0s3</strong></td>
+    </tr>
+    <tr>
+      <td>Node Data</td>
+      <td><strong>false</strong></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+
+<ol>
+  <li>node agent.lon.example42.training</li>
+</ol>
+
+<ul>
+  <li>Datacenter: London</li>
+  <li>Certname: agent.lon.example42.training</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>permit_root</th>
+      <th>ssh_port</th>
+      <th>ssh_listen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Common Data</td>
+      <td><strong>false</strong></td>
+      <td>22</td>
+      <td><strong>any</strong></td>
+    </tr>
+    <tr>
+      <td>London Data</td>
+      <td>—</td>
+      <td><strong>222</strong></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Node Data</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+
+<ol>
+  <li>node firewall.lon.example42.training</li>
+</ol>
+
+<ul>
+  <li>Datacenter: London</li>
+  <li>Certname: firewall.lon.example42.training</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>permit_root</th>
+      <th>ssh_port</th>
+      <th>ssh_listen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Common Data</td>
+      <td><strong>false</strong></td>
+      <td>22</td>
+      <td><strong>any</strong></td>
+    </tr>
+    <tr>
+      <td>London Data</td>
+      <td>—</td>
+      <td><strong>222</strong></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Node Data</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+
+<ol>
+  <li>node devel.lon.example42.training</li>
+</ol>
+
+<ul>
+  <li>Datacenter: London</li>
+  <li>Certname: devel.lon.example42.training</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>permit_root</th>
+      <th>ssh_port</th>
+      <th>ssh_listen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Common Data</td>
+      <td>false</td>
+      <td>22</td>
+      <td><strong>any</strong></td>
+    </tr>
+    <tr>
+      <td>London Data</td>
+      <td>—</td>
+      <td><strong>222</strong></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Node Data</td>
+      <td><strong>true</strong></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Based on these inforation you can build your hierarchies into your hiera.yaml file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/code/environments/production/hiera.yaml
+---
+version: 5
+defaults:
+  datadir: data
+  data_hash: yaml_data
+hierarchy:
+  - name: 'Node Data'
+    path: "nodes/%{trusted.certname}.yaml"
+  - name: 'Data Center Data'
+    path: "datacenters/%{facts.datacenter}.yaml"
+  - name: 'Common Data'
+    path: 'common.yaml'
+</code></pre></div></div>
+
+<p>The data for hiera are placed inside the (relative) path <code class="highlighter-rouge">data</code> (<code class="highlighter-rouge">/etc/puppetlabs/code/environments/production/data</code>).</p>
+
+<p>Your directory structure (using the above examples) will be the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/puppetlabs/code/environments/production/data
+  |- common.yaml
+  |- datacenters/
+  |  |- london.yaml
+  |  \- amsterdam.yaml
+  \- nodes/
+     |- gateway.ams.example42.training.yaml
+     \- devel.lon.example42.training
+</code></pre></div></div>
+
+<p>The content of the files will be YAML structured data containing <code class="highlighter-rouge">key: value</code>.
+e.g.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># common.yaml
+permit_root: false
+ssh_port: '22'
+ssh_listen: 'any'
+</code></pre></div></div>
+
+<p>But now it is up to you to take care to not use duplicate key names.</p>
+
+<p>There is another even more simple way: When declaring a parameterozed class using the <code class="highlighter-rouge">include</code> function, Puppet will automatically query hiera for data.</p>
+
+<p>So you move the lookups to parameters:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ssh (
+  Boolean $permit_root = false,
+  String  $ssh_port    = '22',
+  String  $ssh_listen  = 'enp0s3',
+){
+  file { '/etc/ssh/sshd_config':
+    ensure  =&gt; file,
+    content =&gt; epp('ssh/sshd_config.epp'),  # &lt;- template uses variables from above
+  }
+}
+</code></pre></div></div>
+
+<p>When you just <code class="highlighter-rouge">include ssh</code> Puppet will ask hiera for the parameters in the given namespace: “Hey hiera, do you have a value for namespace <code class="highlighter-rouge">ssh</code> and parameter <code class="highlighter-rouge">permit_root</code>? Or to be short: <code class="highlighter-rouge">ssh::permit_root</code>.</p>
+
+<p>All you have to do is add the namesapces to your keys:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># common.yaml
+ssh::permit_root: false
+ssh::ssh_port: '22'
+ssh::ssh_listen: 'any'
+</code></pre></div></div>
+
+<p>The next posting will explain the concept of re-using existing modules and provide information on why you should see modules similar to libararies. Additionally I will explain the concept of Roles and Profiles and the Node Classification.</p>
+
+<p>Martin Alfke</p>
+:ET

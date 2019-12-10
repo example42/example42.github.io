@@ -1,0 +1,116 @@
+I"t'<p>Welcome to 2019!</p>
+
+<p>We close the year with a categorised summary of all postings from 2018 and a rethinking of the purpose of this blog.</p>
+
+<p>After exactly 2 years of weekly posts about Puppet we have decided to quit with the weekly schedule. We will continue to release Puppet Tips here, but not every week.</p>
+
+<p>The ratio between time spent in writing the posts and feedback from readers and the Puppet world has not been positive enough to justify the effort.</p>
+
+<p>We apologise to who has always supported and helped us in spreading these contents (special thanks to Taciano Tres (@tacianot) for the continuous help in this) and we hope we will still be able to provide you useful contents in the future.</p>
+
+<p>Now, let’s see what has been written about in 2018.</p>
+
+<p>As similar post was done for <a href="https://www.example42.com/2018/01/01/2017_categorized_posting_summary/" target="_blank">2017</a> check it out for a full list of all our “Tips of the Week”.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#awards" id="markdown-toc-awards">Awards</a></li>
+  <li><a href="#psick-control-repository-tiny-puppet-and-example42-modules" id="markdown-toc-psick-control-repository-tiny-puppet-and-example42-modules">PSICK, Control-Repository, Tiny Puppet and example42 Modules</a></li>
+  <li><a href="#devopscontainers-strategies" id="markdown-toc-devopscontainers-strategies">DevOps,Containers, Strategies</a></li>
+  <li><a href="#puppet-tutorials-and-best-practices" id="markdown-toc-puppet-tutorials-and-best-practices">Puppet Tutorials and Best Practices</a></li>
+  <li><a href="#puppet-6" id="markdown-toc-puppet-6">Puppet 6</a></li>
+  <li><a href="#bolt-tasks-plans" id="markdown-toc-bolt-tasks-plans">Bolt, tasks, plans</a></li>
+  <li><a href="#puppet-code-development-and-testing" id="markdown-toc-puppet-code-development-and-testing">Puppet Code Development and Testing</a></li>
+  <li><a href="#hiera-razor" id="markdown-toc-hiera-razor">Hiera, Razor</a></li>
+</ul>
+
+<h2 id="awards">Awards</h2>
+
+<ul>
+  <li><a href="https://www.example42.com/2018/11/05/example42_top10_devops_consulting-company/" target="_blank">example42 is rewarded as one of the Top10 DevOps consulting companies in Europe</a></li>
+  <li><a href="https://www.example42.com/2018/11/26/puppet_community_award/" target="_blank">Puppet Community Award</a></li>
+</ul>
+
+<h2 id="psick-control-repository-tiny-puppet-and-example42-modules">PSICK, Control-Repository, Tiny Puppet and example42 Modules</h2>
+
+<ul>
+  <li><a href="https://www.example42.com/2018/01/15/classification_and_first_run_mode_with_psick/" target="_blank">Classification and First Run mode with PSICK</a></li>
+  <li><a href="https://www.example42.com/2018/01/22/acceptance_testing_of_different_puppet_versions_with_psick/" target="_blank">Running acceptance tests on different Puppet versions with PSICK</a></li>
+  <li><a href="https://www.example42.com/2018/02/12/how_to_use_psick_module_for_common_profiles/" target="_blank">How to use PSICK module for common profiles</a></li>
+  <li><a href="https://www.example42.com/2018/02/19/anatomy-of-a-puppet-control-repo-compared-to-psick/" target="_blank">Anatomy of a Puppet control-repo compared to PSICK</a></li>
+  <li><a href="https://www.example42.com/2018/04/02/example42_puppet_modules_status_update/" target="_blank">example42 Puppet modules status update</a></li>
+  <li><a href="https://www.example42.com/2018/07/09/update_on_example42_modules/" target="_blank">Update on example42 Puppet modules</a></li>
+  <li><a href="https://www.example42.com/2018/07/23/a-few-steps-to-tiny-puppet-command-line/" target="_blank">A few steps to Tiny Puppet on the command line</a></li>
+  <li><a href="https://www.example42.com/2018/09/10/tp-install-anything-and-configure/" target="_blank">tp install anything (anywhere),and configure</a></li>
+  <li><a href="https://www.example42.com/2018/10/15/application-management-using-tinypuppet/" target="_blank">Custom applications management using Tiny Puppet</a></li>
+  <li><a href="https://www.example42.com/2018/11/12/psick_profiles_part_1_overview/" target="_blank">PSICK profiles, Part 1 - Overview</a></li>
+  <li><a href="https://www.example42.com/2018/11/19/psick_profiles_part_2_proxy_and_hostname_settings/" target="_blank">PSICK profiles, Part 2 - Setting proxy, server and hostname</a></li>
+  <li><a href="https://www.example42.com/2018/12/03/psick_profiles_part_3_openssh/" target="_blank">PSICK profiles, Part 3 - Managing OpenSSH</a></li>
+  <li><a href="https://www.example42.com/2018/12/10/psick_profiles_part_4_users/" target="_blank">PSICK profiles, Part 4 - Managing users</a></li>
+  <li><a href="https://www.example42.com/2018/12/17/psick_profiles_part_5_hosts_and_dns/" target="_blank">PSICK profiles, Part 5 - Managing /etc/hosts and DNS</a></li>
+</ul>
+
+<h2 id="devopscontainers-strategies">DevOps,Containers, Strategies</h2>
+
+<ul>
+  <li><a href="https://www.example42.com/2018/02/26/devops-permanent-learning/" target="_blank">DevOps and the permaent learning pattern</a></li>
+  <li><a href="https://www.example42.com/2018/03/19/wholistic_devops/">A wholistic DevOps approach</a></li>
+  <li><a href="https://www.example42.com/2018/08/07/cfgmgmt_and_containers/" target="_blank">Configuration Management and Containers</a></li>
+  <li><a href="https://www.example42.com/2018/08/14/the_downside_of_naming_conventions/" target="_blank">The downside of server naming conventions</a></li>
+</ul>
+
+<h2 id="puppet-tutorials-and-best-practices">Puppet Tutorials and Best Practices</h2>
+
+<ul>
+  <li><a href="https://www.example42.com/2018/03/12/control-repo-change-impact/" target="_blank">Puppet Control Repo change impact scenarios</a></li>
+  <li><a href="https://www.example42.com/2018/03/26/example42_puppet_cheat_sheet/" target="_blank">The example42 Puppet cheat sheet</a></li>
+  <li><a href="https://www.example42.com/2018/04/09/puppet_tutorial_part_1/" target="_blank">example42 Puppet Tutorial - Part 1</a></li>
+  <li><a href="https://www.example42.com/2018/04/09/puppet_tutorial_part_2/" target="_blank">example42 Puppet Tutorial - Part 2</a></li>
+  <li><a href="https://www.example42.com/2018/04/09/puppet_tutorial_part_3/" target="_blank">example42 Puppet Tutorial - Part 3</a></li>
+  <li><a href="https://www.example42.com/2018/04/09/puppet_tutorial_part_4/" target="_blank">example42 Puppet Tutorial - Part 4</a></li>
+  <li><a href="https://www.example42.com/2018/05/14/puppet-custom-data-types/" target="_blank">Puppet custom data types</a></li>
+  <li><a href="https://www.example42.com/2018/05/28/what-you-need-to-know-about-puppet-facts-part-1-core_facts/" target="_blank">What you need to know about Puppet facts. Part 1 - Core facts</a></li>
+  <li><a href="https://www.example42.com/2018/06/04/what-you-need-to-know-about-puppet-facts-part-2-custom_facts/" target="_blank">What you need to know about Puppet facts. Part 2 - Custom facts</a></li>
+  <li><a href="https://www.example42.com/2018/06/11/what-you-need-to-know-about-puppet-facts-part-3-external_facts/" target="_blank">What you need to know about Puppet facts. Part 3 - External facts</a></li>
+  <li><a href="https://www.example42.com/2018/06/18/what-you-need-to-know-about-puppet-facts-part-4-trusted_facts/" target="_blank">What you need to know about Puppet facts. Part 4 - Trusted facts</a></li>
+  <li><a href="https://www.example42.com/2018/06/25/what-you-need-to-know-about-puppet-facts-part-5-facter_conf/" target="_blank">What you need to know about Puppet facts. Part 5 - facter.conf</a></li>
+  <li><a href="https://www.example42.com/2018/07/16/prevent_facter_fork_bombs/" target="_blank">Facter fork bombs and timeout - what are they, how to prevent them</a></li>
+  <li><a href="https://www.example42.com/2018/08/20/puppet-classification/" target="_blank">Puppet node classification</a></li>
+  <li><a href="https://www.example42.com/2018/08/27/module_synchronization/" target="_blank">Puppet Library Module synchronization</a></li>
+  <li><a href="https://www.example42.com/2018/09/03/managing-osx-packages-with-puppet-and-homebrew/" target="_blank">Managing packages on MacOSX with Puppet and HomeBrew</a></li>
+  <li><a href="https://www.example42.com/2018/09/24/the_five_things_you_need_to_know_about_puppet/" target="_blank">The FIVE things you need to know when starting with Puppet</a></li>
+  <li><a href="https://www.example42.com/2018/10/22/profiles_explained/" target="_blank">Roles and Profiles explained</a></li>
+</ul>
+
+<h2 id="puppet-6">Puppet 6</h2>
+
+<ul>
+  <li><a href="https://www.example42.com/2018/10/01/what-s-new-with-puppet-6/" target="_blank">What’s new with Puppet 6?</a></li>
+  <li><a href="https://www.example42.com/2018/10/08/puppet6-ca-upgrading" target="_blank">Upgrading to Puppet 6 CA</a></li>
+</ul>
+
+<h2 id="bolt-tasks-plans">Bolt, tasks, plans</h2>
+
+<ul>
+  <li><a href="https://www.example42.com/2018/01/29/remote_puppet_control/" target="_blank">All the ways to remotely trigger Puppet runs (with or without Puppet tasks</a></li>
+</ul>
+
+<h2 id="puppet-code-development-and-testing">Puppet Code Development and Testing</h2>
+
+<ul>
+  <li><a href="https://www.example42.com/2018/03/05/catalog-diff-on-refactoring/" target="_blank">Using catalog diff to check refactoring</a></li>
+  <li><a href="https://www.example42.com/2018/05/07/testing-puppet-enterprise-2018-1-0/" target="_blank">Testing Puppet Enterprise 2018.1</a></li>
+  <li><a href="https://www.example42.com/2018/07/02/pdk_how_to_adopt/" target="_blank">How to adopt the Puppet Developer Kit (PDK) to your code</a></li>
+  <li><a href="https://www.example42.com/2018/10/29/editorconfig/" target="_blank">Editorconfig</a></li>
+</ul>
+
+<h2 id="hiera-razor">Hiera, Razor</h2>
+
+<ul>
+  <li><a href="https://www.example42.com/2018/05/21/migrate_from_hiera3_to_hiera5/" target="_blank">Migrate from Hiera v3 to Hiera v5</a></li>
+  <li><a href="https://www.example42.com/2018/07/30/introduction_to_razor/" target="_blank">Introduction to Razor</a></li>
+</ul>
+
+<p>example42 wishes everybody a healthy and successful new year.</p>
+
+<p>Martin Alfke, Alessandro Franceschi</p>
+:ET

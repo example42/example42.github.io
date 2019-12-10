@@ -1,0 +1,130 @@
+I"f<p>Puppet 4 has some new functionality. Within the next few blog posts I will give some examples on how to use the new functionality.</p>
+
+<p>The <a href="http://www.example42.com/2015/09/09/puppet4-examples-data-types/">first post</a> covered the new Data Type system.</p>
+
+<p>This second post covers the new Function API.</p>
+
+<p>In Puppet 3 functions had limitation like</p>
+
+<ul>
+  <li>no type checking</li>
+  <li>unique naming required</li>
+</ul>
+
+<p>Puppet 3 functions had to be placed in a module in <code class="highlighter-rouge">lib/puppet/parser/functions</code></p>
+
+<p>This has changed in Puppet 4. Functions now live in <code class="highlighter-rouge">lib/puppet/functions</code></p>
+
+<p>Inside this functions directory other subdirectories can be used, to provide namespaces for functions.</p>
+
+<p>e.g. in module resolver:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># lib/puppet/functions/resolver/resolve.rb
+Puppet::Functions.create_function(:'resolver::resolve') do
+  ...
+end
+</code></pre></div></div>
+
+<p>This allows module specific functions with the same name as other functions (e.g. v3 functions from stdlib).</p>
+
+<p>In fact this is not the same name. It is the same filename.</p>
+
+<p>The resolve function should return the Puppet master fqdn in case no argument is given.</p>
+
+<p>Hint: this functionality requires the <code class="highlighter-rouge">socket</code> gem.</p>
+
+<p>We now extend the function:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># lib/puppet/functions/resolver/resolve.rb
+require 'socket'
+Puppet::Functions.create_function(:'resolver::resolve') do
+  def resolve
+    Socket.gethostname
+  end
+end
+</code></pre></div></div>
+
+<p><em>Please note: the def uses the function short name without the namespace !</em></p>
+
+<p>With Puppet 3 we had to have multiple functions returning different data depending on the provided arguments.</p>
+
+<p>With Puppet 4 we now have a possibility to check for arguments data type and execute according function parts only.</p>
+
+<p>First we need to write dispatch definitions which will evaluate the given data type.</p>
+
+<p>We will continue with the last example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># lib/puppet/functions/resolver/resolve.rb
+require 'socket'
+Puppet::Functions.create_function(:'resolver::resolve') do
+  dispatch :no_param do
+  end
+  def no_param
+    Socket.gethostname
+  end
+end
+</code></pre></div></div>
+
+<p>Note that we now make use of the dispatch when running specific parts of the function.</p>
+
+<p>One can have multiple dispatch sections e.g. for different data types.</p>
+
+<p>We want to make use of this by adding tow more resolve calls:</p>
+
+<ul>
+  <li>when provided with an IP address, it should return the hostname</li>
+  <li>when provided with a hostname, it should return the IP address</li>
+</ul>
+
+<p>Hint: This functionality requires the rubygem <code class="highlighter-rouge">resolv</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># lib/puppet/functions/resolver/resolve.rb
+require 'socket'
+require 'resolv'
+Puppet::Functions.create_function(:'resolver::resolve') do
+  dispatch :ip_param do
+    param 'Pattern[/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/]', :ip
+  end
+  dispatch :fqdn_param do
+    param 'Pattern[/^([a-z0-9\.].*$/]', :fdqn
+  end
+  dispatch :no_param do
+  end
+
+  def ip_param(ip)
+    Resolv.getname(ip)
+  end
+  def fqdn_param(fqdn)
+    Resolv.getaddress(fqdn)
+  end
+  def no_param
+    Socket.gethostname
+  end
+end
+</code></pre></div></div>
+
+<p>We now can make use of the function in a manifest:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$localname = resolver::resolve()
+notify { "Without argument resolver returns local hostname: ${localname}": }
+
+$remotename = resolver::resolve('google.com')
+notify { "With argument google.com: ${remotename}": }
+
+$remoteip = resolver::resolve('8.8.8.8')
+notify { "With argument 8.8.8.8: ${remoteip}": }
+</code></pre></div></div>
+
+<p>When declaring a manifest with this code inside, the following result will show up:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Notify[Without argument resolver returns local hostname: puppetmaster]
+Notify[With argument google.com: 216.58.216.142]
+Notify[With argument 8.8.8.8: google-public-dns-a.google.com]
+</code></pre></div></div>
+
+<p>This function now fully relies upon working DNS resolution.
+One might want to add some sanity checks around the resolv and socket ruby code.</p>
+
+<p>The next posting will cover Puppet 4 EPP template engine.</p>
+
+:ET

@@ -1,0 +1,90 @@
+I"�<p>This is the first of a series of posts about <a href="https://github.com/puppetlabs/razor-server">Razor</a>, an Open Source systems provisioning tool developed by <a href="https://puppet.com">Puppet</a>.</p>
+
+<p>Razor automates the installation of the most common Operating Systems on bare metal servers or virtual machines, as long as they can perform a network boot via <a href="https://ipxe.org/">iPXE</a>.</p>
+
+<p>Nodes to be provisioned need to have network boot enabled and be connected to a network where a DHCP server is configured with a valid Boot server a Bootfile name.</p>
+
+<p>This must be a reachable a tftp server configured to serve via network a Razor <strong>micro kernel</strong> (a minimal Linux distro) which uses <strong>Facter</strong> to collect data (facts) about the system to be provisioned and interacts with the Razor server to manage how provisioning has to be performed.</p>
+
+<p><strong>Razor server</strong> is a ruby application that works on RedHat and derivatives 6 and 7, it uses PostgreSQL for data persistence and HTTP(S) for APIs and client-server traffic. It can run on nodes different from the Puppet Master, the DHCP and the tftpserver.</p>
+
+<p>When using Puppet Enterprise to install the Razor server it’s enough to include the <strong>pe_razor</strong> Puppet module, which is already shipped with PE.</p>
+
+<p>The FOSS version can be installed by <a href="https://forge.puppet.com/Lavaburn/razor">lavaburn-razor</a> module.</p>
+
+<p>Alternatively the <code class="highlighter-rouge">razor-server</code> package can be installed from the official Puppet repos.</p>
+
+<p>In its configuration file, <code class="highlighter-rouge">/etc/puppetlabs/razor-server/config-defaults.yaml</code>, we can manage database endpoints, authentication methods and how Razor behaves with newly discovered hosts (by default, now, they are considered installed, to avoid unwanted re-provisioning of existing systems)</p>
+
+<p>Razor uses port 8150 for HTTP communication between the server and nodes (traffic should be open to server’s port 8150 from any host to be provisioned) and port 8151 for HTTPS, used for accessing the public API (server’s port must be reachable from any system where the Razor client is used).</p>
+
+<p>The razor client is a Ruby gem (<code class="highlighter-rouge">gem install razor-client</code>) which provides a command-line tool (<code class="highlighter-rouge">razor</code>), that interacts with Razor server’s APIs (by default using the URL <code class="highlighter-rouge">http://razor:8150/api</code>, can be changed by the <code class="highlighter-rouge">--url</code> option or by setting the <code class="highlighter-rouge">RAZOR_API</code> environment variable).</p>
+
+<p>To setup provisioning via Razor we need in our Infrastructure:</p>
+
+<ul>
+  <li><strong>Nodes</strong> to be provisioned (either VMs or Physical servers) able and configured to boot via network</li>
+  <li>A <strong>DHCP server</strong> configured to provision clients using a kernel image loaded via network (next-server and filename option on ISC DHCPd)</li>
+  <li>A <strong>tftp server</strong> with Razor’s microkernel</li>
+  <li>A <strong>Razor server</strong> installed and configured to access a PostgreSQL DB</li>
+  <li>A minimal <strong>configuration</strong> of Razor resources (repos, brokers, tags, policies, tasks…)</li>
+</ul>
+
+<p>Each node is identified by its Mac address, by default, and once it boots Razor’s microkernel image, it is registered with most of its facts.</p>
+
+<p>According to the node’s facts, we can <strong>tag</strong> systems, matching any condition we need.</p>
+
+<p>We can then create a <strong>policy</strong> which correlate tags to the other basic Razor provisioning elements.</p>
+
+<p>Policies are rules that tell Razor what to do with a node and how it has to be provisioned: <strong>repos</strong> to use, <strong>tasks</strong> (commands, snippets of preseed / kickstart configs…) to include, and <strong>brokers</strong> (post-installation integrations) to activate, like the one that installs Puppet on the provisioned node.</p>
+
+<p>We will review in future posts how to configure the various server components and how to configure Razor elements. Here is a quick preview of the minimal essentials.</p>
+
+<p>First we can give a look around and show current Razor server configs:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>razor config
+</code></pre></div></div>
+
+<p>Then we can see if there are predefined elements (there should be at least some tasks):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>razor tasks
+</code></pre></div></div>
+
+<p>More generally we can specify any valid element type and eventually its name:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>razor &lt;tags|brokers|hooks|nodes|policies|repos|tasks&gt; [element_name]
+</code></pre></div></div>
+
+<p>A minimal configuration requires setting a tag for one or more nodes, accoridng to the matching rules (based on facts) we want. So, for example, strictly matching a node with its MAC:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>razor create-tag --name my_node --rule '["in", ["fact", "macaddress"], "00:0c:21:21:11:43"]'
+</code></pre></div></div>
+
+<p>Then we have to add at least a repo of an ISO of a OS to provision. Here we get the CentOS7 iso and associate it to the pre-existing centos/7 task:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>razor create-repo --name centos7-1804 --iso-url http://www.mirrorservice.org/sites/mirror.centos.org/7/isos/x86_64/CentOS-7-x86_64-DVD-1804.iso --task centos/7
+</code></pre></div></div>
+
+<p>We create a broker, a post installation activity, that is intended to hand over the provisioned system to a configuration management tool. Available broker types are: noop, puppet, puppet-pe, chef.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>razor create-broker --name mypuppet -c server=puppet.example.com -c environment=production --broker-type puppet
+</code></pre></div></div>
+
+<p>We can finally create a policy, that applies the given provisioning tasks, repos and broker to the nodes that match the specified tags:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>razor create-policy --name centos7 \
+--repo centos7-1804 --task centos/7 --broker mypuppet \
+--enabled --hostname 'host${id}.example.com' \
+--root-password my_root_password --max-count 20 \
+--tag my_node
+</code></pre></div></div>
+
+<p>We can review the commands given with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>razor commands
+</code></pre></div></div>
+
+<p>This has been just a gentle introduction to Razor, with a glimpse of the commands needed for basic minima configuration, in the next posts we will see more details on how to setup an use a Razor based provisioning infrastructure.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

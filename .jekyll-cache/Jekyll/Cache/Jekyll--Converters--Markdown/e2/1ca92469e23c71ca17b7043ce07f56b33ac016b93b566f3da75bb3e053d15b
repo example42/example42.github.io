@@ -1,0 +1,166 @@
+I"Ö<p>In our <a href="https://www.example42.com/2018/10/01/what-s-new-with-puppet-6/">last blog post</a> we covered all the new features of Puppet 6.</p>
+
+<p>Now we look forward on how to migrate to the new CA.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#ca-usage-on-puppet-5-and-earlier" id="markdown-toc-ca-usage-on-puppet-5-and-earlier">CA usage on Puppet 5 and earlier</a></li>
+  <li><a href="#the-puppet-6-ca" id="markdown-toc-the-puppet-6-ca">The Puppet 6 CA</a></li>
+  <li><a href="#migrating-to-puppet-6-ca" id="markdown-toc-migrating-to-puppet-6-ca">Migrating to Puppet 6 CA</a>    <ul>
+      <li><a href="#new-ca" id="markdown-toc-new-ca">New CA</a></li>
+      <li><a href="#authconf" id="markdown-toc-authconf">auth.conf</a></li>
+      <li><a href="#modify-ca-cert" id="markdown-toc-modify-ca-cert">Modify CA cert</a></li>
+    </ul>
+  </li>
+  <li><a href="#autosigning-on-puppet-6-ca" id="markdown-toc-autosigning-on-puppet-6-ca">Autosigning on Puppet 6 CA</a></li>
+  <li><a href="#ca-and-certificate-management-on-puppet-6" id="markdown-toc-ca-and-certificate-management-on-puppet-6">CA and certificate management on Puppet 6</a></li>
+</ul>
+
+<h2 id="ca-usage-on-puppet-5-and-earlier">CA usage on Puppet 5 and earlier</h2>
+
+<p>The CA and certificate management was usually part of the Puppet Agent package.
+All related commands were part of the <code class="highlighter-rouge">puppet</code> command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet cert list [--all]
+puppet cert sign &lt;certname&gt;
+puppet cert print &lt;certname&gt;
+puppet cert revoke &lt;certname&gt;
+puppet cert clean &lt;certname&gt;
+</code></pre></div></div>
+
+<h2 id="the-puppet-6-ca">The Puppet 6 CA</h2>
+
+<p>Starting with Puppet 5.5 you will recognize that Puppet CA and certificate management will be moved from Puppet Agent to Puppetserver in Puppet 6.
+Puppet 5.5 prepares you by providing deprecation information in the Puppet server logfile and on the command line.</p>
+
+<p>The Puppetserver handles certificate management via API calls. All Puppetserver APIs are protected with an authorization layer for read and write access. This authorization and access control is also done for the certificate management API.</p>
+
+<p>Within a newer Puppet server, you will find two new entries in the authorization configuration file located at <code class="highlighter-rouge">/etc/puppetlabs/puppetserver/conf.d/auth.conf</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
+        # Allow the CA CLI to access the certificate_status endpoint
+        match-request: {
+            path: "/puppet-ca/v1/certificate_status"
+            type: path
+            method: [get, put, delete]
+        }
+        allow: {
+           extensions: {
+               pp_cli_auth: "true"
+           }
+        }
+        sort-order: 500
+        name: "puppetlabs cert status"
+    },
+    {
+        # Allow the CA CLI to access the certificate_statuses endpoint
+        match-request: {
+            path: "/puppet-ca/v1/certificate_statuses"
+            type: path
+            method: get
+        }
+        allow: {
+           extensions: {
+               pp_cli_auth: "true"
+           }
+        }
+        sort-order: 500
+        name: "puppetlabs cert statuses"
+    },
+</code></pre></div></div>
+
+<p>Within the allow section we see the default settings, which now requires the Puppet server ca certificate to have the <code class="highlighter-rouge">pp_cli_auth</code> extension set.</p>
+
+<p>Letâ€™s analyze the new Puppet 6 CA certificate:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl x509 -noout -text -in /etc/puppetlabs/puppet/ssl/certs/$(puppet config print certname).pem
+[...]
+        X509v3 extensions:
+        Netscape Comment:
+            Puppet Server Internal Certificate
+        X509v3 Authority Key Identifier:
+            keyid:B3:DC:C3:68:D5:3A:A8:A3:30:3C:EB:85:79:0F:EB:9E:1A:82:5E:7A
+
+        X509v3 Subject Key Identifier:
+            1F:32:B6:9D:D0:9F:9D:57:8A:57:D6:DE:42:45:78:6D:27:D3:A1:15
+        1.3.6.1.4.1.34380.1.3.39:
+            ..true
+[...]
+</code></pre></div></div>
+
+<p>Here we see a new entry with an OID (1.3.6.1.4.1.34380.1.3.39) and the value set to true.</p>
+
+<h2 id="migrating-to-puppet-6-ca">Migrating to Puppet 6 CA</h2>
+
+<p>In general you have multiple possibilities which you can follow when upgrading to Puppet 6:</p>
+
+<ol>
+  <li>new CA and certificates</li>
+  <li>modify auth.conf to use old CA certificate</li>
+  <li>modify existing CA certificate and add required extension</li>
+</ol>
+
+<h3 id="new-ca">New CA</h3>
+
+<p>Usually you barely want to follow this option as this does mean a complete CA roll-over within all of your Puppet managed systems.
+Maybe this is an option in case that your CA is about to expire soon?</p>
+
+<p>We will look into the two solutions which do not require new certificates:</p>
+
+<h3 id="authconf">auth.conf</h3>
+
+<p>Within <code class="highlighter-rouge">/etc/puppetlabs/puppetserver/conf.d/auth.conf</code> you want to add your Puppet server:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
+        # Allow the CA CLI to access the certificate_status endpoint
+        match-request: {
+            path: "/puppet-ca/v1/certificate_status"
+            type: path
+            method: [get, put, delete]
+        }
+        allow: {
+           extensions: {
+               pp_cli_auth: "true"
+           }
+        }
+        allow: master.example.com   # &lt;- add your puppet master certname
+        sort-order: 500
+        name: "puppetlabs cert status"
+    },
+</code></pre></div></div>
+
+<p>Please try to not set <code class="highlighter-rouge">allow-unauthenticated: true</code>. Even though this is technically possible (e.g. if your VM management solution is not integrated or managed by Puppet), you can easily generate a certificate on the Puppet CA and copy it over to the system which is responsible for removing or signing certificates.</p>
+
+<p>Please remember to restart your Puppet server process to activate changes.</p>
+
+<h3 id="modify-ca-cert">Modify CA cert</h3>
+
+<p>Another solution (untested) is to add the required extension to the Puppet CA certificate.
+There is a project on <a href="https://github.com/smortex/puppet-add-cli-auth-to-certificate">GitHub from smortex</a> which also has links to tickets at Puppet and which provides a ruby script which adds the required extension.</p>
+
+<h2 id="autosigning-on-puppet-6-ca">Autosigning on Puppet 6 CA</h2>
+
+<p>Autosigning itself has not changed from Puppet 5 to Puppet 6.
+The configuration is still done in Puppet configuration file (<code class="highlighter-rouge">/etc/puppetlabs/puppet/puppet.conf</code>) in <code class="highlighter-rouge">master</code> section:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/puppetlabs/puppet/puppet.conf
+[master]
+autosign = false                              # &lt;- disable autosign
+autosign = true                               # &lt;- default, sign based on content of autosign.conf file (naive autosigning)
+autosign = /etc/puppetlabs/puppet/autosign.sh # &lt;- script to execute: on exit 0 signing will take place (policy based autosigning)
+</code></pre></div></div>
+
+<h2 id="ca-and-certificate-management-on-puppet-6">CA and certificate management on Puppet 6</h2>
+
+<p>The new CA management is completely integrated into Puppet server:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppetserver ca list [--all]
+puppetserver ca sign &lt;certname&gt;
+puppetserver ca print &lt;certname&gt;
+puppetserver ca revoke &lt;certname&gt;
+puppetserver ca clean &lt;certname&gt;
+</code></pre></div></div>
+
+<p>We wish everybody fun and success with Puppet 6,</p>
+
+<p>Martin Alfke</p>
+:ET

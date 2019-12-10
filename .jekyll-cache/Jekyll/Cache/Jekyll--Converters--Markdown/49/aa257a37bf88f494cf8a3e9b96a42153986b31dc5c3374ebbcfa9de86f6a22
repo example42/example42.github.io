@@ -1,0 +1,93 @@
+I"�<p>This week continues our journey inside what’s worth knowing about Facter.
+In the <a href="https://www.example42.com/2018/05/28/what-you-need-to-know-about-puppet-facts-part-1-core_facts/">first post</a> we introduced its basic features and the <strong>Core facts</strong>, in the <a href="https://www.example42.com/2018/06/04/what-you-need-to-know-about-puppet-facts-part-2-custom_facts/">second post</a> we described how to write custom facts in Ruby language.</p>
+
+<p>Now we are going to give a look to an even easier way to create custom facts: <strong>external facts</strong></p>
+
+<h3 id="external-facts">External facts</h3>
+
+<p>They have been introduced in Facter 1.7, inheriting a similar functionality that was proposed via the <strong>stdlibe</strong> module.</p>
+
+<p>External facts can be texts in ini file, yaml or json format, or simply commands or scripts, written in any language for which is available a local interpreter, that respectively contain or return key-values.</p>
+
+<p>Writing an external file is as easy as placing a file like <code class="highlighter-rouge">/etc/facter/facts.d/myfact.txt</code> with a content like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myfact=myfactvalue
+</code></pre></div></div>
+
+<p>The same fact can be placed in a Yaml file called <code class="highlighter-rouge">/etc/facter/facts.d/myfact.yaml</code> and have content like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+myfact: myfactvalue
+</code></pre></div></div>
+
+<p>Or be a Json file like <code class="highlighter-rouge">/etc/facter/facts.d/myfact.json</code> with content like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "myfact": "myfactvalue"
+}
+</code></pre></div></div>
+
+<p>Note that actually the name of these files has not to be the same of the fact, what’s important is the content of the txt, or json or yaml, the name of the key being the name of the fact.</p>
+
+<p>We can have even more than one fact definition in a single file, and it’s trivial to write <strong>structured facts</strong> (check previous posts for explanations) in Yaml or Json files:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+classification:
+  role: webserver
+  env: prod
+  zone: dc1
+</code></pre></div></div>
+
+<h3 id="executable-facts">Executable Facts</h3>
+
+<p>External facts can be also expressed as the output of a command, on Unix derivatives it’s enough to have an executable file under <code class="highlighter-rouge">/etc/facter/facts.d/</code> that outputs the name of the facts and its value (in ini like style: <code class="highlighter-rouge">name=value</code>):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">echo </span><span class="nv">connected_users</span><span class="o">=</span><span class="si">$(</span>/usr/bin/who | <span class="nb">wc</span> <span class="nt">-l</span> | <span class="nb">tr</span> <span class="nt">-d</span> <span class="s1">' '</span><span class="si">)</span>
+</code></pre></div></div>
+
+<p>Any language can be used to write external facts as executables, but it’s required to specify the path of the interpreter to use (here bash) in the first line, with a shebang (<code class="highlighter-rouge">#!</code>).</p>
+
+<p>On Windows executable facts can be placed in files with the following extensions:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">.com</code> or <code class="highlighter-rouge">.exe</code> for binary executables</li>
+  <li><code class="highlighter-rouge">.bat</code> or <code class="highlighter-rouge">.cmd</code> for batch scripts</li>
+  <li><code class="highlighter-rouge">.ps1</code> for PowerShell scripts</li>
+</ul>
+
+<p>Up to now we mentioned the directory <code class="highlighter-rouge">/etc/facter/facts.d</code> but actuslly FGacter looks for external facts in different directories. On Unix/Linux they can be placed under:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/opt/puppetlabs/facter/facts.d/
+/etc/puppetlabs/facter/facts.d/
+/etc/facter/facts.d/
+</code></pre></div></div>
+
+<p>On Windows they can be placed under:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\ProgramData\PuppetLabs\facter\facts.d\
+</code></pre></div></div>
+
+<p>When running Puppet as a non privileged user, external facts are looked in:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HOME DIRECTORY&gt;/.facter/facts.d/
+</code></pre></div></div>
+
+<p>Contrary to <strong>custom facts</strong> written in Ruby, which can be seen from the command-line only by running <code class="highlighter-rouge">facter -p</code>, external facts are visible, as <strong>core facts</strong> just by running <code class="highlighter-rouge">facter</code>.</p>
+
+<h3 id="shipping-external-facts">Shipping external facts</h3>
+
+<p>As we have seen, it’s enough to place a file in one of the mentioned directories to create an external fact.</p>
+
+<p>This can be done during the nodes’ provisioning, and might be a way to define how different can be our nodes in our infrastructure according to facts values like role, env, zone, datacenter, application or similar.</p>
+
+<p>We can also ship external facts directly in our modules: as the <code class="highlighter-rouge">lib</code> directory of modules (ciontaining Puppet types and provides, ruby facts and functions) is automatically distributed to clients via Puppet <strong>pluginsync</strong> mechanism, the content of the directory <code class="highlighter-rouge">facts.d</code> of a module is also copied to clients, and the external facts there are evaluated since the very first Puppet run.</p>
+
+<p>Note that any external file placed in a module’s <code class="highlighter-rouge">facts.d</code> directory is copied as is to every client, so there’s no way to ship different facts with different values to different clients.</p>
+
+<p>The obvious consequence is that generally in modules the shipped external facts are executables, that and run and compute their values on the clients.</p>
+
+<p>We can also shop external facts via Puppet using the <code class="highlighter-rouge">file</code> resource and placing a file in one of the available dirs for external facts. In this case the content of such file can be derived from a template and be different according to our nodes, but note that if we follow this approach, the relevant facts are available only starting from the second Puppet run, as the first one is needed to create them (no pluginsync is involved in this case).</p>
+
+<p>Alessandro Franceschi</p>
+:ET

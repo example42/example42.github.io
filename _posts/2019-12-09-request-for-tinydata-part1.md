@@ -23,11 +23,11 @@ On What Operating Systems?
 
 What you can use it for?
 
-- Shell usage: Use the `tp` command to quickly install, test, show logs of the managed applications
-- Puppet manifests usage: Use `tp::install', `tp::dir` and `tp::conf` defines to manage applications installation and configuration in:
-  - Local site profiles, with our code, our files configured with our logic 
-  - Possibly, optionally, in component modules, to benefit of tp cli integrations
-  - Ready for Hiera use profiles collections, like the [tp-profile](https://github.com/example42/puppet-tp_profile) or the [psick module](https://github.com/example42/puppet-psick)
+- **Shell** usage: Use the `tp` command to quickly install, test, show logs of the managed applications
+- **Puppet manifests** usage: Use `tp::install`, `tp::dir` and `tp::conf` defines to manage applications installation and configuration in:
+  - Local **site profiles**, with our code, our files configured with our logic 
+  - Possibly, optionally, in **component modules**, to benefit of tp cli integrations and OS coverage
+  - Ready for Hiera use **profiles collections**, like the [tp-profile](https://github.com/example42/puppet-tp_profile){:target="_blank"} or the [psick module](https://github.com/example42/puppet-psick){:target="_blank"}.
 
 Just to give you an idea, the following code:
 
@@ -51,7 +51,7 @@ will install the package, configure the file with the contents we want, manage t
 
 The example used here for openssh can be done **virtually for all applications you can think about** (for which there's a package to install and the right tinydata).
 
-This can be useful when **we know how to configure our application**, and we want a quick way to puppettize it without getting lost in finding the right component modules with its bunch of dependencies, in a way the allows us to concentrate just on the data to customise, which, for the above example, could be Hiera data as follows:
+This can be useful when **we know how to configure our application**, and we want a **quick way to puppettize** it without getting lost in finding the right component modules with its bunch of dependencies, in a way the allows us to concentrate just on the data to customize, which, for the above example, could be Hiera data as follows:
 
     profile::openssh::template: profile/openssh/sshd_config.erb
     profile::openssh::options:

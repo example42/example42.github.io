@@ -1,0 +1,183 @@
+I"c"<p>Let’s say you know nothing about Puppet.</p>
+
+<p>Or maybe you already know something and have started to use it, but still don’t have a firm grasp on its components or a clear understanding of the whole picture.</p>
+
+<p>Eventually someone has started to introduce it in your company and you have to deal with it.</p>
+
+<p>Or you are a more or less experienced Puppet practitioner.</p>
+
+<p>You might belong to one or more of these category of Puppet users:</p>
+<ul>
+  <li><strong>End user</strong>, dealing only with (Hiera) Data based on given internal directives</li>
+  <li><strong>Power user</strong> comfortable with using public or internal modules and eventually write custom classes (such as profiles)</li>
+  <li><strong>Modules developer</strong>, writing modules and profiles intended for local or public use</li>
+  <li><strong>Admin</strong>, who maintains the Puppet server infrastructure</li>
+  <li><strong>Architect</strong>, who designs the data structure, the code organisation, the classification approach</li>
+</ul>
+
+<p>Bad news is that more you belong to the latter categories, more things you need to know, and their amount is not negligible.</p>
+
+<p>Good news is that you don’t need to know everything, in order to successfully use Puppet.</p>
+
+<p>Here is a list, with useful links, of the things to know, according to who you are and what you want to be, in Puppet terms.</p>
+
+<h2 id="terms-command-and-components">Terms, command and components</h2>
+
+<p>Basic knowledge of Puppet ecosystem is essential for architects, admins and developers, and useful, even if not strictly necessary, for end users:</p>
+
+<ul>
+  <li>Puppet <a href="https://docs.puppet.com/references/glossary.html">terminology</a></li>
+  <li><a href="https://puppet.com/products/platform/core-components">Components</a> of an infrastructure
+    <ul>
+      <li>Server side:
+        <ul>
+          <li><a href="https://puppet.com/docs/puppetserver">Puppet Server</a></li>
+          <li>Puppet CA (by default on the master)</li>
+          <li><a href="https://puppet.com/docs/puppetdb">PuppetDB</a></li>
+          <li>Web Frontends:
+            <ul>
+              <li>Puppet Enterprise</li>
+              <li><a href="https://www.theforeman.org">Foreman</a></li>
+              <li>Puppetboard</li>
+              <li>Puppet Explorer</li>
+            </ul>
+          </li>
+          <li><a href="https://puppet.com/docs/hiera">Hiera</a></li>
+        </ul>
+      </li>
+      <li>Client side:
+        <ul>
+          <li><a href="https://puppet.com/docs/puppet/">Puppet</a> agent</li>
+          <li><a href="https://puppet.com/docs/facter">Facter</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>The puppet <a href="https://puppet.com/docs/puppet/latest/services_commands.html">commands</a></li>
+  <li>Help from:
+    <ul>
+      <li><a href="https://puppet.com/docs">Official documentation page</a></li>
+      <li>The <a href="https://puppet.com/community">Community</a></li>
+      <li><a href="https://puppet.com/support">Support</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="modules">Modules</h2>
+
+<p>If you are an end user, you might even know nothing about Puppet modules and blindly add the data you are told to manage, still for everybody else using, understanding and integrating modules is part of the job, so these concepts are given for granted:</p>
+
+<ul>
+  <li>Modules <a href="https://puppet.com/docs/puppet/latest/modules_fundamentals.html">structure</a> and conventions</li>
+  <li>Public modules on the <a href="https://forge.puppet.com">Forge</a> and GitHub</li>
+  <li><a href="https://forge.puppet.com/puppetlabs/stdlib">stdlib</a> and other common modules</li>
+  <li><a href="https://puppet.com/docs/puppet/latest/cheatsheet_module.html">Conventions</a> for templates and files</li>
+  <li><a href="https://puppet.com/docs/puppet/latest/hiera_automatic.html#looking-up-data-with-hiera">Automatic class parameter lookup</a> on Hiera data</li>
+  <li>The <a href="https://puppet.com/docs/puppet/latest/modules_installing.html"><code class="highlighter-rouge">puppet module</code></a> command</li>
+  <li>Modules development via <a href="https://puppet.com/docs/pdk/latest/pdk.html">PDK</a></li>
+</ul>
+
+<h2 id="classification">Classification</h2>
+
+<p>Classification is how we decide what classes, from any module, to include in our nodes, in order to manage the desired resources.</p>
+
+<p>Basically for each Puppet managed node we have to define a list of classes to use, each class comes from modules, either public (so we don’t have to write it) or written by a developer.</p>
+
+<p>Once included, these classes can be parametrised via Hiera data and hence have different behaviours according to our data.</p>
+
+<p>End users, if allowed to define what applications to install on a node, deal with the classification approach decided by architects.</p>
+
+<p><a href="https://www.example42.com/2018/08/20/puppet-classification/">Classication</a> can be done in different ways using different, not necessarily alternative, tools:</p>
+
+<ul>
+  <li><a href="https://puppet.com/docs/puppet/latest/nodes_external.html">External Node Classifiers (ENC)</a>:
+    <ul>
+      <li>Custom ENC script getting data from any source</li>
+      <li>Classification in Puppet Enterprise console</li>
+      <li>Classification in The Foreman</li>
+    </ul>
+  </li>
+  <li>In the main <code class="highlighter-rouge">manifests</code> dir:
+    <ul>
+      <li><a href="https://puppet.com/docs/puppet/latest/lang_node_definitions.html">Node</a> statement</li>
+      <li>Facts driven class inclusion</li>
+    </ul>
+  </li>
+  <li>In modules:
+    <ul>
+      <li><a href="https://puppet.com/docs/pe/2017.2/r_n_p_intro.html">Roles</a> module</li>
+      <li>Other modules or classes which include and group other classes</li>
+    </ul>
+  </li>
+  <li>On Hiera
+    <ul>
+      <li>Looking up a key (like <code class="highlighter-rouge">classes</code> or <code class="highlighter-rouge">profiles</code> with an array of classes to include</li>
+      <li>Classification via example42’s <a href="https://github.com/example42/puppet-psick#classification">psick module</a> [Shameless plug]</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="the-control-repo">The Control Repo</h2>
+
+<p>A modern Puppet setup is based on a <a href="https://puppet.com/docs/pe/latest/managing_puppet_code.html">control repository</a>. If you are an architect, you designed it, otherwise you might need to work on it (if hieradata is included in the control-repo) or use it while locallh testing any development.</p>
+
+<p>In any case it’s important to know about it.</p>
+
+<ul>
+  <li>Layout:
+    <ul>
+      <li>manifests directory, where Puppet code starts to be evaluated</li>
+      <li>Puppetfile, with list of external modules to use and</li>
+      <li>hiera.yaml with definition of hierarchy levels and backend for data lookup</li>
+      <li>Eventually the hieradata dir if backend is file based (json,yaml…) (Can stay in an external module)</li>
+      <li>site directory with local modules (such as profiles) (Can stay in an external module)</li>
+    </ul>
+  </li>
+  <li>Change management:
+    <ul>
+      <li>development environment (with pdk)</li>
+      <li>testing (syntax, unit, integration tests)</li>
+      <li>deployment (r10k or alike, with control-repo branches matching Puppet environments)</li>
+      <li>application (<a href="https://www.example42.com/2018/01/29/remote_puppet_control/">alternative ways</a> to trigger Puppet runs)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="puppet-dsl">Puppet DSL</h2>
+
+<p>Strictly speaking knowledge of <a href="https://puppet.com/docs/puppet/latest/lang_visual_index.html">Puppet language</a> is not necessary for Puppet end users which may configure their data via Hiera.</p>
+
+<p>Still a basic understanding of Puppet abstraction and idempotency principles and the basics of the language is enough to understand better the used modules and eventually write custom ones.</p>
+
+<ul>
+  <li>The Resource Abstraction Layer:
+    <ul>
+      <li>Types and providers</li>
+      <li>Everything can be a Puppet resource (via the relevant module)</li>
+      <li>the command <code class="highlighter-rouge">puppet resource</code></li>
+    </ul>
+  </li>
+  <li>Resources, classes, defined types and modules</li>
+  <li>Ruby and Puppet DSL functions</li>
+  <li>Data Types</li>
+  <li>Facts
+    <ul>
+      <li>Native</li>
+      <li>Custom facts in ruby</li>
+      <li>External facts (in any language)</li>
+      <li>Trusted facts via <code class="highlighter-rouge">csr_attributes.yaml</code> file</li>
+    </ul>
+  </li>
+  <li>Builtin variables</li>
+  <li>Language operators, expressions, conditionals, iterators…</li>
+  <li>Resources ordering</li>
+</ul>
+
+<h2>…</h2>
+
+<p>Enough?</p>
+
+<p>Enough for now :-)</p>
+
+<p>Alessandro Franceschi</p>
+:ET

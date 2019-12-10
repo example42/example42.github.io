@@ -1,0 +1,142 @@
+I"�&<p>In the <a href="https://www.example42.com/2018/05/28/what-you-need-to-know-about-puppet-facts-part-1-core_facts/">first post</a> of this series about Facter, we introduced its basic features and we talked about <strong>Core facts</strong>, the ones shipped directly with Facter and available whenever we use Puppet.</p>
+
+<p>In this post we will see more details about facts that we can write in Ruby by ourselves for whatever purpose we may have.</p>
+
+<h3 id="custom-facts">Custom facts</h3>
+
+<p>Custom facts are shipped with Puppet modules, if we use already Puppet it’s likely we are already using some custom fact present in one of the public modules we might be using.</p>
+
+<p>They are written in Ruby language and have to be placed in the directory <code class="highlighter-rouge">lib/facter</code> of a module.</p>
+
+<p>The simplest example of a fact is one that just executes a command and shows its output:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Facter.add('connected_users') do
+  setcode do
+    Facter::Core::Execution.execute('/usr/bin/who | wc -l')
+  end
+end
+</code></pre></div></div>
+
+<p>This fact is called <code class="highlighter-rouge">collected_users</code>, this is the argument passed to the <code class="highlighter-rouge">Facter.add</code> method.</p>
+
+<p>Whatever code we want to run in order to calculate the value of this fact, has to stay inside the <code class="highlighter-rouge">setcode</code> statement. In this case we just want to run a shell command, and we use the dedicated <code class="highlighter-rouge">Facter::Core::Execution.execute</code> method for this (which takes care of wrapping our command as needed). The argument passed here is the command we want to execute (<code class="highlighter-rouge">/usr/bin/who | wc -l</code>).</p>
+
+<p>The output of this command is the value of our collected_users fact.</p>
+
+<p>In order to ship and use this fact, we have to place the above piece of Ruby code in a file called <code class="highlighter-rouge">lib/facter/collected_users.rb</code> of a module.</p>
+
+<p>If we have such a module in the <code class="highlighter-rouge">$modulepath</code> of our Puppet Server (for example the directory <code class="highlighter-rouge">/etc/puppetlabs/code/modules</code> for modules available to all Puppet environments, or <code class="highlighter-rouge">/etc/puppetlabs/code/environments/production/modules</code> for modules available for the, default, production Puppet environment), this fact would be automatically copied to each client, <strong>before</strong> running the catalog request. This means that the fact is immediately available to the client and can be used straight on in our Puppet manifests.</p>
+
+<p>This automatic copy of each custom fact (and other extensions placed in the <code class="highlighter-rouge">lib</code> directory) of a module is called <strong>pluginsync</strong> and we actually see it happening when we run Puppet, with an output like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Info: Using configured environment 'production'
+Info: Retrieving pluginfacts
+Notice: /File[/opt/puppetlabs/puppet/cache/lib/facter/connected_users.rb]/ensure: defined content as '{md5}d4cfb32bbc71e8d738004e584b0ac8bf'
+[...]
+</code></pre></div></div>
+
+<p>which is telling us that the <code class="highlighter-rouge">connected_users.rb</code> file present in the <code class="highlighter-rouge">lib/facter</code> directory of one of our modules has been copied to the <code class="highlighter-rouge">/opt/puppetlabs/puppet/cache/lib/facter/</code> directory of the client.</p>
+
+<p>Note that custom facts are <strong>not</strong> visible when we run the <code class="highlighter-rouge">facter</code> command from the local cli. We need to specify <code class="highlighter-rouge">-p</code> (<code class="highlighter-rouge">--puppet</code>) argument, or, recommended starting from Facter 3, use instead the <code class="highlighter-rouge">puppet facts</code> command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@client:~# facter connected_users
+
+root@client:~# facter -p connected_users
+1
+
+root@puppet:~# puppet facts | grep connected_users
+"connected_users": "1",
+</code></pre></div></div>
+
+<h4 id="facts-confinement">Facts confinement</h4>
+
+<p>What’s wrong about the fact we just wrote, if we work in a multi OS environment?</p>
+
+<p>It runs a shell command which is available under Linux / Unix, but this is what happens when we run it under Windows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Info: Retrieving plugin
+Notice: /File[C:/ProgramData/PuppetLabs/puppet/cache/lib/facter/connected_users.rb]/ensure: defined content as '{md5}d4cfb32bbc71e8d738004e584b0ac8bf'
+Info: Loading facts
+Error: Facter: error while resolving custom fact "connected_users": execution of command "/usr/bin/who | wc -l" failed: command not found.
+</code></pre></div></div>
+
+<p>and we don’t want unnecessary (in this case not blocking) errors, right?</p>
+
+<p>We can use the <code class="highlighter-rouge">confine</code> statement, which restricts the execution of the fact only on systems that match the given condition, based on another fact.</p>
+
+<p>For example, to confine our <code class="highlighter-rouge">connected_users</code> fact to run only on Linux we can use the <code class="highlighter-rouge">kernel</code> core fact:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Facter.add('connected_users') do
+  **confine :kernel =&gt; 'Linux'**
+  setcode do
+    Facter::Core::Execution.execute('/usr/bin/who | wc -l')
+  end
+end
+</code></pre></div></div>
+
+<h4 id="facts-within-facts">Facts within Facts</h4>
+
+<p>We can refer to and use the values of other facts inside our custom facts code.</p>
+
+<p>For example we can assign to a local variable, the value of a fact with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>k = Facter.value(:kernel)
+</code></pre></div></div>
+
+<h4 id="facts-precedence">Facts precedence</h4>
+
+<p>We can have multiple <code class="highlighter-rouge">Facter.add</code> statements with the same name, they can have different confinements so that we can resolve the possible values of a fact using different code and logic.</p>
+
+<p>We can also have different entries for the same confinement group, in this case we need a way to decide what’s the actual value to use for a fact, and here comes handy the concept of Facts’s <strong>weight</strong> which defines the wight to give to a give, if we have valid values for two different fact names, the one with <strong>higher</strong> weight “<strong>wins</strong>” and provides the relevant value.</p>
+
+<p>A good example of usage if <code class="highlighter-rouge">confine</code> and <code class="highlighter-rouge">has_weight</code> is the code of the core fact <code class="highlighter-rouge">virtual</code> in Ruby (so in Facter version 2, as the equivalent in version 3 is written in C++). This can be seen  <a href="https://github.com/puppetlabs/facter/blob/2.x/lib/facter/virtual.rb">here</a>.</p>
+
+<p>Note that we have, in the <code class="highlighter-rouge">virtual.rb</code> file, multiple blocks like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Facter.add("virtual") do
+  confine :kernel =&gt; 'XXX
+  confine: :XXX =&gt; 'XXX'
+  has_weight XXX
+end
+</code></pre></div></div>
+
+<p>their combination is used to provide the final value of the virtual fact for different OS and different Hypervisors.</p>
+
+<h3 id="structured-facts-and-aggregated-resolutions">Structured facts and aggregated resolutions</h3>
+
+<p>In the fist part of this series about What you need to know about Facter, we have seen that since Facter version 2, with new acceptable data types (Integer, Float, TrueClass, FalseClass, NilClass, String, Array, Hash. ) as values, <strong>Structured facts</strong> were introduced.</p>
+
+<p>At the same time, <strong>aggregated resolutions</strong> have been introduced.</p>
+
+<p>This is a way to compose the content of a structured fact but executing different chunks of code.</p>
+
+<p>A fact with aggregated resolution may look like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Facter.add(:connected_users, :type =&gt; :aggregate) do
+
+  chunk(:a_name) do
+    [..] # Ruby code that get some information from the system
+  end
+
+  chunk(:another_name) do
+    [..]
+  end
+
+  aggregate do | chunks |
+    # Optional aggregate block that massages the output ProgramData
+  end
+end
+</code></pre></div></div>
+
+<p>A glorious example of structured fact using aggregated resolution is the Ruby version of the <a href="https://github.com/puppetlabs/facter/blob/2.x/lib/facter/os.rb"><code class="highlighter-rouge">$::os</code> fact</a>. Note that in this case different chunks are defined and simply merged in the final result, without the use of the <code class="highlighter-rouge">aggregate</code> method.</p>
+
+<h3 id="conclusions">Conclusions</h3>
+
+<p>We have seen the basics to create custom facts in Ruby. Give a look on Puppet docs site to the <a href="https://puppet.com/docs/facter/3.11/fact_overview.html">Overview of custom facts with examples</a>,  and the <a href="https://puppet.com/docs/facter/3.11/custom_facts.html">Custom facts walkthrough</a>, and check the version 2 branch of <a href="https://github.com/puppetlabs/facter/tree/2.x/lib/facter">facter</a> for, probably, the most advanced examples (being also the core facts) of fact written in Ruby.</p>
+
+<p>Next week we are going to see a much simpler way to create custom facts: <strong>external facts</strong>.</p>
+
+<p>If you don’t know much about them, prepare to have nice surprises.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

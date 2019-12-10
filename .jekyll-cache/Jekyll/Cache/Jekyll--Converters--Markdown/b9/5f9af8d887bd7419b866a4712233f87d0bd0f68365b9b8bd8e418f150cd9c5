@@ -1,0 +1,43 @@
+I"<p>This post, for once, is not strictly about Puppet, but about a nice, standard way to customise the behaviour of a text editor directly from within your source code repository.</p>
+
+<p><a href="https://editorconfig.org/">Editorconfig</a> is a file format that defines the coding style to use in an editor for the files of your repository.</p>
+
+<p>It contains, in stanzas divided ini file format, various definitions to manage common editor settings:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">indent_style</code> - Indentation Style. Possible Values: tab, space</li>
+  <li><code class="highlighter-rouge">indent_size</code> - Indentation Size (in single-spaced characters). Possible Values: an integer, tab</li>
+  <li><code class="highlighter-rouge">tab_width</code> - Width of a single tabstop character. Possible Values: an integer (defaults to indent_size when indent_size is a number)</li>
+  <li><code class="highlighter-rouge">end_of_line</code> - Line ending file format (Unix, DOS, Mac). Possible Values: lf, crlf, cr</li>
+  <li><code class="highlighter-rouge">charset</code> - File character encoding. Possible Values: latin1, utf-8, utf-16be, utf-16le, utf-8-bom</li>
+  <li><code class="highlighter-rouge">trim_trailing_whitespace</code> - Defines whether whitespace is allowed at the end of lines. Possible Values: true, false</li>
+  <li><code class="highlighter-rouge">insert_final_newline</code> - Defines whether file should end with a newline. Possible Values: true, false</li>
+</ul>
+
+<p>Some other settings are editor specific.</p>
+
+<p>Editorconfig is supported by most of the existing editors either natively or via plugins.</p>
+
+<p>Editors that support it out of the box: BBEdit, Codelite, elementaryCode, Builder, GitHub, Gogs, IntelliJidea, KText editor, Komodo, Kakoune, PyCharm, ReSharper, Rider, RubyMine, Source Lair, Tortoise Git, Visual Studio, Web Storm.</p>
+
+<p>Editors that support it via a plugin: AppCode, Atom, Brackets, C Lion, Coda, Code::Block, Eclipse, Emacs, Geany, Gedit, jEdit, Micro, Net Beans, NodePad++, Php Storm, Sublime Text, Text Adept, Text Mate, Vim, Visual Studio Code.</p>
+
+<p>An example is probably better than many works, so here’s our <code class="highlighter-rouge">.editorconfig</code> file in our Psick control-repo. It applies to all the files of the repo, and, as you see, different settings can be defined according to the files name or extension.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+</code></pre></div></div>
+
+<p>Have fun with your editor, Puppet, life, universe and everything!</p>
+
+<p>Alessandro Franceschi</p>
+:ET

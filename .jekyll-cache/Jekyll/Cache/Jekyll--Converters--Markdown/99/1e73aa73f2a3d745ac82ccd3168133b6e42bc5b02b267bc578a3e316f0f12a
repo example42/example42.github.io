@@ -1,0 +1,173 @@
+I"�+<p>With the release of Puppet 4.9, version 5 of Hiera has landed on our Puppet servers, introducing some very interesting evolutions.</p>
+
+<p>Hiera is Puppet’s builtin key/value data lookup system, which has some peculiar characteristics:</p>
+
+<ul>
+  <li>
+    <p>It’s hierarchical: We can configure different hierarchies of data sources and these are traversed in order to find the value of the desired key, from the layer at the top, to the one at the bottom</p>
+  </li>
+  <li>
+    <p>It has a modular backend system: data can be stored on different places, according to the used plugins, from simple Yaml or Json files, to MongoDb, Mysql, PostgreSQL, Redis and <a href="https://voxpupuli.org/plugins/#hiera">others</a></p>
+  </li>
+</ul>
+
+<p>Hiera is important because it allows to assign values to the parameters of Puppet classes: a parameter called <code class="highlighter-rouge">server</code> of a class called <code class="highlighter-rouge">ntp</code>, for example, can be evaluated via a lookup of the Hiera key <code class="highlighter-rouge">ntp::server</code>, this is useful to cleanly separate our Puppet code, where we define the resources we want to apply to our nodes, from the data which defines how these resources should be.</p>
+
+<p>The new version of Hiera is backwards compatible with earlier version: if you don’t use custom plugins you should be able to seamlessly use your existing data sources, it’s also compatible with Puppet <code class="highlighter-rouge">lookup</code> function and face and actually you can upgrade Puppet with Hiera 5 without problems, you will just have some deprecation warnings about things that have changed (some issues were actually introduced in Puppet 4.9.0, the very first version with Hiera 5, but were promptly solved in later releases).</p>
+
+<p>So, what’s new and exciting about Hiera 5?</p>
+
+<h3 id="a-new-hierayaml-format">A new hiera.yaml format</h3>
+
+<p>Hiera’s configuration file (<code class="highlighter-rouge">hiera.yaml</code>) has changed format, here’s the default, which uses the core Yaml backend and has only a layer called common:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+version: 5
+hierarchy:
+  - name: Common              # A level of the hierarchy. They can be more using different data sources
+    path: common.yaml         # The path of the file, under the datadir, where data is stored
+defaults:
+  data_hash: yaml_data        # Use the YAML backend
+  datadir: data               # Yaml files are stored in the data dir of your Puppet environment
+</code></pre></div></div>
+
+<p>Here’s a bit more complex example, where the popular Hiera-eyaml backend is used (a backend that uses Yaml files and allows the encryption of single keys) and multiple paths are defined (they are equivalent of having multiple hierarchy levels):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+version: 5
+
+hierarchy:
+  - name: "Eyaml hierarchy"
+    lookup_key: eyaml_lookup_key         # Use eyaml backend. Note this can be specified for each level
+    paths:                               # Instead of multiple hierarchy levels we can define just one with
+      - "nodes/%{trusted.certname}.yaml" # multiple paths, when the same backend is used. It's exactly the same.
+      - "role/%{::role}-%{::env}.yaml"
+      - "role/%{::role}.yaml"
+      - "common.yaml"
+    options:                             # Hiera-eyaml specific options (the paths of the keypair used for encryption)
+      pkcs7_private_key: /etc/puppetlabs/puppet/keys/private_key.pkcs7.pem
+      pkcs7_public_key:  /etc/puppetlabs/puppet/keys/public_key.pkcs7.pem
+
+defaults:
+  datadir: data
+</code></pre></div></div>
+
+<p>For full reference on the format of Hiera 5 configuration file, check the <a href="https://docs.puppet.com/puppet/latest/hiera_config_yaml_5.html">Official Documentation</a></p>
+
+<h3 id="environment-and-module-data">Environment and module data</h3>
+
+<p>Hiera 4, used from Puppet versions 4.3 to 4.8, introduced the possibility of defining, inside a module, the default values of each class parameter using Hiera.</p>
+
+<p>The actual user data, outside modules, was configured by a global <code class="highlighter-rouge">/etc/puppetlabs/puppet/hiera.yaml</code> file, which defines Hiera configurations for every Puppet environment.</p>
+
+<p>Now is possible to have environment specific configurations, so we can have a <code class="highlighter-rouge">hiera.yaml</code> inside a environment directory which may be different for each environment (<code class="highlighter-rouge">/etc/puppetlabs/code/environments/$environment_name/hiera.yaml</code>). This is useful to test hierarchies or backend changes before committing them to the production environment.</p>
+
+<p>We can have also per module configurations, so in a NTP module, for example, we can have a <code class="highlighter-rouge">$module_path/users/hiera.yaml</code> with the, now familiar, version 5 syntax:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+version: 5
+
+defaults:
+  datadir: data
+  data_hash: yaml_data
+
+hierarchy:
+  - name: "In module hierarchy"
+    paths:
+      - "%{facts.virtual}.yaml"
+      - "%{facts.os.name}-%{facts.os.release.major}.yaml"
+      - "%{facts.os.name}.yaml"
+      - "%{facts.os.family}-%{facts.os.release.major}.yaml"
+      - "%{facts.os.family}.yaml"
+      - "common.yaml"
+</code></pre></div></div>
+
+<p>this refers yaml files under the <code class="highlighter-rouge">data</code> directory of the module.</p>
+
+<p>The interesting thing in this is that we have a uniform and common way to lookup for data, across the <a href="https://docs.puppet.com/puppet/latest/hiera_layers.html">three layers</a>: global, environment and module: each hierarchy of each layer is used to compose a “super hierarchy” which is traversed seamlessly.</p>
+
+<p>In the module data is also possible to define the kind of lookup to perform for each class parameter.</p>
+
+<p>Previously the lookup was always a “normal” one: the value returned is the one of the key found the first time while traversing the hierarchy.</p>
+
+<p>Now (actually since Hiera 4) it’s possible to specify for some parameters alternative lookup methods (for example merging all the values found across the hierarchy for the requested key). This is done in the same data files where we specify our key values, so, for example, in our <code class="highlighter-rouge">$module_path/users/data/common.yaml</code> we can have:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lookup_options:
+  users::local:                     # This lookup option applies to parameter 'local' of class 'users'
+    merge:                          # Merge the values found across hierarchies, instead of getting the first one
+      strategy: deep                # Do a deep merge, useful when dealing with Hashes (to override single subkeys)
+      merge_hash_arrays: true
+  users::admins:                    # This lookup option applies to parameter 'admins' of class 'users'
+    merge:                          
+      strategy: unique              # In this case we expect an array and will merge all the values found in a single one
+      knockout_prefix: "--"         # It's even possible to define a prefix (here --) to force the removal of entries
+                                    # even if they are present in other layers
+</code></pre></div></div>
+
+<p>Note that you can use regular expressions when defining specific lookup options for some keys:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lookup_options:
+  "^profile::(.*)::(.*)_hash$":
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+  "^profile::(.*)::(.*)_list$":
+    merge:
+      strategy: unique
+      knockout_prefix: "--"
+</code></pre></div></div>
+
+<h3 id="the-lookup-command">The lookup command</h3>
+
+<p>It’s possible to use the <code class="highlighter-rouge">puppet lookup</code> command to query Hiera for a given key.</p>
+
+<p>If you run this on your Puppet Master you can easily find out the value of a given key for the specified node:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puppet lookup profiles --node git.lab # Looks for the profiles key on the node git.lab
+</code></pre></div></div>
+
+<p>If you add the <code class="highlighter-rouge">--debug</code> option you will see a lot of useful information about where and how data is looked for.</p>
+
+<p>You can also use the <code class="highlighter-rouge">lookup()</code> function inside your Puppet code, it replaces (and deprecates), the old <code class="highlighter-rouge">hiera()</code>, <code class="highlighter-rouge">hiera_array()</code>, <code class="highlighter-rouge">hiera_hash()</code> and <code class="highlighter-rouge">hiera_include()</code>.</p>
+
+<p>The general syntax is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lookup( &lt;NAME&gt;, [&lt;VALUE TYPE&gt;], [&lt;MERGE BEHAVIOR&gt;], [&lt;DEFAULT VALUE&gt;] )
+</code></pre></div></div>
+
+<p>or</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lookup( [&lt;NAME&gt;], &lt;OPTIONS HASH&gt; )
+</code></pre></div></div>
+
+<p>Some examples:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lookup('ntp::user') # Normal lookup. Same of hiera('ntp::user')
+lookup('ntp::user','root') # Normal lookup with default. Same of hiera('ntp::user','root')
+lookup('ntp_servers', Array, 'unique') # Array lookup, same of hiera_array('ntp_servers')
+lookup('users', Hash, 'deep') # Deep merge lookup, same of hiera_hash('users') with deep_merge set to true
+lookup('classes', Array[String], 'unique').include # Same of hiera_include('classes')
+
+lookup({
+  'name'  =&gt; 'ntp_servers',
+  'merge' =&gt; {
+    'strategy'        =&gt; 'deep',
+    'knockout_prefix' =&gt; '--',
+  },
+})
+</code></pre></div></div>
+
+<p>Check the <a href="https://docs.puppet.com/puppet/latest/function.html#lookup">official reference</a> for all the options available for the lookup function.</p>
+
+<h3 id="conclusions">Conclusions</h3>
+
+<p>Hiera 5 seems to finally put together years of Hiera evolution: it has a uniform approach to global, environment and module data, it has an easy to use command to query keys and gives users and modules authors much more flexibility on how data should be looked up. It also makes users like easier (if they use the Yaml backend, they can see directly in modules’ data the format of the keys to configure) and, it seems, has some performance benefits.</p>
+
+<p>Finally, and yet not mentioned here, it allows easier creation of <a href="https://docs.puppet.com/puppet/latest/hiera_custom_backends.html">custom backends</a>.</p>
+
+<p>You can start to use it with your existing Puppet code base (if already Puppet 4 ready) and it allows gradual <a href="https://docs.puppet.com/puppet/latest/hiera_migrate.html">migration</a> or your data.</p>
+
+<p>Embrace changes, Hiera 5 is here and now, for better Puppet data management.</p>
+
+<p>Alessandro Franceschi</p>
+:ET

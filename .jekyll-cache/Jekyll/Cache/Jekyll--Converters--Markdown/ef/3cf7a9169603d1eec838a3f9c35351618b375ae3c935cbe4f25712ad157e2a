@@ -1,0 +1,57 @@
+I"•<p>Puppet is always about abstraction. But please never forget maintainability, readability and simplicity <a href="https://en.wikipedia.org/wiki/KISS_principle">(K.I.S.S)</a>.</p>
+
+<p>Nowadays we often see code like the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class my_great_thing (
+  $data = {},
+){
+  $default = {
+    ensure   =&gt; present,
+  }
+  create_resources('user', $data, $default)
+}
+</code></pre></div></div>
+
+<p>Great abstraction, but what happens really?</p>
+
+<p>When declaring the class my_great_thing, puppet compiler will automatically do a hier alookup for the key <code class="highlighter-rouge">my_great_thing::data</code>.</p>
+
+<p>Maybe the key-value looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>my_great_thing::data:
+  'foo':
+    home: '/home/foo'
+    shell: '/bin/bash'
+    uid: '1044'
+    gid: '1044'
+  'bar':
+    home: '/home/bar'
+    shell: '/bin/bash'
+    uid: '1045'
+    gid: '1045'
+</code></pre></div></div>
+
+<p>These data are not used with the <code class="highlighter-rouge">create_resource</code> function, which will generate two user resource types for the users foo and bar.</p>
+
+<p>This is a quite hidden approach of what is done.</p>
+
+<p>How about using Puppet 4 capability of dealing with data?</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class my_great_class (
+  Hash $data = {}
+){
+  $data.each |String $key, Hash $value| {
+    $ensure = pick($value['ensure'], 'present')
+    user { $key:
+      ensure   =&gt; $ensure,
+      *        =&gt; $value,
+    }
+  }
+}
+</code></pre></div></div>
+
+<p>The most beautiful thing here is the splat operator <code class="highlighter-rouge">* =&gt; $value,</code>.
+This expands the $value subhash. Each key becomes the parameter and the according value becomes the parameter value.</p>
+
+<p>Martin Alfke</p>
+:ET

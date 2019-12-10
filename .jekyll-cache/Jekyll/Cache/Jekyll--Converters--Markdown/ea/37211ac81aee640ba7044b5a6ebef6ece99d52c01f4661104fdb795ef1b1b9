@@ -1,0 +1,146 @@
+I"F\<p>Puppi is a Puppet module that lets users manage and automate the deployment of applications or generally every kind of batch activity that involves the execution of a sequence of scripts and commands.<br />Its structure provides <strong>complete flexibility</strong> on the actions required for virtually any kind of application deployment but, in order to make usable out of the box, some example defines and scripts are provided to manage common scenarios and needs.<br />The module provides:<br />- The <strong>puppi command </strong>and its whole working environment<br />- A set of <strong>common usage scripts </strong>that can be used in chain <br />- <strong>Sample defines </strong>that can be used for many common application deployment scenarios.</p>
+<h2>The whole picture in an example</h2>
+<p>Before diving into details let's see a brief example.<br />On your node or role you can use a similar define:</p>
+<pre>puppi::project::war { "myapp":
+    source       =&gt; "http://repository.example42.com/myapp/myapp.war",
+    user         =&gt; "myappuser",
+    deploy_root  =&gt; "/srv/tomcat/myapp/webapps",
+    report_email =&gt; "release@example42.com",
+    enable       =&gt; "true",
+}</pre>
+<p>This creates a set of scripts in <strong>/etc/puppi/projects/myapp</strong> that make it possibile to write the simple command:</p>
+<pre>puppi deploy myapp</pre>
+<p>to run the whole deployment procedure, that, in this case, involves retrieving the war file from the <strong>http://repository.example42.com/myapp/myapp.war</strong>, backing up <strong>/srv/tomcat/myapp/webapps</strong>, deploying the new war in the same directory as <strong>myappuser </strong>and notifying via email <strong>release@example42.com.</strong></p>
+<p>This case is not particularly complex but consider that the same <strong>puppi::project::war </strong>define user before has many more options, that let you run custom pre or post commands (in customizable order and with defineable user), stop and start, during the process any custom service, block access from a specific IP (such as the one of your load balancer) and so on.</p>
+<p>If something wrong happens you can simply type:</p>
+<pre>puppi rollback myapp</pre>
+<p>and choose to what version you want to rollback (latest or any other previous (dated) backup).</p>
+<p>Let's see a real life example of a deploy:</p>
+<pre>root@metaportali-mpc:~# <strong>puppi deploy configurator</strong>
+Puppi setup: 00-configurator-RuntimeConfig-Initialization&#160; [&#160; OK&#160; ]
+
+Deploy: 10-configurator-Run_PRE-Checks&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [  OK  ]
+PROCS OK: 4 processes with command name 'apache2'
+TCP OK - 0.001 second response time on port 80|time=0.000651s;;;0.000000;10.000000
+[ ... ]
+Deploy: 20-configurator-Retrieve_WAR&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+Deploy: 30-configurator-Backup_existing_WAR&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+Deploy: 36-configurator-Disable_extra_services&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+Deploy: 37-configurator-Check_undeploy&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+Deploy: 38-configurator-Service_stop&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+&#160;* Stopping tomcat-mpc instance
+Using CATALINA_BASE:&#160;&#160; /store/tomcat/mpc
+[ ... ]
+Deploy: 39-configurator-Run_Custom_PreDeploy_Script&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+Deploy: 40-configurator-Deploy_WAR&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+Deploy: 42-configurator-Service_start&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+&#160;* Starting tomcat-mpc instance
+Using CATALINA_BASE:&#160;&#160; /store/tomcat/mpc
+[ ... ]
+Deploy: 43-configurator-Check_deploy&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+Deploy: 44-configurator-Enable_extra_services&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+Deploy: 80-configurator-Run_POST-Checks&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [  OK  ]
+PROCS OK: 4 processes with command name 'apache2'
+TCP OK - 0.004 second response time on port 80|time=0.003824s;;;0.000000;10.000000
+[ ... ]
+
+Reporting: 20-configurator-Mail_Notification&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+
+REPORT FOR PUPPI - STATUS OK
+Summary of operations is: /var/log/puppi/configurator/20110224-114729/summary 
+Details are in: /var/log/puppi/configurator/20110224-114729/
+Temporary workdir has been: /tmp/puppi/configurator/ (Will be rewritten at the next puppi run)
+Runtime config file is: /tmp/puppi/configurator/config
+Files have been archived in: /var/lib/puppi/archive/configurator/20110224-114729</pre>
+<p>If you use Example42 modules, enable their automatic monitoring features ($monitor=yes) and use Puppi, among others, as monitoring tool (ie: $monitor_tool=["nagios","munin","puppi"] ) you have out of the box the possibility of running local checks of the applications managed by Puppet with the command <strong>puppi check</strong>. Let's see an example:</p>
+<pre>root@metaportali-mpc:/# <strong>puppi check</strong>
+Host check: 50-apache_process&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 4 processes with command name 'apache2'
+
+Host check: 50-apache_tcp_80&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+TCP OK - 0.001 second response time on port 80|time=0.000668s;;;0.000000;10.000000
+
+Host check: 50-mcollective_process&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 1 process with command name 'ruby', args 'mcollectived'
+
+Host check: 50-munin_process&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 1 process with command name 'munin-node'
+
+Host check: 50-munin_tcp_4949&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+TCP OK - 0.003 second response time on port 4949|time=0.003184s;;;0.000000;10.000000
+
+Host check: 50-nrpe_process&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 1 process with command name 'nrpe'
+
+Host check: 50-nrpe_tcp_5666&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+TCP OK - 0.005 second response time on port 5666|time=0.005355s;;;0.000000;10.000000
+
+Host check: 50-openssh_process&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 13 processes with command name 'sshd'
+
+Host check: 50-openssh_tcp_22&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+TCP OK - 0.001 second response time on port 22|time=0.000857s;;;0.000000;10.000000
+
+Host check: 50-puppet_process&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 1 process with command name 'puppetd'
+
+Host check: 50-rsyslog_process&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 1 process with command name 'rsyslogd'
+
+Host check: 50-snmpd_process&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 1 process with command name 'snmpd'
+
+Host check: 50-tomcat-mpc&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 2 processes with command name 'java', args 'mpc'
+
+Host check: 50-tomcat-verticali&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+PROCS OK: 1 process with command name 'java', args 'verticali'
+
+Host check: 50-tomcat_tcp_8200&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+TCP OK - 0.001 second response time on port 8200|time=0.000697s;;;0.000000;10.000000
+
+Host check: 50-tomcat_tcp_8201&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; [&#160; OK&#160; ]
+TCP OK - 0.001 second response time on port 8201|time=0.001045s;;;0.000000;10.000000</pre>
+<p>From these simple examples it should be clear that with Puppi you have:<br />- A <strong>common command</strong> to 
+manage deploys and rollbacks on any host.<br />- A simple to use, coherent and still flexible and customizable 
+set of <strong>defines</strong> to describe in Puppet manifests all the elements you need for your application deployments. <br />- A quick way to check if everything is ok on your local node (if you use Example42 module set).</p>
+<p>Think about it: with just a Puppet define you build the whole deploy 
+logic<br />- <strong>Reporting</strong> for each deploy/rollback is built-in and extensible
+ <br />- <strong>Automatic checks</strong> can be built in the deploy procedure<br />- You 
+have a common, growing, set of <strong>general-use scripts</strong> for typical actions<br />- You can define <strong>custom deployments workflows</strong> (puppi::project::myprocedure) for specific cases not covered by the provided sample defines.</p>
+<h2>Using the puppi command</h2>
+<p>Puppi provides various actions and options, let's see the main ones:</p>
+<p><strong>puppi &lt;action&gt; &lt;project_name&gt; [ -options ]</strong><br />These are, currently, the available actions:<br />- <strong>puppi init &lt;project_name&gt;</strong> : First time initialization of the defined project<br />- <strong>puppi deploy &lt;project_name&gt;</strong> : Deploys the defined project<br />- <strong>puppi rollback &lt;project_name&gt;</strong> : Rollback to a previous deploy state <br />- <strong>puppi check</strong> [project_name] : Runs project specific and host wide checks <br />For each of these actions puppi runs the commands in <strong>/etc/puppi/projects/$project_name/$action</strong>, logs their status and then runs the commands in <strong>/etc/puppi/projects/$project_name/report</strong> to provide reporting, in whatever, pluggable, way.<br />You can also provide some options:<br /><strong>-f</strong> : Force puppi commands execution also on CRITICAL errors<br /><strong>-i</strong> : Interactively ask confirmation for every command<br /><strong>-t</strong> : Test mode. Just show the commands that should be executed without doing anything<br /><strong>-d &lt;yes|full&gt;</strong>: Debug mode. Show debugging info during execution<br /><strong>-o "parameter=value parameter2=value2"</strong> : Set manual options to override defaults. The options must be in parameter=value syntax, separated by spaces and inside double quotes. </p>
+<p>Here are some command line samples:</p>
+<p><strong>puppi check</strong> : Run host-wide checks. <br /><strong>puppi init myapp</strong> : Make the first deploy of "myapp". Can be optional.<br /><strong>puppi deploy myapp</strong> : Deploys myapp with the standard logic/parameters defined in Puppet<br /><strong>puppi deploy myapp -f</strong> : Deploys myapp and doesn't stop in case of Critical errors<br /><strong>puppi deploy myapp -i</strong> : Deploys myapp in interactive mode. Confirmation is asked for each step<br /><strong>puppi deploy myapp -t</strong> : Test mode. Just show the commands that would be executed<br /><strong>puppi deploy myapp -d full</strong> : Deploys myapp with full debugging output<br /><strong>puppi deploy myapp -i -o "version=1.1 source_url=</strong><a href="http://dev.example42.com/code/my_app/&amp;quot"><strong>http://dev.example42.com/code/my_app</strong>/</a>": Deploys myapp in interactive mode and sets some custom options that override the standard Puppet params.<br />  Note that these parameters change according to the script you use (and the scripts must honour this override).<br /><strong>puppi rollback myapp</strong> : Rollbacks myapp to a previous archived state. User is prompted to choose which deploy to override.</p>
+<h2>File Paths </h2>
+<p>All the paths used by the puppi scripts are provided, and can be configured, in the puppi Puppet module:<br /><strong>/usr/sbin/puppi</strong> - Where the puppi command is placed. Currently is a bash script.<br /><strong>/etc/puppi/puppi.conf</strong> - Puppi main config file. Here various puppi wide paths are defined<br /><strong>/etc/puppi/checks/</strong> ($checksdir) - Here can be placed all the host wide checks. If you use the Example42 monitor module and have "puppi" as $monitor_tool, this directory is automatically filled with checks based on Nagios plugins.<br /><strong>/etc/puppi/projects/</strong> ($projectsdir) - In this directory you can have one or more projects subdirs, with the commands to be run for deploy, rollback and check actions. They are completely built (and purged) by the Puppet module.<br /><strong>/etc/puppi/scripts/</strong> ($scriptsdir) - The general-use scripts directory, these are used by the above commands and may require one or more arguments.<br /><strong>/var/lib/puppi/archive/</strong> ($archivedir) - Where all data to rollback is placed.<br /><strong>/var/log/puppi/</strong> ($logdir) - Where logs and reports of the different commands are placed.<br /><strong>/tmp/puppi/</strong> ($workdir) - Temporary, scratchable, directory where Puppi places temporary files. It's wiped at every puppi run.<br /><strong>/tmp/puppi/$project/config</strong> - A runtime configuration file, where are dinamically placed variables usable by all the scripts invoked by puppi. This is necessary to mantain "state" information that changes on every puppi run (such as the deploy datetime, used for backups).</p>
+<h2>Understanding the Puppi module</h2>
+<p>The puppi module provides few <strong>basic defines</strong> to manage puppi's setup elements and some <strong>example templates</strong> that use these defines to build deployment workflows.<br />The basic defines are:<br /><strong>puppi::project</strong>  - Creates the main project structure. One or more different deployment projects can exist on a node.<br /><strong>puppi::initialize</strong> - Creates a single command to be placed in the init sequence. It's not required for every project.<br /><strong>puppi::deploy</strong>   - Creates a single command to be placed in the deploy sequence. More than one is generally needed for each project.<br /><strong>puppi::rollback</strong> - Creates a single command to be placed in the rollback sequence. More than one is generally needed for each project.<br /><strong>puppi::check</strong>    - Creates a single check (based on Nagios plugins) for a project or for the whole host (host wide checks are auto generated by Example42 monitor module)<br /><strong>puppi::report</strong>   - Creates a reporting command to be placed in the report sequence.<br /><br />The above init, deploy, rollback, check and report defines have generally a standard structure and similar arguments. Every one is reversable (enable =&gt; false) but you can wipe out the whole /etc/puppi directory to have it rebuilt from scratch.<br />Here is an example for a deploy command:</p>
+<pre>puppi::deploy { "Retrieve files":       # The $name of the define
+    command  =&gt; "get_curl.sh",          # General-use script to use 
+    argument =&gt; "<a>file:///storage/file"</a>, # Argument(s) for the script
+    priority =&gt; "10",                   # Execution order
+    user     =&gt; "root",                 # Execution user
+    project  =&gt; "myapp",                # The name of the project
+}</pre>
+<p>This define creates a file named <strong>/etc/puppi/projects/${project}/deploy/${priority}-${name}</strong><br />Its content is, simply:<br /><strong>su - ${user} -c "export project=${project} &amp;&amp; /etc/puppi/scripts/${command} ${arguments}"</strong><br /><br />You can glue together, with the desired order according to the priority argument, different basic defines to create a complex project template and use this in your manifests. Various sample defines that can be used to many common deployment scenarios are present in <strong>puppi/manifests/project/ </strong>You can use puppi::project::war to manage the deployment of a simple war file, as seen before, or other defines to manage deployments of a tarball, an arbitrary list of files, or the maven artifacts published on a Nexus repository.</p>
+<p>The <strong>puppi/files/scripts</strong> directory in the module contains some general usage scripts that can be used in custom deployments.<br />They are generally made to work together according to a specific logic, which is at the base of the sample defines in <strong>puppi/manifests/project/</strong> but you're free to write your own scripts, in whatever language, according to your needs, and integrate them with custom Puppet defines.</p>
+<p>The default scripts are engineered to follow this procedure for a deployment:<br />- Remote files are downloaded in <strong>/tmp/puppi/$project/store </strong>or directly in the predeploy directory:<strong> /tmp/puppi/$project/deploy</strong><br />- If&#160; necessary the downloaded files are expanded in one or more predeploy directories (default:<strong>/tmp/puppi/$project/deploy)</strong>- Runtime configuration entries might be saved in <strong>/tmp/puppi/$project/config</strong>- Files are eventually backed from the deploy directory (Apache' docroot, Tomcat webapps or whatever) to the archive directory <strong>(/var/lib/puppi/archive/$project</strong>)<br />- Files are copied from the predeploy directory to the deploy dir. <br />- Relevant services are eventually sopped and started</p>
+<p>The most used common scripts are (they might have different arguments, some of them are quite simple):<br /><strong>get_file.sh</strong> - Retrieves a remove file via ssh/http/rsync/svn and places it in a temporary directory (store or predeploy)<br /><strong>deploy.sh</strong> - Copies the files in the predeploy dir to deploy dir<br /><strong>archive.sh</strong> - Backups and restores files in deploy dir<br /><strong>service.sh</strong> - Stops or starts one or more services<br /><strong>wait.sh</strong> - Waits for the presence or absence of a file, for the presence of a string in a file or a defined number or seconds.<br /><strong>get_metadata.sh</strong> - Extracts metadata from various sources in order to provide info to other scripts<br /><strong>report_mail.sh</strong> - Sends a mail with the report of the operations done</p>
+<h2>How to customize</h2>
+<p>It should be clear that with puppi you have full flexibility in the definition of a deployment procedure, since the puppi command is basically a wrapper that executes arbitrary scripts with a given sequence, in pure KISS logic.<br /><br />There are different parts where you can customize the behaviour of puppi:</p>
+<p>- The set of <strong>general-use scripts in /etc/puppi/scripts</strong>/ ( this dir is filled with the content of puppi/files/scripts/ ) can/should be enhanced. As been, these can be arbitrary scripts in whatever language. If you want to follow puppi's logic, though, consider that they should import the common and runtime configuration files and have an exit code logic similar to the one of Nagios plugins: 0 is OK, 1 is WARNING, 2 is CRITICAL.<br />Note that by default a script that exits with WARNING doesn't block the deploy procedure, on the other hand, if a script exits with CRITICAL (exit 2) by default it blocks the procedure.<br />  Take a second, also, to explore the runtime config file created by the puppi command that contains variables that can be set and used by the scripts invoked by puppi.</p>
+<p>- The custom <strong>project defines</strong> that describe deployments procedures. These are placed in <strong>puppi/manifests/project</strong>/ and can request all the arguments you want to feed your scripts with.<br />  Generally is a good idea to design a standard enough template that can be used for all the cases where the deployment procedure involves similar steps. Consider also that you can handle exceptions with variables (see the $loadbalancer_ip usage in puppi/manifests/project/maven.pp)</p>
+<h2>What's next</h2>
+<p>The Puppi module is a work in progress that is already used in production. It has been designed to automate deployments in a specific environment but a lot of effort has been done to standardize as much as possible the procedures and the options for differents needs and logic and to make it modular by design.<br />The same puppi command can be re-written from scratch. It's has been made in bash and not in fancier languanges for simplicity and portability.<br />What it does at the moment, after all, is something quite simple (basically execute commands in a sequence). <br />The whole point of the Puppi module is to define quickly and standardize in Puppet manifests any kind of deployment procedure (at least, at the moment, any kind of procedure that can be executed from the same node, orchestration is planned but not yet functional).</p>
+<p>Future plans involve:<br />- dedicated agents for orchestration tools like Mcollective or ControlTier<br />- more reporting scripts (for example reporting on Google Calendar and Docs)<br />- a web interface to manage the deployment procedure and see reports</p>
+:ET
