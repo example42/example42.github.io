@@ -5,7 +5,7 @@ title: Puppet Tip 108 - Request for Tiny Data - Part 2 - Tiny data exposed
 
 This is the **second** of **four** post series for our call for Tiny Data.
 
-In the first post we introduced Tiny Puppet (tp), now we are going to talk about what feeds it:
+In the [first post](https://www.example42.com/2019/12/09/request-for-tinydata-part1/) we introduced Tiny Puppet (tp), now we are going to talk about what feeds it and what all this is about.
 
 ### Tiny data
 
