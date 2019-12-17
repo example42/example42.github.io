@@ -68,23 +68,23 @@ Almost no module uses this feature, Tiny Puppet does it, potentially for any app
 
 This is a partial set of tinydata for apache:
 
-  ---
-  apache::settings:
-    package_name: 'httpd'
-    service_name: 'httpd'
-    config_file_path: '/etc/httpd/conf/httpd.conf'
-    config_dir_path: '/etc/httpd'
-    tcp_port: '80'
-    pid_file_path: '/var/run/httpd.pid'
-    log_file_path: [ '/var/log/httpd/access.log' , '/var/log/httpd/error.log' ]
-    log_dir_path: '/var/log/httpd'
-    data_dir_path: '/var/www/html'
-    process_name: 'httpd'
-    process_user: 'apache'
-    process_group: 'apache'
-    nodaemon_args: '-DFOREGROUND'
-    validate_cmd:
-      config: 'httpd -t -f %'
+    ---
+    apache::settings:
+      package_name: 'httpd'
+      service_name: 'httpd'
+      config_file_path: '/etc/httpd/conf/httpd.conf'
+      config_dir_path: '/etc/httpd'
+      tcp_port: '80'
+      pid_file_path: '/var/run/httpd.pid'
+      log_file_path: [ '/var/log/httpd/access.log' , '/var/log/httpd/error.log' ]
+      log_dir_path: '/var/log/httpd'
+      data_dir_path: '/var/www/html'
+      process_name: 'httpd'
+      process_user: 'apache'
+      process_group: 'apache'
+      nodaemon_args: '-DFOREGROUND'
+      validate_cmd:
+        config: 'httpd -t -f %'
 
 Note the hash for validate_cmd, where we can use different commands for different kind of files (here we set the command to check for the file defined by `**config**_file_path` ).
 As everything in Tiny Data, settings can be overridden for different OS, so for Debian OS family, the above data is overridden by:
