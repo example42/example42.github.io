@@ -7,9 +7,10 @@ Post **four** of **four** about our Request for Tiny Data!
 
 Previously we have:
 
-- Part 1 - Introduced Tiny Puppet and where it can be used
-- Part 2 - Described how to write Tiny Data
-- Part 3 - Shown how to manage extra repositories and how to define an app upstream repo
+
+- [Part 1](https://www.example42.com/2019/12/09/request-for-tinydata-part1/){:target="_blank"} - Introduced Tiny Puppet and where it can be used
+- [Part 2](https://www.example42.com/2019/12/12/request-for-tinydata-part2/){:target="_blank"} - Described how to write Tiny Data
+- [Part 3](https://www.example42.com/2019/12/16/request-for-tinydata-part3/) - Shown special tiny data to handle package repositories, configuration files validation and usage within containers
 
 Now let's add a few other info and raise the final call!
 
@@ -45,11 +46,11 @@ To test a specific app (can be used in shell sessions, CI, monitoring, puppet ta
 
 To `tail -f` all the known logs of the apps managed with tp:
 
-    tp logs
+    tp log
 
 To limit to the logs of an application
 
-    tp logs nginx
+    tp log nginx
 
 To quickly install an application caring of repositories
 
@@ -99,6 +100,6 @@ Please engage with, in effort order:
 - **Open a [ticket](https://github.com/example42/tinydata/issues){:target="_blank"}** for **incorrect, incomplete or not updated** existing tiny data
 - **Do directly the work** with updated tinydata and submit a **[Pull Request](https://github.com/example42/tinydata/pulls){:target="_blank"}**
 
-Our goal is to `tp install everything` on any OS.
+Our goal is to `tp install everything` on any OS ;-)
 
-Now **let's define everything** together.
+Now **let's define everything**, together.
