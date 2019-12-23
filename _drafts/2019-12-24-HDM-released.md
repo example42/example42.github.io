@@ -17,8 +17,7 @@ We learned from several customers, that most of them have specifc requirements w
 Data must be able to be modified by a person which:
 - has no knowledge on Git
 - has no knowledge on Puppet
-- only runs Windows
-- optionally only shows data, but does not allow modification
+- only runs Windows on Workstation
 
 Therefore we decided to develop HDM.
 
@@ -26,7 +25,7 @@ HDM starts with letting you select a desired environment where you want to check
 
 ![select environment](_hdm/image1_select_env.png)
 
-Next you can select a node. We query PuppetDB to find existing nodes and their facter values:
+Next you can select a node. We query PuppetDB to find existing environments, nodes and their facter values:
 
 ![select node](_hdm/image2_select_node.png)
 
@@ -44,8 +43,7 @@ HDM writes the data back to a file.
 #### Requirements
 
 In the actual state, HDM must run on the Puppet Master.
-We check for existing environments by reading directory structures.
-We fetch nodelist and facts from PuppetDB (using http localhost access point).
+We fetch environments, nodelist and facts from PuppetDB.
 
 HDM needs a file structure where it con store modified data.
 This file structure must be added to your `hiera.yaml` configuration file.
@@ -53,6 +51,7 @@ This file structure must be added to your `hiera.yaml` configuration file.
 #### Upcoming features
 
 Within the next releases we want to:
+- add read-only feature
 - provide a Puppet module to install, configure and run HDM
 - optimize the web view
 - have HDM run on a separate machine
