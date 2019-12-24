@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Puppet Tip 107 - HDM released!
+title: Puppet Tip 111 - HDM released!
 ---
 
 Merry christmas to everybody.
@@ -23,19 +23,19 @@ Therefore we decided to develop HDM.
 
 HDM starts with letting you select a desired environment where you want to check or change data.
 
-![select environment](_hdm/image1_select_env.png)
+![select environment](/img/hdm/02_HDM_env.png)
 
 Next you can select a node. We query PuppetDB to find existing environments, nodes and their facter values:
 
-![select node](_hdm/image2_select_node.png)
+![select node](/img/hdm/03_HDM_node.png)
 
 Now you can see all hiera keys a node has within the environment hiera data:
 
-![hiera keys](_hdm/image3_see_keys.png)
+![hiera keys](/img/hdm/04_HDM_node_data.png)
 
 When selecting a key we show the hierachies and vizualize whether a hierarchy has data for a key and which one is the default:
 
-![hiera data](_hdm/image4_see_data.png)
+![hiera data](/img/hdm/05_HDM_node_data_view.png)
 
 You can now change data on node level.
 HDM writes the data back to a file.
