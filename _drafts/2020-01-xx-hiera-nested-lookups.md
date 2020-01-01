@@ -4,12 +4,14 @@ title: Tip of the Week XX - Hiera nested lookups
 ---
 
 The Puppet data backend (hiera) allows you set data for site specific differences in your infrastructure.
-e.g. you can have multiple datacenters where DNS, NTP, SNMP and backup are different, or you have a development stage which uses a different database server than the productoin stage.
+
+For example you can have multiple datacenters where DNS, NTP, SNMP and backup are different, or you have a development stage which uses a different database server than the production stage.
 
 Usually you check your infrastructure for differences and then use Facter data to build layers of Hiera data.
 
 But what if you need the same data in several hiera keys?
-e.g. you want to set the db connection settings like user/password for databases and webservers.
+
+Fot example you want to set the db connection settings like user/password for databases and webservers.
 
 This is where we can make use of nested hiera lookups.
 
@@ -18,7 +20,8 @@ This is where we can make use of nested hiera lookups.
 
 ## Hiera nested lookups
 
-Hiera let's you run an additional hiera lookup inside of hiera data.
+Hiera lets you run an additional hiera lookup inside of hiera data.
+
 This allows you to specify shared information once only, instead of adding the same information several times:
 
 An example:
@@ -36,8 +39,7 @@ An example:
 
 ## The "lookup" and "hiera" lookup
 
-Instead of managing the same information on several places, we can ask hiera to runanotherlookup to fetch the required data:
-
+Instead of managing the same information on several places, we can ask hiera to run another lookup to fetch the required data:
 
     profile::app::db::auth
       'app1':
@@ -53,10 +55,13 @@ Instead of managing the same information on several places, we can ask hiera to 
     app1_user_pass: '$\.fgeetd'
 
 Instead of "lookup" you can also specify "hiera".
+
 Please note that "lookup" and "hiera" nested lookups will only return string based values.
+
 If you specify a non existing key, hiera will fail and return an error.
 
 You can have multiple layers of nested lookups. That means that you run a lookup on a key, which does again run lookup.
+
 You have to be aware that Hiera will fail, if you build loops. Hiera will detect these and return an error.
 
 ## The "alias" lookup
@@ -78,6 +83,7 @@ Please note, that you can not add additional data to an "alias" lookup.
 ## The "literal" lookup
 
 Consider the situation in which you donot like hiera to interpolate the percent (%) sign.
+
 In this case you can use the "literal" lookup:
 
     profile::app::web::server_name_string: "%{literal('%')}{SERVER_NAME}"
