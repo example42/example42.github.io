@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Tip of the Week XX - Hiera nested lookups
+title: Puppet Tip 112 - Hiera nested lookups
 ---
 
 The Puppet data backend (hiera) allows you set data for site specific differences in your infrastructure.
