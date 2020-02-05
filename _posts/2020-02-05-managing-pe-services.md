@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Puppet Tip 113 - Managing Puppet Enterprise: Part 1 - Services 
+title: Puppet Tip 113 - Managing Puppet Enterprise - Part 1 - Services 
 ---
 
 Puppet Enterprise (PE) is Puppet's commercial offering. It's based on the Open Source core and provides various enterprise features, like the powerful and utterly useful Console to manage and visualize the whole infrastructure from a Web interface.

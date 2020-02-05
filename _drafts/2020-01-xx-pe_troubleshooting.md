@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Puppet Tip 114 - Managing Puppet Enterprise: Part 2 - Log Files 
+title: Puppet Tip 114 - Managing Puppet Enterprise - Part 2 - Log Files 
 ---
 
 In the previous blog post we have seen what are the main services present in a Puppet Enterprise (PE) server, here we are going to give a look at their logs.
