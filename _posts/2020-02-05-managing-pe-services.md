@@ -301,5 +301,3 @@ In the next post, we are going to see where and how are all the PE related logs.
 Stay awaken.
 
 Alessandro Franceschi
-
-Alessandro Franceschi
