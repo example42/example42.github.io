@@ -20,9 +20,10 @@ This blog post explains the simple and the git flow based change workflow for a 
 
 ## Simple workflow
 
-Only production and branch protected.
-Changes as feature branches only.
-Similar to upstream development of most Puppet library module code.
+Within the simple workflow you are working with a single long living branch which we usually call `production`.
+We prefer to set this branch to "protected" to prevent any direct changes. And all changes must be delivered using feature branches which will be merged into `production` branch.
+
+This is similar to many upstream development procedures of most Puppet library module code.
 
 Pro:
 easy to learn
@@ -38,36 +39,45 @@ An example:
 
 ## GIT Flow
 
-In this case you have to create several long living branches like `development`, `testing` and then `production`. You can use any string lower case letter sa nd numbers and underscore as environment name. Maybe you prefer other naming like `dev`, `qa`, `int`, `pre_prod`, `prod`.
+But how to proceed, if you want to have Puppet code available for each of your infrastructure stages?
+In this case you have to create several long living branches like `development`, `testing` and then `production`. You can use any string lower case letters and numbers and underscore as environment name. Maybe you prefer other naming like `dev`, `qa`, `int`, `pre_prod`, `prod`.
 
-But using multiple branches makes it harder to deploy single changes independently. What will happen upon merge if you have two changes within development branch and only the second one may be deploed to thenext branch?
+But using multiple branches makes it harder to deploy single changes independently. What will happen upon merge if you have two changes within development branch and only the second one may be deploed to the next branch?
 
-Multiple branches have several additional requirements.
-Rebase and Squashing is a hard must for each merge.
-All long living branches must be protected. Changes may only be added via merge requests. No exceptions allowed.
-Hotfixes in testing are developed on testing feature branch, forwarded to production feature branch and backported into development feature branch.
-Hotfixes on production branch are developed on production feature branch and are backported via development feature branch and testing feature branch.
+One must reconsider on how you see GIT repositories: Instead of just seeing one single code base within a GIT repository you should see several loosly coupled streams of code placed into branches on a single GIT repository.
+
+Each of these code stream branches can be developed and improved indepdendently and all development must be done in a stream feature/change branch.
+Within the change ticket you follow work and deployment be placing them into subtasks for each stream branch.
+
+
+    dev         dev
+      |         |
+      dev_feature
+      
+          qa        qa
+           |        |
+           qa_feature
+           
+                 prod          prod
+                    |          |
+                    prod_feature
+
+This might look like duplicate work, as you need to apply the same change in multiple places.
+But on the other hand, this deployment and staging methods allows you to also deploy hotfixes in production and backporting them to development.
+
+Multiple branches have several additional requirements:
+
+- Rebase and Squashing is a hard must for each merge.
+- All long living branches must be protected. Changes may only be added via merge requests. No exceptions allowed.
+- Normal code staging is done by merging into dev and cherrypicking the change  in a merge request to the other branches.
+- Hotfixes in testing are developed on testing feature branch, forwarded to production feature branch and backported into development feature branch.
+- Hotfixes on production branch are developed on production feature branch and are backported via development feature branch and testing feature branch.
 
 Pro:
 adopts agile and waterfall concepts
 
 Con:
 needs more GIT knowledge
-
-## Production isolated from development?
-
-Needs GIT server and Puppet Master in prod and dev.
-Puppetfile references an DNS alias!
-
-### Simple workflow
-
-Same as above.
-After CI run in dev the deployment to prod Puppet is either automated or a manual CI step.
-
-### GIT Flow workflow
-
-Needs a GIT sync system.
-Pull frm dev, push to prod (branches and code)
 
 ## Recommendations
 
