@@ -68,10 +68,11 @@ But on the other hand, this deployment and staging methods allows you to also de
 Multiple branches have several additional requirements:
 
 - Rebase and Squashing is a hard must for each merge.
+- Cherry-Picking is the way to get a change from one feature branch to another.
 - All long living branches must be protected. Changes may only be added via merge requests. No exceptions allowed.
 - Normal code staging is done by merging into dev and cherrypicking the change  in a merge request to the other branches.
-- Hotfixes in testing are developed on testing feature branch, forwarded to production feature branch and backported into development feature branch.
-- Hotfixes on production branch are developed on production feature branch and are backported via development feature branch and testing feature branch.
+- Hotfixes in testing are developed on testing feature branch, forwarded vai cherry-pick to production feature branch and backported (also chrry-pick) into development feature branch.
+- Hotfixes on production branch are developed on production feature branch and are backported via development feature branch and testing feature branch (both cherry-pick).
 
 Pro:
 adopts agile and waterfall concepts
@@ -85,9 +86,9 @@ When to use which solution?
 What are characteristics which will make you consider using GIT Flow. What are the requirements?
 
 Deploy fast and often? Single plattform, no stages? -> Use simple
-Deployment may stuck for weeks in a specific stage? Deployments are rare and slowly? ITIL based change management and change approval process? -> Use git flow
+Deployment may stuck for weeks in a specific stage? Deployments are rare and slowly? ITIL based change management and change approval process? -> Use GIT Flow
 
-Switching to GIT Flow allows more flexible handling of complex change approval requirements but needs more understanding on GIT squash and rebase and how to deal with merge conflicts.
+Switching to GIT Flow allows more flexible handling of complex change approval requirements but needs more understanding on GIT squash, rebase and cherry-pick and how to deal with merge conflicts.
 
 Martin Alfke
 
