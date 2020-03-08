@@ -70,8 +70,8 @@ Multiple branches have several additional requirements:
 - Rebase and Squashing is a hard must for each merge.
 - Cherry-Picking is the way to get a change from one feature branch to another.
 - All long living branches must be protected. Changes may only be added via merge requests. No exceptions allowed.
-- Normal code staging is done by merging into dev and cherrypicking the change  in a merge request to the other branches.
-- Hotfixes in testing are developed on testing feature branch, forwarded vai cherry-pick to production feature branch and backported (also chrry-pick) into development feature branch.
+- Normal code staging is done by merging into dev and cherrypicking the change into a merge request to the other branches.
+- Hotfixes in testing are developed on testing feature branch, forwarded via cherry-pick to production feature branch and backported (also cherry-pick) into development feature branch.
 - Hotfixes on production branch are developed on production feature branch and are backported via development feature branch and testing feature branch (both cherry-pick).
 
 Pro:
