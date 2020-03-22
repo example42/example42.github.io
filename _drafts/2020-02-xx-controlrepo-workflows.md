@@ -10,10 +10,10 @@ In both cases you want to carefully consider your workflow on how to get changes
 
 The most simple option is to only use the `production` environment branch and add all changes via feature branches and merge requests.
 
-When working in an ITIL based change management environment this simple approach does not adopt to change management requirements which allow code changes being tested on dedicated systems prior being deployed to production systems.
-This is where one should consider adopting the GIT Flow concept. 
+When working in an ITIL based change management environment this simple approach does not adopt to change management requirements which ony allows code changes being tested on dedicated systems prior being deployed to production systems.
+This is where one should consider adopting the [GIT Flow](https://nvie.com/posts/a-successful-git-branching-model/) concept. 
 
-This blog post explains the simple and the git flow based change workflow for a Puppet control-repository.
+This blog post explains the *simple* and the *git flow* based change workflow for a Puppet control-repository.
 
 * Table of content
 {:toc}
@@ -21,7 +21,7 @@ This blog post explains the simple and the git flow based change workflow for a 
 ## Simple workflow
 
 Within the simple workflow you are working with a single long living branch which we usually call `production`.
-We prefer to set this branch to "protected" to prevent any direct changes. And all changes must be delivered using feature branches which will be merged into `production` branch.
+We prefer to set this branch to "protected" to prevent any direct changes. All changes must be delivered using feature branches which will be merged into `production` branch.
 
 This is similar to many upstream development procedures of most Puppet library module code.
 
@@ -37,6 +37,18 @@ An example:
       |     |
       feature
 
+You will statr by creating your own feature branch:
+
+    git checkout -b <feature_branch>
+
+At customers we usually recommend to build the name of the branch based upon useer or team name. e.g. `git checkout -b alfke_new_db_role`.
+
+Additionally we recommend to work with rebase on feature branches instead of merge. Rebasing will take care that your feature branch changes are placed after any other productoin changes.
+
+If you see changes on production branch you need to rebase: `git rebase origin/production`
+
+Any feature branch should result in a merge request. Every merge request should consist of a single commit only. Best option is to use `git commit --amend` on any additional change or to squash all commits once your feature is ready to get deployed.
+
 ## GIT Flow
 
 But how to proceed, if you want to have Puppet code available for each of your infrastructure stages?
@@ -44,10 +56,10 @@ In this case you have to create several long living branches like `development`,
 
 But using multiple branches makes it harder to deploy single changes independently. What will happen upon merge if you have two changes within development branch and only the second one may be deploed to the next branch?
 
-One must reconsider on how you see GIT repositories: Instead of just seeing one single code base within a GIT repository you should see several loosly coupled streams of code placed into branches on a single GIT repository.
+One must reconsider on how you look at your branches within your GIT repositorie: *Instead of just seeing one single code base within a GIT repository you should see several loosly coupled streams of code placed into branches on a single GIT repository*.
 
 Each of these code stream branches can be developed and improved indepdendently and all development must be done in a stream feature/change branch.
-Within the change ticket you follow work and deployment be placing them into subtasks for each stream branch.
+All workflows must be tracked within a ticket. Within this change ticket you follow work and deployment be placing them into subtasks for each stream branch.
 
 
     dev         dev
