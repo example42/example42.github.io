@@ -154,9 +154,9 @@ So, what's important to understand here is that Tiny Puppet has no idea on how t
 
 In the above template example, we have seen some other tinydata settings which may be useful when working with tp::conf.
 
-We have seen that by default, if you just pass in the title the name of an application, tp::conf manage the "main" configuration file of that application, but you can actually manage other files for that application according to the following conventions.
+We have seen that by default, if you just pass in the title the name of an application, tp::conf manages the "main" configuration file of that application, but you can actually manage other files for that application according to the following conventions.
 
-If we specify a file name after the application name in the title, separated by ::, that file is placed in the main configuration directory (setting `config_dir_path`), the following, for example, will manage `/etc/ssh/ssh_config` since openssh's config_dir_path is `/etc/ssh`:
+If we specify a file name after the application name in the title, separated by `::`, that file is placed in the main configuration directory (setting `config_dir_path`), the following, for example, will manage `/etc/ssh/ssh_config` since openssh's config_dir_path is `/etc/ssh`:
 
     tp::conf { 'openssh::ssh_config': [...] }
 
@@ -169,9 +169,9 @@ If we explicitly set a path, that path is used and the title is only used to und
 
 If we specify a `base_dir` and use a title with the format: `application::file_name` the file is created with the defined name in the indicated base directory. For example, the following wil create (in RedHat derivatives) `/etc/httpd/conf.d/example42.com.conf`:
 
-  tp::conf { 'apache::example42.com.conf':
-    base_dir => 'conf', # Use the settings key: conf_dir_path
-  }
+    tp::conf { 'apache::example42.com.conf':
+      base_dir => 'conf', # Use the settings key: conf_dir_path
+    }
 
 There are different possible `base_dir` values, they may be defined according to the application. The most common ones are:
 
@@ -182,7 +182,7 @@ There are different possible `base_dir` values, they may be defined according to
     log               log_dir_path       Directory where are placed the application logs
     data              data_dir_path      Directory where application data lives
 
-Why is it useful and necessary to always specify the application name in tp::conf? Because in this way all dependencies are automatically managed: file is managed after the installation of the relevant package and triggers a service restart. We can however disable, or change, this behavior.
+Why is it useful and necessary to always specify the application name in `tp::conf`? Because in this way all dependencies are automatically managed: file is managed after the installation of the relevant package and triggers a service restart. We can however disable, or change, this behavior.
 
 To disable package and service dependencies:
 
@@ -259,77 +259,83 @@ We have talked about the tp defines, but there's actually a `tp` class, which is
 
 In the following example, we are managing a full LAMP stack, included configuration files for virtual hosts and web application files with auto deployment from a Git source (don't try this at home, you miss some files and access to git repos):
 
-  tp::install_hash:
-    apache: {}
-    mysql: {}
-    php: {}
+    tp::install_hash:
+      apache: {}
+      mysql: {}
+      php: {}
 
-  tp::conf_hash:
-    apache::openkills.info.conf:
-      base_dir: conf
-      template: psick/apache/vhost.conf.erb
-      options_hash:
-        ServerName: openskills.info
-        ServerAlias:
-          - openskill.info
-          - www.openskills.info
-          - www.openskill.info
-        AddDefaultCharset: ISO-8859-1
-    apache::deny_git.conf:
-      base_dir: conf
-      source: puppet:///modules/psick/apache/deny_git.conf
-    apache::abnormalia.com.conf:
-      base_dir: conf
-      template: psick/apache/vhost.conf.erb
-      options_hash:
-        ServerName: abnormalia.com
-        ServerAlias:
-          - www.abnormalia.com
-        AddDefaultCharset: ISO-8859-1
-        extra:
-          ErrorDocument: '404 /index.php'
+    tp::conf_hash:
+      apache::openkills.info.conf:
+        base_dir: conf
+        template: psick/apache/vhost.conf.erb
+        options_hash:
+          ServerName: openskills.info
+          ServerAlias:
+            - openskill.info
+            - www.openskills.info
+            - www.openskill.info
+          AddDefaultCharset: ISO-8859-1
+      apache::deny_git.conf:
+        base_dir: conf
+        source: puppet:///modules/psick/apache/deny_git.conf
+      apache::abnormalia.com.conf:
+        base_dir: conf
+        template: psick/apache/vhost.conf.erb
+        options_hash:
+          ServerName: abnormalia.com
+          ServerAlias:
+            - www.abnormalia.com
+          AddDefaultCharset: ISO-8859-1
+          extra:
+            ErrorDocument: '404 /index.php'
 
-  tp::dir_hash:
-    apache::openskills.info:
-      vcsrepo: git
-      source: git@bitbucket.org:alvagante/openskills.info.git
-      path: /var/www/html/openskills.info
-    apache::abnormalia.com:
-      ensure: latest
-      vcsrepo: git
-      source: git@bitbucket.org:alvagante/abnormalia.com.git
-      path: /var/www/html/abnormalia.com
+    tp::dir_hash:
+      apache::openskills.info:
+        vcsrepo: git
+        source: git@bitbucket.org:alvagante/openskills.info.git
+        path: /var/www/html/openskills.info
+      apache::abnormalia.com:
+        ensure: latest
+        vcsrepo: git
+        source: git@bitbucket.org:alvagante/abnormalia.com.git
+        path: /var/www/html/abnormalia.com
 
 
 ## tp resources defaults
 
 If you use massively tp in your control repo, you may want to set in the main manifests/site.pp some resource defaults which are applied to all the tp resources in your catalog. Here is an example where tp cli integration is enabled (do yourself a favour, use it just for the joys of writing on your shell `tp log` and `tp test` ;-) ) and a custom tinydata module is used.
 
-  $tinydata_module = 'my_tinydata'
-  Tp::Install {
-    cli_enable  => true,
-    test_enable => true,
-    data_module => $tinydata_module
-  }
-  Tp::Conf {
-    data_module => $tinydata_module,
-  }
-  Tp::Dir {
-    data_module => $tinydata_module,
-  }
+    $tinydata_module = 'my_tinydata'
+    Tp::Install {
+      cli_enable  => true,
+      test_enable => true,
+      data_module => $tinydata_module
+    }
+    Tp::Conf {
+      data_module => $tinydata_module,
+    }
+    Tp::Dir {
+      data_module => $tinydata_module,
+    }
 
 
 ## Using tp for custom applications or in local profiles 
 
-An interesting point to consider is that, besides the option `data_module` which allows the usage of a custom tinydata module, all the tp defines have also the parameter `settings_hash` which can be used to override any tiny daya setting.
+An interesting point to consider is that, besides the option `data_module` which allows the usage of a custom tinydata module, all the tp defines have also the parameter `settings_hash` which can be used to override any tiny data setting.
 
-We can even manage via tp a custom application, packaged internally, as long as we have the relevant tinydata in a custom tinydata module:
+We can even manage via tp a custom application, packaged internally, as long as we have the relevant data in a custom tinydata module:
 
     tp::install { 'my_app':
       data_module => 'my_tinydata',
     }
 
-Alternatively, let's say when we want to install a custom apache package, coming from some internal repo, but still using Tiny Puppet with the default tinydata module, we can override the name of the package to use with:
+When you use directly the upstream **tinydata** module and not a local clone (in your internal git servers) or fork of it, we **recommend** to always specify the used version in your Puppetfile and properly test changes before updating the version used:  tinydata contains info about a large number of applications, and their data might be updated if we find that is wrong for a given OS or if we want to extend support for a new OS release.  These changes don't follow [SemVer](https://semver.org/) standards and even a minor version update in Tiny Data may change some settings for an application you manage via Tiny Data.
+
+The rule of thumb here is: know what applications you manage via tp and check, when upgrading the tinydata module, if there are changes in data for these applications that might impact you. It's not hard and not difficult, but that's the tradeoff of having a single module managing different applications.
+
+Changes on the **tp**, which contains code and not data, instead, are much more controlled and fully follow SemVer conventions.
+
+As alternative to the usage of a custom tinydata module or fork, you can override the defaults tinydata settings. Let's say you want to install a custom apache package, coming from some internal repo, but keep all the other settings, you can write something as follows:
 
     tp::install { 'apache':
       settings_hash => {
@@ -337,7 +343,7 @@ Alternatively, let's say when we want to install a custom apache package, coming
       }
     }
 
-In these cases, anyway, when a custom dedicated tinydata module could be overkill but still we need to override some settings, is better to be sure that we use the same settings for all the related defines:
+Even better, to be sure that we use the same settings for all the related defines, place your settings in a variable (whose content can come from Hiera) and use it wherever needed:
 
     $apache_settings = {
       package_name => 'my_httpd',
@@ -352,20 +358,23 @@ In these cases, anyway, when a custom dedicated tinydata module could be overkil
       settings_hash => $apache_settings,
     }
 
-
 More information about how to use Tiny Data to configure custom applications and how to use tp defines in custom profiles, can be read in [this blog post](https://www.example42.com/2018/10/15/application-management-using-tinypuppet/).
 
-The full list of the currently used available tinydata settings is defined in the [tp::settings data type](https://github.com/example42/puppet-tp/blob/master/types/settings.pp), not however that currently this is not enforced or used for validation of the `settings_hash` parameter.
+The full list of the currently used available tinydata settings is defined in the [tp::settings data type](https://github.com/example42/puppet-tp/blob/master/types/settings.pp), note however that currently this is not enforced or used for validation of the `settings_hash` parameter.
 
-More information on the tiny data settings you can configure and customise to adapt to local versions of supported application or totally new applications, have been described in a recent posts series, where we described and updated info on:
+More information on the tiny data settings you can configure and customize to adapt to local versions of supported application or totally new applications, have been described in a recent posts series, where we described and updated info on:
+
   - [Tiny Puppet principles](https://www.example42.com/2019/12/09/request-for-tinydata-part1/)
   - [Details on Tiny data structure](https://www.example42.com/2019/12/12/request-for-tinydata-part2/)
   - [Fancy and powerful features](https://www.example42.com/2019/12/16/request-for-tinydata-part3/) on how to check for config files syntax, how to use upstream repos or run an application in a container.
   - [How to manage ANY application](https://www.example42.com/2019/12/19/request-for-tinydata-part4/)
 
-One of the interesting things I noticed reading the past blog posts mentioned in this article is that most of theri contents are still actual and valid: I'm not sure if this is a good or bad sign.
+One of the interesting things I noticed reading the past blog posts mentioned in this article is that most of their contents are still actual and valid: I'm not sure if this is a good or bad sign.
 
-Has Tiny Puppet beed sane enough since the beginning os it simply never evolved?
+Has Tiny Puppet beed sane enough since the beginning os it simply never evolved too much?
 
+Whatever the answer, it's still here, and, as far as we know, it's used in Startups, Top 100 companies, Government institutions and Central Banks.
+
+So, I guess, it just works.
 
 Alessandro Franceschi
