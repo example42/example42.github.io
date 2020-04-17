@@ -323,6 +323,36 @@ If you use massively tp in your control repo, you may want to set in the main ma
 
 An interesting point to consider is that, besides the option `data_module` which allows the usage of a custom tinydata module, all the tp defines have also the parameter `settings_hash` which can be used to override any tiny daya setting.
 
+We can even manage via tp a custom application, packaged internally, as long as we have the relevant tinydata in a custom tinydata module:
+
+    tp::install { 'my_app':
+      data_module => 'my_tinydata',
+    }
+
+Alternatively, let's say when we want to install a custom apache package, coming from some internal repo, but still using Tiny Puppet with the default tinydata module, we can override the name of the package to use with:
+
+    tp::install { 'apache':
+      settings_hash => {
+        package_name => 'my_httpd',
+      }
+    }
+
+In these cases, anyway, when a custom dedicated tinydata module could be overkill but still we need to override some settings, is better to be sure that we use the same settings for all the related defines:
+
+    $apache_settings = {
+      package_name => 'my_httpd',
+    }
+    tp::install { 'apache':
+      settings_hash => $apache_settings,
+    }
+    tp::install { 'apache':
+      settings_hash => $apache_settings,
+    }
+    tp::install { 'apache::mime.types':
+      settings_hash => $apache_settings,
+    }
+
+
 More information about how to use Tiny Data to configure custom applications and how to use tp defines in custom profiles, can be read in [this blog post](https://www.example42.com/2018/10/15/application-management-using-tinypuppet/).
 
 The full list of the currently used available tinydata settings is defined in the [tp::settings data type](https://github.com/example42/puppet-tp/blob/master/types/settings.pp), not however that currently this is not enforced or used for validation of the `settings_hash` parameter.
