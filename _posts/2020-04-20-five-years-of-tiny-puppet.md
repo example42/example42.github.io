@@ -368,7 +368,7 @@ More information on the tiny data settings you can configure and customize to ad
 
 One of the interesting things I noticed reading the past blog posts mentioned in this article is that most of their contents are still actual and valid: I'm not sure if this is a good or bad sign.
 
-Has Tiny Puppet beed sane enough since the beginning or is it simply never evolved too much?
+Has Tiny Puppet been sane enough since the beginning or is it simply never evolved too much?
 
 Whatever the answer, it's still here, and, as far as we know, it's used in Startups, Top 100 companies, Government institutions and Central Banks.
 
