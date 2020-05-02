@@ -351,8 +351,9 @@ Even better, to be sure that we use the same settings for all the related define
     tp::install { 'apache':
       settings_hash => $apache_settings,
     }
-    tp::install { 'apache::mime.types':
+    tp::conf { 'apache::mime.types':
       settings_hash => $apache_settings,
+      [...]
     }
 
 More information about how to use Tiny Data to configure custom applications and how to use tp defines in custom profiles, can be read in [this blog post](https://www.example42.com/2018/10/15/application-management-using-tinypuppet/).
