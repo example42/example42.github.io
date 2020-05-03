@@ -40,7 +40,7 @@ When working with multiple people in different feature branches, everyone must r
 
 This is similar to many upstream development procedures of most Puppet library module code.
 
-![simple git flow](/img/posts/git_simple.png){:height="50%" width="50%"}
+![simple git flow](/img/posts/git-simple.png){:height="50%" width="50%"}
 
 Pro:
 easy to learn
