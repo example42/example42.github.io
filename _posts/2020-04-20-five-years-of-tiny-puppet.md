@@ -5,7 +5,7 @@ title: Puppet Tip 115 - Five Years of Tiny Puppet
 
 When my colleague Martin Alfke suggested me to write a blog post about Tiny Puppet, I wondered what I could write about it that I haven't written before.
 
-So I started to look at the past blog posts and I realized that more than five years have already passed since the [first announcement](https://www.example42.com/2015/01/02/introducing-tiny-puppet/), in January 2015.
+So I started to look at the past blog posts and I realized that more than five years have already passed since the [first announcement](https://www.example42.com/2015/01/02/introducing-tiny-puppet/){:target="_blank"}, in January 2015.
 
 At those times Tiny Puppet came as a natural evolution of the first generation and the "NextGen" example42 Puppet modules: a large set of modules, now mostly deprecated, with a standard structure that became a pain to maintain for a single person.
 
@@ -15,15 +15,15 @@ For this reason I wrote a single module to manage via Puppet a cross-OS installa
 
 The core `tp` defines (Used Defined Type, written in Puppet DSL) were already there, since the beginning: `tp::install`, `tp::conf`, `tp::dir` and all of them were already relying on TinyData, a yaml based, hierarchical set of files where are defined the different settings of different applications on different Operating systems.
 
-Initially the tinydata was placed in the same tp module, then, with [the release 1.0](https://www.example42.com/2015/11/18/tp-1-release/) it was separated in an autonomous git repo to allow easier upgrades and separate the tool (the tp module) from the data (the tinydata repository, which can also be user defined and customized using the `data_module` parameter, present in all the tp defines.
+Initially the tinydata was placed in the same tp module, then, with [the release 1.0](https://www.example42.com/2015/11/18/tp-1-release/){:target="_blank"} it was separated in an autonomous git repo to allow easier upgrades and separate the tool (the tp module) from the data (the tinydata repository, which can also be user defined and customized using the `data_module` parameter, present in all the tp defines.
 
-With the release 1.0 we started to [support Puppet 4 by default](https://www.example42.com/2015/10/26/preparing-for-tp-1/), note anyway that you can still use tp with Puppet 3 (and even Puppet 2), using the relevant defines with the `3` suffix: `tp::install3`, `tp::conf3`, `tp::dir3`. 
+With the release 1.0 we started to [support Puppet 4 by default](https://www.example42.com/2015/10/26/preparing-for-tp-1/){:target="_blank"}, note anyway that you can still use tp with Puppet 3 (and even Puppet 2), using the relevant defines with the `3` suffix: `tp::install3`, `tp::conf3`, `tp::dir3`. 
 
 ## tp::install
 
 The define `tp::install` in its simplest usage just accepts, as title, the name of the application to install.
 
-The names of the package(s) to install are derived from the relevant [Tiny Data](https://github.com/example42/tinydata/tree/master/data), or, if missing, from the same title used for the defines (this is possible since [TP version 2.3](https://www.example42.com/2018/09/10/tp-install-anything-and-configure/).
+The names of the package(s) to install are derived from the relevant [Tiny Data](https://github.com/example42/tinydata/tree/master/data){:target="_blank"}, or, if missing, from the same title used for the defines (this is possible since [TP version 2.3](https://www.example42.com/2018/09/10/tp-install-anything-and-configure/){:target="_blank"}.
 
 Some examples of tp::install can be:
 
@@ -76,7 +76,7 @@ The resource tp::install, is basically a wrapper, that, according to the relevan
 
   - a **tp::puppi** resource, which can be used to integrate the installed application with [Puppi](https://github.com/example42/puppi) , if the parameter `puppi_enable` is set to true
 
-  - the **file  { "/etc/tp/app/${app}": }** used by the tp [cli command](https://www.example42.com/2018/07/23/a-few-steps-to-tiny-puppet-command-line/) if the parameter `cli_enable` is set to true
+  - the **file  { "/etc/tp/app/${app}": }** used by the tp [cli command](https://www.example42.com/2018/07/23/a-few-steps-to-tiny-puppet-command-line/){:target="_blank"} if the parameter `cli_enable` is set to true
 
 Quite a long list of resources, indeed, but don't be scared by that, in most of the cases with a **tp::install** you just manage, via Puppet, a **package** and a **service**, needless to say that it's up to tp to handle the correct names and dependencies.
 
@@ -219,7 +219,7 @@ We haven't mentioned this before, but the following parameters cna be used, both
       mode  => '0750',
     }
 
-We can also force the recursive purge of all the files of a directory which are not in the given source (params here beahve as in the file resource), always be careful when recursively purging files with Puppet (double check your paths!):
+We can also force the recursive purge of all the files of a directory which are not in the given source (params here behave as in the file resource), always be careful when recursively purging files with Puppet (double check your paths!):
 
     tp::dir { 'redis':
       source  => 'puppet:///modules/profile/redis/',
@@ -228,14 +228,14 @@ We can also force the recursive purge of all the files of a directory which are 
       force   => true,
     }
 
-In case you want to manage a directory, which might have as parent a non existing directory, you can ensure that its parent directory exists, to prvent Puppet failures:
+In case you want to manage a directory, which might have as parent a non existing directory, you can ensure that its parent directory exists, to prevent Puppet failures:
 
     tp::dir { 'apache::my_app':
       path               => '/data/www/my_app',
       path_parent_create => true,
     }
 
-You can also manage the content of a directory using a git repository ()or whatever is supported by puppetlabs-vcsrepo module, which is require for this functonality):
+You can also manage the content of a directory using a git repository ()or whatever is supported by puppetlabs-vcsrepo module, which is require for this functionality):
 
     tp::dir { 'apache':
       base_dir => 'data',
@@ -329,7 +329,7 @@ We can even manage via tp a custom application, packaged internally, as long as 
       data_module => 'my_tinydata',
     }
 
-When you use directly the upstream **tinydata** module and not a local clone (in your internal git servers) or fork of it, we **recommend** to always specify the used version in your Puppetfile and properly test changes before updating the version used:  tinydata contains info about a large number of applications, and their data might be updated if we find that is wrong for a given OS or if we want to extend support for a new OS release.  These changes don't follow [SemVer](https://semver.org/) standards and even a minor version update in Tiny Data may change some settings for an application you manage via Tiny Data.
+When you use directly the upstream **tinydata** module and not a local clone (in your internal git servers) or fork of it, we **recommend** to always specify the used version in your Puppetfile and properly test changes before updating the version used:  tinydata contains info about a large number of applications, and their data might be updated if we find that is wrong for a given OS or if we want to extend support for a new OS release.  These changes don't follow [SemVer](https://semver.org/){:target="_blank"} standards and even a minor version update in Tiny Data may change some settings for an application you manage via Tiny Data.
 
 The rule of thumb here is: know what applications you manage via tp and check, when upgrading the tinydata module, if there are changes in data for these applications that might impact you. It's not hard and not difficult, but that's the tradeoff of having a single module managing different applications.
 
@@ -356,16 +356,16 @@ Even better, to be sure that we use the same settings for all the related define
       [...]
     }
 
-More information about how to use Tiny Data to configure custom applications and how to use tp defines in custom profiles, can be read in [this blog post](https://www.example42.com/2018/10/15/application-management-using-tinypuppet/).
+More information about how to use Tiny Data to configure custom applications and how to use tp defines in custom profiles, can be read in [this blog post](https://www.example42.com/2018/10/15/application-management-using-tinypuppet/){:target="_blank"}.
 
-The full list of the currently used available tinydata settings is defined in the [tp::settings data type](https://github.com/example42/puppet-tp/blob/master/types/settings.pp), note however that currently this is not enforced or used for validation of the `settings_hash` parameter.
+The full list of the currently used available tinydata settings is defined in the [tp::settings data type](https://github.com/example42/puppet-tp/blob/master/types/settings.pp){:target="_blank"}, note however that currently this is not enforced or used for validation of the `settings_hash` parameter.
 
 More information on the tiny data settings you can configure and customize to adapt to local versions of supported application or totally new applications, have been described in a recent posts series, where we described and updated info on:
 
-  - [Tiny Puppet principles](https://www.example42.com/2019/12/09/request-for-tinydata-part1/)
-  - [Details on Tiny data structure](https://www.example42.com/2019/12/12/request-for-tinydata-part2/)
-  - [Fancy and powerful features](https://www.example42.com/2019/12/16/request-for-tinydata-part3/) on how to check for config files syntax, how to use upstream repos or run an application in a container.
-  - [How to manage ANY application](https://www.example42.com/2019/12/19/request-for-tinydata-part4/)
+  - [Tiny Puppet principles](https://www.example42.com/2019/12/09/request-for-tinydata-part1/){:target="_blank"}
+  - [Details on Tiny data structure](https://www.example42.com/2019/12/12/request-for-tinydata-part2/){:target="_blank"}
+  - [Fancy and powerful features](https://www.example42.com/2019/12/16/request-for-tinydata-part3/){:target="_blank"} on how to check for config files syntax, how to use upstream repos or run an application in a container.
+  - [How to manage ANY application](https://www.example42.com/2019/12/19/request-for-tinydata-part4/){:target="_blank"}
 
 One of the interesting things I noticed reading the past blog posts mentioned in this article is that most of their contents are still actual and valid: I'm not sure if this is a good or bad sign.
 
