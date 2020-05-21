@@ -42,44 +42,44 @@ As of writing we currently support on Tiny Puppet, for RedHat and derivatives ve
 
         tp install epel
 
-The above options are available for all the other repos (and applications) that Tiny Puppet can install, so we will not repeat them in the examples below.
+  The above options are available for all the other repos (and applications) that Tiny Puppet can install, so we will not repeat them in the examples below.
 
 - [RPM Fusion](https://rpmfusion.org/){:target="_blank"}, is another *historic* repo of extra packages, result of the merger of older repos (Dribble, Freshrpms and Livna, for who remembers them ;-) it provides both free and non free (like Nvidia drivers) packages for RedHat (and derivatives) 6, 7 and 8 and keeps compatibility with EPEL:
 
         tp::install { 'rpmfusion-free': }
         tp::install { 'rpmfusion-nonfree': }
 
-Note, in the [git commit](https://github.com/example42/tinydata/commit/fd5ebc15b4735d30cc11438d6e8bf02017d7b0d9){:target="_blank"} where RPM Fusion Tiny Data has been added, how we manage the needed dnf or subscription-manager commands on RedHat 8.
+  Note, in the [git commit](https://github.com/example42/tinydata/commit/fd5ebc15b4735d30cc11438d6e8bf02017d7b0d9){:target="_blank"} where RPM Fusion Tiny Data has been added, how we manage the needed dnf or subscription-manager commands on RedHat 8.
 
 - [IUS](https://ius.io/){:target="_blank"}, which stays for *Inline with Upstream Stable*, provides updated packages of common applications, packages in a way to be compatible with RedHat native rpms. As of writing supports RedHat (and derivatives) 6 and 7:
 
         tp::install { 'ius': }
 
-The relevant [commit](https://github.com/example42/tinydata/commit/5f14cd7e5dea56d98e2e8df446d26adc5a4b7aea){:target="_blank"} shows how easily a new repo like this one could be added.
+  The relevant [commit](https://github.com/example42/tinydata/commit/5f14cd7e5dea56d98e2e8df446d26adc5a4b7aea){:target="_blank"} shows how easily a new repo like this one could be added.
 
 - [Remi Repository](https://rpms.remirepo.net/){:target="_blank"}, a repo which adds to EPEL's packages several (more than 2000) other packages, particularly oriented to different versions of PHP, for RedHat (and derivatives) 6, 7 and 8:
 
         tp::install { 'remi': }
 
-Also here, [one commit](https://github.com/example42/tinydata/commit/3d7ed6acd50a71423ab6467bafd9658508326723){:target="_blank"}, one repo support added (and no extra module needed ;-)
+  Also here, [one commit](https://github.com/example42/tinydata/commit/3d7ed6acd50a71423ab6467bafd9658508326723){:target="_blank"}, one repo support added (and no extra module needed ;-)
 
 - [ELRepo](http://elrepo.org/tiki/){:target="_blank"} focuses on hardware related packages for enterprise usage it supports RedHat (and derivatives) 6, 7 and 8:
 
         tp::install { 'elrepo': }
 
-Another [simple commit](https://github.com/example42/tinydata/commit/95004e77cac0fff82eba14fd0da5fd58012d4a18){:target="_blank"}.
+  Another [simple commit](https://github.com/example42/tinydata/commit/95004e77cac0fff82eba14fd0da5fd58012d4a18){:target="_blank"}.
 
 - [Nux DexTop](http://li.nux.ro/repos.html){:target="_blank"} provides multimedia and desktop oriented packages for RedHat (and derivatives) 6 and 7:
 
         tp::install { 'nux': }
 
-Introduced in a [too quick commit](https://github.com/example42/tinydata/commit/0cc1f6d04825636b4e82d6f0b6963630c907abd2){:target="_blank"} based on another repo, then [corrected](https://github.com/example42/tinydata/commit/5571dc311d82e0c170c29dd9d11146134ee4627c){:target="_blank"}.
+  Introduced in a [too quick commit](https://github.com/example42/tinydata/commit/0cc1f6d04825636b4e82d6f0b6963630c907abd2){:target="_blank"} based on another repo, then [corrected](https://github.com/example42/tinydata/commit/5571dc311d82e0c170c29dd9d11146134ee4627c){:target="_blank"}.
 
 - [Ulyaoth](https://community.ulyaoth.com/resources/categories/repository.1/){:target="_blank"}, a repo with different versions of Tomcat and Solr packages for RedHat (and derivatives) 7 and 8:
 
         tp::install { 'ulyaoth': }
 
-Here just one release package is enough for all RedHat versions, as you can see in [this commit](https://github.com/example42/tinydata/commit/a29c59ed4789f855aa6ee4a416f557ba8c210055){:target="_blank"}.
+  Here just one release package is enough for all RedHat versions, as you can see in [this commit](https://github.com/example42/tinydata/commit/a29c59ed4789f855aa6ee4a416f557ba8c210055){:target="_blank"}.
 
 
 ## Ubuntu / Debian based repositories
