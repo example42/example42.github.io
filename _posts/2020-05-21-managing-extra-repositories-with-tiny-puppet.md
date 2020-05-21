@@ -10,15 +10,15 @@ Now, here, I want to talk about how you can use it to manage interesting and jui
 * Table of content
 {:toc}
 
-## Managing packages repositories with Puppet
+## Managing packages repositories with Tiny Puppet
 
 I suppose everybody who works with RedHat Linux or derivatives is well aware of EPEL, a collection of packages, totally compatible with the default set of packages, shipped with RedHat Enterprise Linux (and derivatives like CentOS, Oracle Linux and Scientific Linux).
 
-Now on Puppet Forge there are [various modules](https://forge.puppet.com/modules?q=epel){:target="_blank"} you can use to install the Epel repository, but why adding another module to your Puppetfile (with eventual dependencies), when you can EPEL using Tiny Puppet simply by adding in your profiles:
+Now on Puppet Forge there are [various modules](https://forge.puppet.com/modules?q=epel){:target="_blank"} you can use to install the Epel repository, but why adding another module to your Puppetfile (with eventual dependencies), when you can install EPEL using Tiny Puppet simply by adding in your profiles:
 
     tp::install { 'epel': }
 
-And why limiting ourselves to EPEL, when with the single Tiny Puppet module and its TinyData companion you can add several other repos?
+And why limiting ourselves to EPEL, when with the single Tiny Puppet module and its [TinyData](https://github.com/example42/tinydata){:target="_blank"} companion you can add several other repos?
 
 What Repos? Let see them, note that Tiny Puppet installs them using the best approach possible, which in most of the cases means installing the relevant **release package** which takes care of configuring yum repo files, GPG keys and whatever is needed to add the repository to the system, but when a release package is not available the yum or apt configuration files, and eventual GPG keys are directly managed.
 
@@ -38,7 +38,7 @@ As of writing we currently support on Tiny Puppet, for RedHat and derivatives ve
           epel:
             ensure: present
 
-  finally, if you prefer to use Tiny Puppet from the command line (install it with: `puppet module install example42-tp ; puppet tp setup`), as root, on your favourite shell, you can simply type:
+  finally, if you prefer to use Tiny Puppet from the command line (install it with: `puppet module install example42-tp ; puppet tp setup`), as root, on your favorite shell, you can simply type:
 
         tp install epel
 
@@ -91,7 +91,7 @@ In any case, if you have any interesting extra repo to suggest here, please let 
 
 ## Adding custom repositories
 
-Since Internal is a bad and dangerous place, many companies prefer to have internal repositories where packages are both mirrored from upstream sources and locally packaged.
+Since Internet is a bad and dangerous place, many companies prefer to have internal repositories where packages are both mirrored from upstream sources and locally packaged.
 
 Tiny Puppet can help here, and allow to handle any custom repository, either by using custom tinydata as in the above examples or by specifying directly the expected params when using the `tp::repo` define, which is declared inside  `tp::install` if repo related Tiny Data is present.
 
