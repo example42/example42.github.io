@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Puppet Tip 117 - Managing extra repositories Tiny Puppet 
+title: Puppet Tip 117 - Managing extra repositories with Tiny Puppet 
 ---
 
 I've written recently a [post about Tiny Puppet](https://www.example42.com/2020/04/20/five-years-of-tiny-puppet/){:target="_blank"}, which is a recommended reading if you want to understand some of its internals.
