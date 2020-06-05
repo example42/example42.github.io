@@ -1,3 +1,5 @@
+<p>
 {% for post in site.posts %}
-<p>{{ post.date | date: "%Y-%m-%d" }} - <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></p>
+{{ post.date | date: "%Y-%m-%d" }} - <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></br>
 {% endfor %}
+</p>
