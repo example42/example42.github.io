@@ -6,12 +6,12 @@
             <div class="row">
                 <div>
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">All example42 blog posts</h2>
+                    <h2 class="section-heading">Blog posts</h2>
                     <div class="lead">
                     <ul class="posts">
                     {% for post in site.posts %}
                       <li>
-                      {{ post.date | date: "%Y-%m-%d" }} <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
+                      {{ post.date | date: "%Y-%m-%d" }} - <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
                       </li>
                     {% endfor %}
                     </ul>
