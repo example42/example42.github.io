@@ -11,6 +11,8 @@ description: > # "Example42 delivers Puppet training, consulting and development
 # ----------------------- #
 #    Jekyll & Plugins     #
 # ----------------------- #
+plugins:
+  - jekyll-redirect-from
 
 # Build settings
 markdown: kramdown
