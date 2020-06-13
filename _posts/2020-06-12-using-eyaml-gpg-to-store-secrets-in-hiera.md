@@ -336,3 +336,6 @@ super_secret_test: 'DEC(1)::GPG[super secret string]!'
 super_secret_test_two: 'DEC(3)::GPG[super secret string too]!'
 ```
 Have fun using Hiera EYAML-GPG!
+
+
+Simon Hönscheid
