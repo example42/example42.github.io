@@ -68,6 +68,21 @@ Note that this is not the typical way to manage noop mode in Puppet and when usi
 
 Final result is the same (no resources are really applied) but they are shown differently on PE console.
 
+#### Important caveat with server-side noop mode
+
+There's a small but rather important thing to consider when using the noop() function: since it works by adding the noop metaparameter to a resource, and can override a normal puppet run without noop set client-side, it can have unpredictable effects when you are working with **exported resources** which, when missing, alter the configuration of the node which collects them.
+
+Let's see an example:
+
+- You run puppet in normal mode on a node which exports a concat resource used by a load balancer. When server side noop mode is used , this concat resource is exported with noop = true
+- When you run puppet on the load balancer which collects the concat resources previously exported (with noop set server side), Puppet will rebuild the target configuration without the concat fragment where noop is true.
+
+This doesn't happen when you run Puppet with noop mode client side-
+
+How to avoid such situations?
+- Identify the cases where missing exported resources can actually change some configurations (rather than just not managing for a single Puppet run a resource previously configured). This basically happens whenever you export concat fragments and where you export files in directories which are completely managed and where files not explicitly managed by Puppet are purged.
+- In the above cases, be sure to have a normal real Puppet run on the exporting nodes before doing a Puppet run in the collecting ones.
+
 
 ### Enforcing no-noop mode
 
