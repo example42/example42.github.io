@@ -21,41 +21,41 @@ Within EPP templates varaibles are writtenin Puppet syntax - which means that va
 
 Example (sshd_config):
 
-    <% if $ssh::port -%>
+    <% if $ssh::port { -%>
     Port <%= $ssh::port %>
-    <% else -%>
+    <% } else { -%>
     Port 22
-    <% end -%>
-    <% if $ssh::listen -%>
+    <% } -%>
+    <% if $ssh::listen { -%>
     ListenAddress <%= $ssh::listen %>
-    <% else -%>
+    <% } else { -%>
     ListenAddress 0.0.0.0
     ListenAddress ::
-    <% end -%>
+    <% } -%>
 
 Besides this the array iteration also needs to be written in Puppet DSL code:
 
-    <% if $ssh::port ~= Array -%>
+    <% if $ssh::port ~= Array { -%>
     <% $ssh::port.each |$port| { -%>
     Port <%= $port %>
     <% } -%>
-    <% end -%>
+    <% } -%>
 
 Additionally the EPP template now offers the possibility to make use of parameters (like parameterized classes).
 Parameters in EPP have to be put in the beginning and are enclosed in EPP tag and a pipe sign.
 
     <% |  String $text, $Array $array, Boolean $bool |>
-    <% if $string -%>
+    <% if $string { -%>
     Text from variable: <%= $string %>
-    <% end -%>
-    <% if $array -%>
+    <% } -%>
+    <% if $array { -%>
     <% $array.each |$element| { -%>
     Array item: <%= $element %>
     <% } -%>
-    <% end -%>
-    <% if $bool -%>
+    <% } -%>
+    <% if $bool { -%>
     Bool value is true
-    <% end -%>
+    <% } -%>
 
 Data for EPP parameters are set by the epp or inline_epp function. This function now can have two parameters:
 
