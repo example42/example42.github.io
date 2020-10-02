@@ -52,6 +52,8 @@ example file:
       'demo1'  = { ip = '10.0.1.2', role = 'demo',   server_Type = 'cx11', accces_level = 'all_keys'   }
     }
 
+This will spin up 2 machines in hetzner cloud.
+
 Note: access\_level is work in progress. At the moment we deploy all keys to all machines.
 
 ## Your own control-repo
