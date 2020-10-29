@@ -29,7 +29,7 @@ Here is a list, with useful links, of the things to know, according to who you a
 
 Basic knowledge of Puppet ecosystem is essential for architects, admins and developers, and useful, even if not strictly necessary, for end users:
 
-- Puppet [terminology](https://docs.puppet.com/references/glossary.html)
+- Puppet [terminology](https://puppet.com/docs/puppet/latest/glossary.html)
 - [Components](https://puppet.com/products/platform/core-components) of an infrastructure
   - Server side:
     - [Puppet Server](https://puppet.com/docs/puppetserver)
