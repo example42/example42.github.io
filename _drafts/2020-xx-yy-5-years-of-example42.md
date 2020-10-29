@@ -5,7 +5,7 @@ title: 5 years of example42
 
 example42 was founded back in 2015.
 
-It was the union of intents and purposes of two of the most experienced and known puppetters in Europe: Martin Alfke from Germany and Alessandro Franceschi from Italy.
+It was the union of intents and purposes of two of the most experienced and known puppeteers in Europe: Martin Alfke from Germany and Alessandro Franceschi from Italy.
 
 Martin recalls with a smile the first steps of the company:
 
@@ -42,7 +42,7 @@ We are humbled and impressed by the customers we had the privilege to work with:
 
 Some of them are direct customers, some of them coming from our deep and solid collaboration with Puppet.
 
-We traveled for several hundreds of days, delivering onsite services mostly in Europe but also in the Middle East, now times are definitively different, and while we like to provide remote support worldwide, we are looking forward to go "back to the road" and have our almost routinary weekly flights.
+We traveled for several hundreds of days, delivering onsite services mostly in Europe but also in the Middle East, now times are definitively different, and while we like to provide remote support worldwide, we are looking forward to go "back to the road".
 
 We have always tried to put at disposal and share with customers our experience and knowledge: we want them to success with the technologies we work with and we want them to be independent and autonomous on the topics for which we provide consulting and training. Still, not unsurprisingly, it happens frequently that they keep on asking us for support and services. 
 
@@ -63,11 +63,11 @@ We are a small company, someone might define it a boutique rather than a warehou
 
 We started as 2, sharing the company vision, equities and responsibilities, then Jessica Zimmerman came onboard, taking care of the administration side.
 
-A pair of years ago Simon Hönscheid joined and soon Robert Waffen will be with us as well. Both of them are experienced DevOps with great Puppet background.
+In 2019 Simon Hönscheid joined as Senior IT Infrastructure Automation Engineer and starting in February 2021 Robert Waffen will be with us as well. Both of them are experienced DevOps with great Puppet background.
 
 We don't even have a sales department, as works chase us via word of mouth, direct contacts or our partnership with Puppet.
 
-We are growing slowly but steadily, without any financial help from banks or backers.
+We are growing steadily, without any financial help from banks or backers or any other invstment or funding.
 
 Even if we work on cutting edge IT space, under this point of view we don't consider ourselves startuppers, but rather tailors of automation.
 
