@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: All our good reasons to sponsor Puppettize Digital 
+title: All our good reasons to sponsor Puppetize Digital 
 ---
 
 Another year, another Puppet conference, and another time we are sponsoring it.
@@ -10,9 +10,12 @@ Let's see what, how and why.
 * Table of content
 {:toc}
 
-# Puppettize Digital
+![Sponsoring Puppetize](/img/posts/puppetize_digital_1200x628_sponsors.png)
 
-Puppettize Digital will be a 24 hours online event, on November 19, sprayed on three different continents timezones:
+
+# Puppetize Digital
+
+Puppetize Digital will be a 24 hours online event, on November 19, sprayed on three different continents timezones:
 
 - Asia Pacific: 10:00 AM - 6:00 PM AEDT 
 - Europe 9:00 AM - 5:00 PM GMT
@@ -41,13 +44,13 @@ You just need to [Register here](https://digital.puppetize.com/s/landing-page4/h
 As individuals, even before our company was born, we have attended Puppet events since the very beginning: the first PuppetCamp , in San Francisco, on 2009. What is impressive looking back at that event is that most of the participants have been hired by Puppet Inc, over the years.
 
 In the picture you see me pitching a round table session about Modules Standards, an obsession I had since the very first times.
-![Puppetcamp 2009](/img/posts/puppetcamp2009.png)
+![Puppetcamp 2009](/img/posts/puppetcamp2009.jpg)
 
 Since then we almost never missed any global Puppet event and since example42 GmbH was founded, five years ago, we have always been sponsors of the yearly major one.
 
 We are happy to sponsor the main Puppet conference also in 2020: this time is remote only, for the reasons we all  know, but the feelings and the appreciation for such a great product and company, and the big expectations we have for "that moment in the year" remain the same.
 
-# Presenting at Puppettize Digital
+# Presenting at Puppetize Digital
 
 Martin is going to make a presentation at this event, it's titled "Puppet Control Repository and GIT - a comparison of simple vs Git Flow".
 
