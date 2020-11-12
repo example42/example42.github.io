@@ -5,7 +5,7 @@ title: Puppetize Digital - example42 talk about GIT workflows
 
 [Puppetize Digital](https://digital.puppetize.com/series/Puppetize-Agenda/schedule) is coming! November 19th!
 
-example42 is super exited that we are again delivering a talk to a Puppet conference.
+example42 is super excited that we are again delivering a talk to a Puppet conference.
 
 This year [Martin Alfke](https://digital.puppetize.com/series/d90513c03829/show_speaker_details) is talking about GIT workflows.
 
@@ -30,7 +30,7 @@ But how do you deal when you have separated networks?
 
 e.g. people are not allowed to do changes in production network. Changes must de done in the development network.
 
-In this case you need GIT servers in each network zone. How dou you now stage your code from development to production network?
+In this case you need GIT servers in each network zone. How do you now stage your code from development to production network?
 
 ## GIT flow
 
