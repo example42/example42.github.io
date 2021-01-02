@@ -5,6 +5,11 @@ title: Puppet Tip XYZ - Happy New Year
 
 example42 wishes all customers, partners, colleagues, employees, friends and supporters a healthy, successful and happy new year.
 
+* Table of content
+{:toc}
+
+# Looking back on 2020
+
 2020 has been difficult for many people and organizations. Many of them suffered due to lockdown and local restrictions.
 Just consider musicians, artists and their entourage which had to cancel event after event. Or think about local small business which had to close their shops.
 
@@ -23,6 +28,8 @@ We also saw many companies moving - some for the very first time - to Open Sourc
 But having hardware in rack is not enough to enable teams fast. This is where IT Automation comes into place - a core field of example42 business.
 Automation heavily reduces the time needed to deploy new systems or bring out changes with almost no effort.
 
+# Lookout to 2021
+
 At example42 we are fans of Puppet, Terraform, Vagrant, Vault, GitLab and many other tools which help making IT a smater place to work at.
 
 We appretiate all the support and feedback our csutomers provided to us within one of the most difficult years in modern times.
@@ -31,7 +38,7 @@ But support is something that anyone of us can do easily. It does not mean to ta
 
 Next time you are thinking about a spending: please think carefully who you want to support? A big company, run by unknown managers or are you going next door to a shop nearby?
 
-Please consider supporting local, small business. These are the ones that suffer most. Big companies receive hugh payments from government. Some of the I would prefer to name "dysfunctional" or even "catatonic".
+Please consider supporting local, small business. These are the ones that suffer most.
 
 example42 wishes everybody a healthy, successful and happy new year.
 Please stay safe and take care on people who need your help.
