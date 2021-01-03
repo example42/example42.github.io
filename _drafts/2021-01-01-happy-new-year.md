@@ -23,9 +23,9 @@ On many occasions, we saw that a DevOps mindset, attitude, and behavior was supe
 This showed us that DevOps is one of the keys to success in IT.
 Without the DevOps culture and its agile working methods, it would have not been possible for most organizations to enable new ways of working within a reasonable amount of time.
 
-We also saw many companies moving - some for the very first time - to Open Source applications. Especially BigBlueButton or Jitsi were carefully proofread by security. Understandably, it took the projects some time to adapt to these findings.
+We also saw many companies moving - some for the very first time - to Open Source applications. Especially BigBlueButton or Jitsi were carefully proofread by security. Understandably, it took the projects some time to adapt the findings.
 
-But having hardware in a rack is not enough to enable teams to work fast. This is where IT automation comes into place - a core field of example42's business.
+But having hardware in a rack or a cloud account is not enough to enable teams to work fast. This is where IT automation comes into place - a core field of example42's business.
 Automation heavily reduces the time needed to deploy new systems or bring out changes with minimum effort.
 
 # Lookout to 2021
@@ -38,7 +38,7 @@ But support is something that any one of us can do easily. This does not mean sp
 
 Next time you are thinking about a spending: please think carefully who you want to support. Do you want to go to a big company, run by unknown managers? Or will you go next door to a shop nearby?
 
-Please consider supporting local, small business. These are the ones that suffer most.
+Please consider supporting local, small business. These are the ones that suffer most and which make cities a lively place.
 
 example42 wishes everybody a healthy, successful, and happy new year.
 Please stay safe and take care of those who need your help.
