@@ -3,7 +3,7 @@ layout: blog
 title: Happy New Year!
 ---
 
-example42 wishes all customers, partners, colleagues, employees, friends, and supporters a healthy, successful, and happy new year.
+example42 wishes all customers, partners, colleagues, friends, and supporters a healthy, successful, and happy new year.
 
 * Table of content
 {:toc}
@@ -47,7 +47,7 @@ Happy puppetizing,
 
 Your team of example42:
 Alessandro,
-Martin,
-Simon, and
-Jessica
+Jessica,
+Martin and
+Simon
 
