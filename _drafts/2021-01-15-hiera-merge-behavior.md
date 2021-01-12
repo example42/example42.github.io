@@ -24,7 +24,7 @@ Hiera offers the following merge options:
 - `hash` and
 - `deep`
 
-# first
+## first
  
 By default if no option is provided, hiera uses the `first` merge option.
 Using `first` is not really a merge option as hiera will return the very first result of a key.
@@ -32,10 +32,23 @@ Using `first` is not really a merge option as hiera will return the very first r
 The data type of the result depends on the data type of hiera data.
 e.g. if hiera finds a string, it will return a string, if it finds an array, it will return an array.
 
-# unique
+## unique
 
-Unique r
+The `unique` merge option allows you to collect data from multiple hierarchies and returns the result as an array.
+All elements in all matching hierarchies must be of data type array.
 
+## hash
+
+The `hash` merge option parses all matching hierarchies and returns a list of hashes.
+All elements in all matching hierarchies must be of type hash.
+
+## deep
+
+The `deep` merge option is a specila behavior of the `hash` merge option.
+Hash uses the first hash ke from highest hierarchy.
+
+Using `deep` allows you to merge data from hashes with the same key.
+All elemts in all matching hierarchie smust be of type hash.
 
 # Merge behavior on explizit lookup
 
