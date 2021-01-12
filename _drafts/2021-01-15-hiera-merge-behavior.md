@@ -24,6 +24,12 @@ Hiera offers the following merge options:
 - `hash` and
 - `deep`
 
+All data examples assume that you have a hiera.yaml file using four hierarchies:
+- node specific data
+- application-stage specific data
+- application specific data
+- common data
+
 ## first
  
 By default if no option is provided, hiera uses the `first` merge option.
@@ -37,10 +43,72 @@ e.g. if hiera finds a string, it will return a string, if it finds an array, it 
 The `unique` merge option allows you to collect data from multiple hierarchies and returns the result as an array.
 All elements in all matching hierarchies must be of data type array.
 
+Now let's have a look at the hiera data:
+
+In common you have a packages key:
+
+    # data/common.yaml
+    packages:
+      - vim-enhanced
+      - curl
+
+In application level you also have a packages key:
+
+    # data/application/mysql.yaml
+    packages:
+      - xtrabackup
+
+The returned result for a packages keky, using `unique` merge strategy will return the following values:
+
+    packages:
+      - vim-enhanced
+      - curl
+      - xtrabackup
+
 ## hash
 
 The `hash` merge option parses all matching hierarchies and returns a list of hashes.
 All elements in all matching hierarchies must be of type hash.
+
+Let's look at the data. In this case we manage users:
+
+    # data/common.yaml
+    users:
+      martin:
+        uid: 10012
+        home: /mnt/home/martin
+        shell: /bin/bash
+      alessandro:
+        uid: 10011
+        home: /mnt/home/al
+        shell: /bin/zsh
+
+In application level, we also have users:
+
+    # data/applicatoun/mysql.yaml
+    users:
+      simon:
+        uid: 10013
+        home: /home/simon
+      martin: # mysql is different that common
+        uid: 10012
+        home: /home/martin
+
+The hash key from highest hierarchy is taken first. other keys from lower hierarchies are just added.
+If a hash key exists in several hierarchies, the one from the highest hierarchy is taken:
+
+    # result
+    users:
+      simon:
+        uid: 10013
+        home: /home/simon
+      martin: # mysql is different that common
+        uid: 10012
+        home: /home/martin
+      alessandro:
+        uid: 10011
+        home: /mnt/home/al
+        shell: /bin/zsh
 
 ## deep
 
