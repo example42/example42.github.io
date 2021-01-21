@@ -3,13 +3,16 @@ layout: blog
 title: Hiera merge behavior
 ---
 
-Hiera v5 allows you to provide information regarding merge behavior from data.
+Hiera v5 allows you to provide information regarding merge behavior in a couple of different ways.
 
-Using this functionality allows you to e.g. separate common (admin) users from application users by adding common users in common hiera layer and the application users into an application hiera layer.
+Using different merge behaviors allows you to e.g. separate common (admin) users from application users by adding common users in common hiera layer and the application users into an application hiera layer.
 This reduces duplicates in data and allow more simple data management.
 
-Another example is installation of packages,´. You usually have a list of packages you need on all systems (admin packages) and some packages which are needed on special systems only.
+Another example is installation of packages. You usually have a list of packages you need on all systems (admin packages) and some packages which are needed on special systems only.
 Again you can mention all common packages in hiera common laxer and add node specific packages in node hiera layer.
+
+In this posting we explain the different possible merge behaviors and their results.
+Aditionally we explain the options where you can set merge behavior.
 
 * Table of content
 {:toc}
@@ -29,6 +32,20 @@ All data examples assume that you have a hiera.yaml file using four hierarchies:
 - application-stage specific data
 - application specific data
 - common data
+
+Example for hiera config:
+
+    version: 5
+    defaults:
+      datadir: data
+      data_hash: yaml_data
+    hierarchy:
+      - name: "hiera hierarchies"
+        paths: 
+          - "nodes/%{trusted.certname}.yaml"
+          - "application/%{::application}-%{::stage}.yaml"
+          - "application/%{::application}.yaml"
+          - "common.yaml"
 
 ## first
  
@@ -85,7 +102,7 @@ Let's look at the data. In this case we manage users:
 
 In application level, we also have users:
 
-    # data/applicatoun/mysql.yaml
+    # data/application/mysql.yaml
     users:
       simon:
         uid: 10013
@@ -120,9 +137,9 @@ All elemts in all matching hierarchie smust be of type hash.
 
 # Merge behavior on explizit lookup
 
-# Merge behavior on autoamtic data binding
+# Merge behavior configuration within hiera data
 
-Happy puppetizing,
+Happy puppetizing and data merging,
 
 Martin Alfke
 
