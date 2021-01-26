@@ -82,6 +82,15 @@ The returned result for a packages keky, using `unique` merge strategy will retu
       - curl
       - xtrabackup
 
+Visualizazion:
+
+| Result               | mysql                | common             |
+|--------              |-------               |--------            |
+| **packages:**        | **packages:**        | **packages:**      |
+| ..**- vim-enhanced** | ..**- vim-enhanced** |                    |
+| ..**- curl**         | ..**- curl**         |                    |
+| ..**- xtrabackup**   |                      | ..**- xtrabackup** |
+
 ## hash
 
 The `hash` merge option parses all matching hierarchies and returns a list of hashes.
@@ -122,10 +131,27 @@ If a hash key exists in several hierarchies, the one from the highest hierarchy 
       martin: # mysql is different that common
         uid: 10012
         home: /home/martin
+        shell: /bin/bash
       alessandro:
         uid: 10011
         home: /mnt/home/al
         shell: /bin/zsh
+
+Visualizazion:
+
+| Result                          | mysql                      | common                     |
+|--------                         |-------                     |--------                            |
+| **users:**                      | users:                     | users:                             |
+| ..**simon:**                    | ..**simon:**               |                                    |
+| ....**uid: 10013**              | ....**uid: 10013**         |                                    |
+| ....**home: /home/simon**       | ....**home: /home/simon**  |                                    |
+| ..**martin:**                   | ..**martin:**              | ..martin:                          |
+| ....**uid: 10012**              | ....**uid: 10012**         | ....uid: 10012                     |
+| ....**home: /home/martin**      | ....**home: /home/martin** | ....home: /mnt/home/martin         |
+| ..**alessandro:**               |                            | ..**alessandro:**                  |
+| ....**uid: 10011**              |                            | ....**uid: 10011**                 |
+| ....**home: /home/alessandro**  |                            | ....**home: /mnt/home/alessandro** |
+
 
 ## deep
 
@@ -133,11 +159,125 @@ The `deep` merge option is a specila behavior of the `hash` merge option.
 Hash uses the first hash ke from highest hierarchy.
 
 Using `deep` allows you to merge data from hashes with the same key.
-All elemts in all matching hierarchie smust be of type hash.
+All elemts in all matching hierarchies must be of type hash.
+
+Let's look at the data. In this case we manage users:
+
+    # data/common.yaml
+    users:
+      martin:
+        uid: 10012
+        home: /mnt/home/martin
+        shell: /bin/bash
+      alessandro:
+        uid: 10011
+        home: /mnt/home/al
+        shell: /bin/zsh
+
+In application level, we also have users:
+
+    # data/application/mysql.yaml
+    users:
+      simon:
+        uid: 10013
+        home: /home/simon
+      martin: # mysql and shell is different that common
+        home: /home/martin
+        shell: /bin/zsh
+
+The hash key from highest hierarchy is taken first. other keys from lower hierarchies are just added.
+If a hash key exists in several hierarchies, the one from the highest hierarchy is taken:
+
+    # result
+    users:
+      simon:
+        uid: 10013
+        home: /home/simon
+      martin: # mysql is different that common
+        uid: 10012
+        home: /home/martin
+        shell: /bin/zsh
+      alessandro:
+        uid: 10011
+        home: /mnt/home/al
+        shell: /bin/zsh
+
+Visualizazion:
+
+| Result                          | mysql                      | common                     |
+|--------                         |-------                     |--------                            |
+| **users:**                      | users:                     | users:                             |
+| ..**simon:**                    | ..**simon:**               |                                    |
+| ....**uid: 10013**              | ....**uid: 10013**         |                                    |
+| ....**home: /home/simon**       | ....**home: /home/simon**  |                                    |
+| ..**martin:**                   | ..**martin:**              | ..**martin:**                      |
+| ....**uid: 10012**              |                            | ....**uid: 10012**                 |
+| ....**home: /home/martin**      | ....**home: /home/martin** | ....home: /mnt/home/martin         |
+| ....**shell: /bin/zsh**         | ....**shell: /bin/zsh**    | ....shell: /bin/bash               |
+| ..**alessandro:**               |                            | ..**alessandro:**                  |
+| ....**uid: 10011**              |                            | ....**uid: 10011**                 |
+| ....**home: /home/alessandro**  |                            | ....**home: /mnt/home/alessandro** |
+| ....**shell: /bin/zsh**         |                            | ....**shell: /bin/zsh**            |
 
 # Merge behavior on explizit lookup
 
+Note: This is not my preferred option! I prefer automatic data binding!
+
+When using the `lookup` function one can specify the merge behavior in 2 different ways:
+
+1. merge parameter
+
+When using the merge parameter you must also provide the data type parameter:
+
+    lookup( <NAME>, [<VALUE TYPE>], [<MERGE BEHAVIOR>], [<DEFAULT VALUE>] )
+
+    lookup('users', Hash, 'deep')
+
+2. parameter hash
+
+When using the parameter hash, you can skip the data type:
+
+    lookup( [<NAME>], <OPTIONS HASH> )
+
+    lookup('users', { 'merge' => { 'strategy' => 'deep', }, 'value_type' => Hash})
 # Merge behavior configuration within hiera data
+
+When using automatic data binding (naming hiera keys according to t eh class/parameter names) one can not directly specify the merge behavior as the lookup is done automatically.
+But hiera offers an option to use a special key called `lookup_options`.
+
+Within the lookup_options key one specifies a Hash. The key of the hash is the hiera key to look for. For each key you can then specify e.g. the merge strategy and the return value data type conversion.
+
+Let's have a look at the users with deep merge example from above. Let's assume we have a class class users with a parameter called users. To allow autoamtic data fetching the key in hiera must have the name `users::users`:
+
+    # data/common.yaml
+    users::users:
+      martin:
+        uid: 10012
+        home: /mnt/home/martin
+        shell: /bin/bash
+      alessandro:
+        uid: 10011
+        home: /mnt/home/al
+        shell: /bin/zsh
+
+In application level, we also have users:
+
+    # data/application/mysql.yaml
+    users::users:
+      simon:
+        uid: 10013
+        home: /home/simon
+      martin: # mysql and shell is different that common
+        home: /home/martin
+        shell: /bin/zsh
+
+Additionally we add the lookup_options key to common.yaml:
+
+    lookup_options:
+      users::users:
+        merge: 'deep'
+
+It is up to you and your usecase if you place the lookup_option into the common layer or if you even overwrite lookup_options on a higher level.
 
 Happy puppetizing and data merging,
 
