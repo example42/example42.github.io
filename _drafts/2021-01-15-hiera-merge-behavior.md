@@ -240,6 +240,7 @@ When using the parameter hash, you can skip the data type:
     lookup( [<NAME>], <OPTIONS HASH> )
 
     lookup('users', { 'merge' => { 'strategy' => 'deep', }, 'value_type' => Hash})
+
 # Merge behavior configuration within hiera data
 
 When using automatic data binding (naming hiera keys according to t eh class/parameter names) one can not directly specify the merge behavior as the lookup is done automatically.
