@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Hiera merge behavior
+title: Puppet Tip 119 - Hiera merge behavior
 ---
 
 Hiera v5 allows you to provide information regarding merge behavior in a couple of different ways.
