@@ -12,26 +12,28 @@ Another example is installation of packages. You usually have a list of packages
 Again you can mention all common packages in hiera common laxer and add node specific packages in node hiera layer.
 
 In this posting we explain the different possible merge behaviors and their results.
-Aditionally we explain the options where you can set merge behavior.
+Additionally we explain the options where you can set merge behavior.
 
 * Table of content
 {:toc}
 
 # Hiera merge behavior options and the results
 
-We will first have a look at all available merge options and explain the behavior and the result later in the explizit and automatic data explanations.
+We will first have a look at all available merge options and explain the behavior and the result later in the explicit and automatic data explanations.
 
 Hiera offers the following merge options:
-- `first`
-- `unique`
-- `hash` and
-- `deep`
+
+* `first`
+* `unique`
+* `hash` and
+* `deep`
 
 All data examples assume that you have a hiera.yaml file using four hierarchies:
-- node specific data
-- application-stage specific data
-- application specific data
-- common data
+
+* node specific data
+* application-stage specific data
+* application specific data
+* common data
 
 Example for hiera config:
 
@@ -48,7 +50,7 @@ Example for hiera config:
           - "common.yaml"
 
 ## first
- 
+
 By default if no option is provided, hiera uses the `first` merge option.
 Using `first` is not really a merge option as hiera will return the very first result of a key.
 
@@ -75,14 +77,14 @@ In application level you also have a packages key:
     packages:
       - xtrabackup
 
-The returned result for a packages keky, using `unique` merge strategy will return the following values:
+The returned result for a packages key, using `unique` merge strategy will return the following values:
 
     packages:
       - vim-enhanced
       - curl
       - xtrabackup
 
-Visualizazion:
+Visualization:
 
 | Result               | mysql                | common             |
 |--------              |-------               |--------            |
@@ -137,7 +139,7 @@ If a hash key exists in several hierarchies, the one from the highest hierarchy 
         home: /mnt/home/al
         shell: /bin/zsh
 
-Visualizazion:
+Visualization:
 
 | Result                          | mysql                      | common                     |
 |--------                         |-------                     |--------                            |
@@ -152,14 +154,13 @@ Visualizazion:
 | ....**uid: 10011**              |                            | ....**uid: 10011**                 |
 | ....**home: /home/alessandro**  |                            | ....**home: /mnt/home/alessandro** |
 
-
 ## deep
 
-The `deep` merge option is a specila behavior of the `hash` merge option.
+The `deep` merge option is a special behavior of the `hash` merge option.
 Hash uses the first hash ke from highest hierarchy.
 
 Using `deep` allows you to merge data from hashes with the same key.
-All elemts in all matching hierarchies must be of type hash.
+All elements in all matching hierarchies must be of type hash.
 
 Let's look at the data. In this case we manage users:
 
@@ -202,7 +203,7 @@ If a hash key exists in several hierarchies, the one from the highest hierarchy 
         home: /mnt/home/al
         shell: /bin/zsh
 
-Visualizazion:
+Visualization:
 
 | Result                          | mysql                      | common                     |
 |--------                         |-------                     |--------                            |
@@ -219,7 +220,7 @@ Visualizazion:
 | ....**home: /home/alessandro**  |                            | ....**home: /mnt/home/alessandro** |
 | ....**shell: /bin/zsh**         |                            | ....**shell: /bin/zsh**            |
 
-# Merge behavior on explizit lookup
+## Merge behavior on explizit lookup
 
 Note: This is not my preferred option! I prefer automatic data binding!
 
@@ -233,7 +234,7 @@ When using the merge parameter you must also provide the data type parameter:
 
     lookup('users', Hash, 'deep')
 
-2. parameter hash
+1. parameter hash
 
 When using the parameter hash, you can skip the data type:
 
@@ -241,14 +242,14 @@ When using the parameter hash, you can skip the data type:
 
     lookup('users', { 'merge' => { 'strategy' => 'deep', }, 'value_type' => Hash})
 
-# Merge behavior configuration within hiera data
+## Merge behavior configuration within hiera data
 
 When using automatic data binding (naming hiera keys according to t eh class/parameter names) one can not directly specify the merge behavior as the lookup is done automatically.
 But hiera offers an option to use a special key called `lookup_options`.
 
 Within the lookup_options key one specifies a Hash. The key of the hash is the hiera key to look for. For each key you can then specify e.g. the merge strategy and the return value data type conversion.
 
-Let's have a look at the users with deep merge example from above. Let's assume we have a class class users with a parameter called users. To allow autoamtic data fetching the key in hiera must have the name `users::users`:
+Let's have a look at the users with deep merge example from above. Let's assume we have a class class users with a parameter called users. To allow automatic data fetching the key in hiera must have the name `users::users`:
 
     # data/common.yaml
     users::users:
@@ -278,9 +279,8 @@ Additionally we add the lookup_options key to common.yaml:
       users::users:
         merge: 'deep'
 
-It is up to you and your usecase if you place the lookup_option into the common layer or if you even overwrite lookup_options on a higher level.
+It is up to you and your use case if you place the lookup_option into the common layer or if you even overwrite lookup_options on a higher level.
 
 Happy puppetizing and data merging,
 
 Martin Alfke
-
