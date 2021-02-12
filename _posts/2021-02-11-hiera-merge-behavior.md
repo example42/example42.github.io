@@ -86,12 +86,12 @@ The returned result for a packages key, using `unique` merge strategy will retur
 
 Visualization:
 
-| Result               | mysql                | common             |
-|--------              |-------               |--------            |
-| **packages:**        | **packages:**        | **packages:**      |
-| ..**- vim-enhanced** | ..**- vim-enhanced** |                    |
-| ..**- curl**         | ..**- curl**         |                    |
-| ..**- xtrabackup**   |                      | ..**- xtrabackup** |
+| Result               | mysql              | common               |
+|--------              |-------             |--------              |
+| **packages:**        | **packages:**      | **packages:**        |
+| ..**- vim-enhanced** |                    | ..**- vim-enhanced** |
+| ..**- curl**         |                    | ..**- curl**         |
+| ..**- xtrabackup**   | ..**- xtrabackup** |                      |
 
 ## hash
 
