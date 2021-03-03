@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Puppetize Digital - example42 talk about GIT workflows
+language: de
 ---
 
 [Puppetize Digital](https://digital.puppetize.com/series/Puppetize-Agenda/schedule) is coming! November 19th!
