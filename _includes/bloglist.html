@@ -1,5 +1,7 @@
 <p>
 {% for post in site.posts %}
+{% if post.language != "de" %}
 {{ post.date | date: "%Y-%m-%d" }} - <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></br>
+{% endif %}
 {% endfor %}
 </p>

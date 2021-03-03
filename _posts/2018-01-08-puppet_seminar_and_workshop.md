@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Tip of the Week 54 - Einladung DevOps und Automatisierung Workshop
+language: de
 ---
 
 Einladung: DevOps und Automatisierung Workshop
