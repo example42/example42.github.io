@@ -44,7 +44,7 @@ Besides this the array iteration also needs to be written in Puppet DSL code:
 Additionally the EPP template now offers the possibility to make use of parameters (like parameterized classes).
 Parameters in EPP have to be put in the beginning and are enclosed in EPP tag and a pipe sign.
 
-    <% |  String $text, $Array $array, Boolean $bool |>
+    <% | String $string, Array $array, Boolean $bool |>
     <% if $string { -%>
     Text from variable: <%= $string %>
     <% } -%>
@@ -65,7 +65,7 @@ Data for EPP parameters are set by the epp or inline_epp function. This function
 Example:
 
 ```
-  content => epp('test/example.epp', { text => 'foo', array => ['one', 'two'], bool => false }),
+  content => epp('test/example.epp', { string => 'foo', array => ['one', 'two'], bool => false }),
 ```
 
 Parameterized templates are useful when the template serves different puprposes for different modules. The non parameterized template should be used when only used by one specific module.
@@ -80,7 +80,7 @@ It has always been a pain having small config files in Puppet DSL - mostly due t
       $content = "Welcome to <%= @fqdn %>
     This system is managed by Puppet.
     Changes will be overwritten on next Puppet Agent run."
-    
+
       file { '/etc/motd':
         ensure  => file,
         content => inline_template($content),
@@ -114,7 +114,7 @@ Next we will make use of the fixed identation by using a pipe sign:
         This system is managed by Puppet.
         Changes will be overwritten on next Puppet Agent run.
         | EOF
-     
+
       file { '/etc/motd':
         ensure  => file,
         content => inline_epp($content),
@@ -129,7 +129,7 @@ Now we want to make use of the heredoc substitution. Substitution can be enabled
         THis system is managed by Puppet.
         Changes will be overwritten on next Puppet Agent run.
         | EOF
-      
+
       file { '/etc/motd':
         ensure  => file,
         content => $content,
