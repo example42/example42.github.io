@@ -71,11 +71,11 @@ In 2009 I also attended the first PuppetCamp ever, held in San Francisco. It has
 
 I've vivid and wonderful memories of that event, from the visit at Google's headquarters, thanks to Nigel Kersten, who was working there at the times:
 
-![Google First rack](/img/posts/google.jpg){:height="50%" width="50%"}
+![Google First rack](/img/posts/google.jpg){:height="60%" width="60%"}
 
 To the tours around San Francisco with new friends and Puppet legends like Ohad Levy (he presented The Foreman there), Brice Figureau (the wizard behind exported resources, puppet device and a lot of other community code) and Dan Bode (he has been one of the first employees hired by Luke right before the event):
 
-![San Francisco](/img/posts/sf.jpg){:height="50%" width="50%"}
+![San Francisco](/img/posts/sf.jpg){:height="60%" width="60%"}
 
 Since those times I had this obsession about modules standards which never really faded, here's me suggesting a round table about the topic:
 
