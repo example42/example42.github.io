@@ -9,15 +9,15 @@ Interesting and, for me, unexpected news. Only time will tell us how much this i
 
 ### Do we still need Puppet?
 
-In these times where serverless, containers, and cloud based services are trending tech friends ask me (given my barely concealed addiction for it) what's the future and the role of a tool like Puppet?
+In these times where serverless, containers, and cloud based services are trending tech friends often ask me (given my barely concealed addiction for it) what's the future and the role of a tool like Puppet.
 
-It was born to solve problems of the past, when people who had to manage their own servers, rather than relying on some cloud service, an hosted Kubernetes cluster or a bunch of "serverless" functions.
+It was born to solve problems of the past, when people had to configure their own servers, rather than relying on some cloud managed service, an hosted Kubernetes cluster or a bunch of "serverless" functions.
 
 My answer is often on these lines:
 
-What's the **average lifetime of the systems** you have to manage? (if you have systems to manage)
+**How many systems** do you have to manage? What's their **average lifetime**?
 
-If it's more than few weeks, and the number of systems is more than a dozen, you NEED a tool like Puppet.
+If they are more than a dozen and they "live" more than a few weeks, you NEED a tool like Puppet.
 
 That's it. Plain and simple.
 
@@ -37,20 +37,20 @@ If you don't have own servers to deal with, do you have to install, configure an
 
 How do you configure the development stations from where you manage your cloud services?
 
-How do you ensure that security settings and selected programs are installed on the employees' laptop?
+How do you ensure that security settings and selected programs are installed on the employees' laptops?
 
 If anywhere in your company, there's a Linux, a Windows, or a MacOS system that lives more than a few weeks, then you need a configuration management tool.
 
 And among the various ones around, trust my biased opinion, Puppet is still the most complete, advanced, and scalable one.
 
-It's also one of the hardest to learn, but for this you can rely on old sysadmins like me and the plenty of documentation around.
+It's also one of the hardest to learn, but for this you can rely on the advice old puppeteers like me and the plenty of documentation around.
 
 
 ### Getting personal
 
 I started to use Puppet around June 2008.
 
-I had just started to work in the national Bank of Italy, as freelance System Administrator, when a colleague came back from an IT conference with exciting infos on this new tool which could help us configuring the hundreds of servers we had to manage.
+I had just begun to work in the national Bank of Italy, as freelance System Administrator, when a colleague came back from an IT conference with exciting infos on this new tool which could help us configuring the hundreds of servers we had to manage.
 
 We were already doing some kind of configuration management, using a somehow genial but cumbersome method based on configuration rpm packages.
 
@@ -84,7 +84,7 @@ Since those times I had this obsession about modules standards which never reall
 
 ### example42 modules
 
-Since that first event I attended almost every major Puppet conference, actually all the times I've been in USA has been for a Puppet event.
+After that first event I attended almost every major Puppet conference, actually all the times I've been in USA has been for a Puppet event.
 
 I owe to Luke Kanies and Puppet a good half of my IT career: since those first years I never stopped to work with Puppet, writing modules, delivering training and consulting all over the world, either for direct customers or as Puppet Partner.
 
@@ -117,18 +117,18 @@ We were both experienced Puppet freelance consultants and we decided to join for
 
 My developments in Puppet code were reduced to simple maintenance activities on the existing projects, sacrificed on the altar of profit with the excuse of lack of time. 
 
-Our business has grown well over the years, we worked with some of the biggest Puppet customers in Europe but even if our relationship was fine, the company has always had a dual nature, with the two of us working somehow in parallel without mutual interferences but also without a real common goal and direction.
+Our business has grown well over the years, we worked with some of the biggest Puppet customers in Europe but even if our relationship was fine, the company has always had a dual nature, with the two of us working somehow in parallel without mutual interferences but also without a real common goals and direction.
 
-Last year we decided to close the example42 GmbH company, and follow our own paths, as can read from [last blog post](https://blog.example42.com/2021/12/20/example42-gmbh-closes-business-on-31st-of-december-2021/){:target="_blank"}.
+Last year we decided to close the example42 GmbH company, and follow our own paths, as you can read from [last blog post](https://blog.example42.com/2021/12/20/example42-gmbh-closes-business-on-31st-of-december-2021/){:target="_blank"}.
 
 
 ### And now?
 
 So here we come to 2022, with the long tail of the pandemic and the terrible war news.
 
-As for many other out there, I lived the last 2 years in a sort of suspended state, completely changing my habits (from one travel a week to endless hours in front of my home computers) and reconsidering priorities and life goals.
+As for many others out there, I lived the last 2 years in a sort of suspended state, completely changing my habits (from one travel a week to endless hours in front of my home computers) and reconsidering priorities and life goals.
 
-The example42 name and online assets came back to my full control, now I deliver all my Puppet related activities via my company in Italy, Lab42 Srl, keeping the example42 brand.
+The example42 name and online assets have come back to my full control, now I deliver all my Puppet related activities via my company in Italy, Lab42 Srl, keeping the example42 brand.
 
 I brought to the extreme the flexibility I always grant to the customers I work with, some of the [services](https://example42.com/services/){:target="_blank"} I offer are really unique for the ways you can access, activate and use them: do you have a problem or something to do with Puppet? Send me a message, let's setup a conference call with shared screen and I can explain, guide, troubleshoot and work with you on your own Puppet setup.
 
@@ -138,9 +138,9 @@ I like my work, I don't have working hours or days: I can pass full mid-week day
 
 I'm not writing a lot of public code lately, and I'm not happy of that. I also would like to write some updated documentation and hints on Puppet (in the past I wrote a [book on Puppet](https://www.amazon.com/Extending-Puppet-Alessandro-Franceschi-ebook/dp/B00LA414JG){:target="_blank"} which was well received, but now it's definitely obsolete and there's so much to talk about newer Puppet topics and patterns).
 
-Still it has been 3 months I'm not doing anything of the above, working only a fraction of my available time, without regrets.
+Still it has been 3 months I'm not doing anything of the above, working only for a fraction of my available time, without regrets.
 
-Suspended, as I said, reconsidering the meaning of Life, the Universe and Everything.
+Suspended, as I said, reconsidering the meaning of Life, the Universe and Everything and planning unlikely road trips across Europe. 
 
 I guess you can relate.
 
