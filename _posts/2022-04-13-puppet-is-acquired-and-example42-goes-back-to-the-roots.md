@@ -140,9 +140,9 @@ I'm not writing a lot of public code lately, and I'm not happy of that. I also w
 
 Still it has been 3 months I'm not doing anything of the above, working only a fraction of my available time, without regrets.
 
-Suspended, I said. Reconsidering the meaning of Life, the Universe and Everything.
+Suspended, as I said, reconsidering the meaning of Life, the Universe and Everything.
 
-I guess you can related.
+I guess you can relate.
 
 The news about the acquisition has left me with mixed thoughts: I don't know if this will mean the end of Puppet as we know it or the beginning of a new shining era. Maybe both.
 
