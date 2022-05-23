@@ -77,7 +77,7 @@ Tiny Puppet and Psick might be considered a concentration of anti-patterns: sing
 
 My stance here is this: I understand and agree with the risks of such an approach, I've pondered elements, and, from my perspective of Puppet modules developer and user, I prefer to have a single module that tackles, in a coherent and comprehensive way, several common configurations that we generally add to our base profiles, rather than selecting, adapting, and chasing the dependencies of several different other component modules.
 
-You have benefits both in terms of performance (generally with Psick we use the least amount of resources possible and, reducing the number of module dependencies, control-repo deployments are faster) and ease of use.
+You have benefits both in terms of performance, integration, speed of implementation and ease of use.
 
 Also, all the features of psick are optional and you can and should cherry pick them.
 
@@ -102,15 +102,21 @@ Always knowing that you can **cherry pick** them and there will be on the Forge 
 
 The **example42 stack of modules** is now composed as follows, in Puppetfile format:
 
-    mod 'example42/tp'            # Tiny Puppet         - The general purpose universal installer
-    mod 'example42/tinydata'      # Tiny data           - Required by Tiny Puppet to manage every application on every OS
+    # Tiny Puppet - The general purpose universal installer, and its Tiny data
+    mod 'example42/tp'
+    mod 'example42/tinydata'
 
-    mod 'example42/psick'         # psick module        - The [optional] infrastructure module to manage most of the common OS resources
-    mod 'example42/psick_profile'  # psick_profile module - The [optional] psick addendum with profiles to manage different applications
+    # psick module - The [recommended] infrastructure module to manage most of the common OS resources
+    mod 'example42/psick'
+
+    # psick_profile module - The [optional] psick addendum with profiles to manage different applications
+    mod 'example42/psick_profile'  
 
 plus the usual and eventual other dependencies for specific profiles.
 
 Four modules, or just two if you need only Tiny Puppet, not too many plugins to sync, nothing done by default, but several options available a Hiera data key away.
+
+If you are using Puppet on a medium, large scale, you know how big Puppetfiles can become (and how this can affect deployments)
 
 I'm available to explain in chats or live development sessions, for free, how to better use these modules.
 
