@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Puppet Evaluation Error\: Error while evaluating a Resource Statement, Unknown resource type
+title: Puppet Evaluation Error Error while evaluating a Resource Statement, Unknown resource type
 tag: puppeterrors
 ---
 
