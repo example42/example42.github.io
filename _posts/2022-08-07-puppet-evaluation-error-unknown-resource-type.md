@@ -1,7 +1,6 @@
 ---
 layout: blog
-title: Puppet Evaluation Error - Error while evaluating a Resource Statement - Unknown resource type
-tag: puppeterrors
+title: Puppet Evaluation Error. Error while evaluating a Resource Statement - Unknown resource type
 ---
 
 So you got the **Error while evaluating a Resource Statement, Unknown resource type** with Puppet and are searching for solutions?
