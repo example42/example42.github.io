@@ -77,7 +77,6 @@ A walk around during Day 2 Keynote, spaces organisation was good, with this main
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/BZbQh0rIVuk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Another walk around, the technical corners, the food stands, the two conference halls. Interesting to see so many people actually participating to the parallel tracks.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CpbTVZRjgTQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
