@@ -13,16 +13,16 @@ The module that provides the referred Unknown resource type is not available whe
 
 Find the module you need in the **metadata.json** file of the module where the code fails (use the provided path).
 
-Add the module to your `Puppetfile`, or locally with `puppet module install` command.
+Solve by adding the module to your `Puppetfile`, or running the `puppet module install` command.
 
 
-## Decomposing the "Unknown resource type" Puppet error message  [JUNIOR]
+### Decomposing the "Unknown resource type" Puppet error message  [JUNIOR]
 
 Your error message may look like (we are going later to see which parts can be different for you):
 
     Error: Could not retrieve catalog from remote server: Error 500 on SERVER: Server Error: Evaluation Error: Error while evaluating a Resource Statement, Unknown resource type: 'concat' (file: /etc/puppetlabs/code/environments/production/modules/openvpn/manifests/config.pp, line: 6, column: 5) on node lab.psick.io
 
-Here's how to decompose the thing:
+Here's how to decompose it:
 
     Error: Could not retrieve catalog from remote server: Error 500 on SERVER: Server Error: Evaluation Error: Error while evaluating a Resource Statement 
 
@@ -41,7 +41,7 @@ Another key information: where Puppet failed to compile our code. In a normal cl
 This is your client node where Puppet agent was run.
 
 
-## A few Puppet basic principles. [BEGINNER]
+### A few Puppet basic principles. [BEGINNER]
 
 Puppet manages any kind of computer related item, it uses its own language, written in files like the /etc/puppetlabs/code/environments/production/modules/openvpn/manifests/config.pp of the above example, where we can declare what are the resources we want to manage on our system(s) (lab.psick.io).
 
@@ -85,7 +85,7 @@ Our problem here is that in line 6 column 5 in the /etc/puppetlabs/code/environm
 that uses the resource 'concat' which is not available, because it's not a native resource type, shipped with puppet itself, and we don't have the module that provides the concat resource.
 
 
-## How to solve Unknown resource type errors [JUNIOR]
+### How to solve Unknown resource type errors [JUNIOR]
 
 The quick answer is to install the module that contains the resource type you are trying to use, and the quick way to find it is to look at the dependencies of the module which is using the missing resource.
 
@@ -117,7 +117,7 @@ The important information here is:
 
 So, in order to use the puppet/openvpn module we also need the puppetlabs/concat and puppetlabs/stdlib modules.
 
-## Some info about where Puppet code lives [JUNIOR]
+### Some info about where Puppet code lives [JUNIOR]
 
 In our example the missing resource is on the file `/etc/puppetlabs/code/environments/production/modules/openvpn/manifests/config.pp`, this whole path has a meaning and you need to know it if you work with Puppet:
 
@@ -147,11 +147,11 @@ and the specific one that matters here, the modulepath, where Puppet looks for m
 
 So all we need to do is to install the missing modules.
 
-## Installing modules [JUNIOR]
+### Installing modules [JUNIOR]
 
 We can install additional modules in various ways which depends on how is managed Puppet code on our systems.
 
-### Using the Puppetfile 
+#### Using the Puppetfile 
 
 If we are using a Puppet server, it's likely and advisable that in your company you are managing the full content of the **/etc/puppetlabs/code/environments/** dir with r10k (in puppet Open Source) or Code Manager (in Puppet Enterprise), so you should never manually touch any file there: a deployment procedure, eventually driven by a CI/CD tool, will do it for you
 
@@ -173,7 +173,7 @@ In the Puppetfile our missing modules can be added as follows:
 
 The version names, and the actual syntax can be seen on the module's page on the Forge.
 
-### Using the puppet module install command
+#### Using the puppet module install command
 
 If you are using Puppet in apply mode, without any Puppet server involved, or (blames on you!) you manage your manifests directly, on your servers's /etc/puppetlabs/code/environments/ dir, you can install the needed modules by using the Puppet module command.
 
@@ -189,7 +189,7 @@ To list the installed modules use:
 Note than while the puppet module install command automatically installs every dependency, you have to specify them all in the Puppetfile.
 
 
-## Common cases of Unknown resource type errors and remedies [INTERMEDIATE]
+### Common cases of Unknown resource type errors and remedies [INTERMEDIATE]
 
 So, I hope it's clear that any kind of Puppet Unknown resource type error can be solved by adding the missing module which provides the resource we are trying to use.
 
