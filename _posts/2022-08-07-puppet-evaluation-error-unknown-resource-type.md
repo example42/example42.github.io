@@ -11,9 +11,9 @@ You are lucky, because right now we are going to see what it means, why it happe
 
 The module that provides the referred Unknown resource type is not available where your Puppet code is compiled.
 
-Find the module you need in the **metadata.json** file of the module where the code fails (use the provided path).
+Find the module you need in the metadata.json file of the module where the code fails (refer to the provided file path).
 
-Solve by adding the module to your `Puppetfile`, or running the `puppet module install` command.
+Solve by adding the dependency module to your `Puppetfile`, or running the `puppet module install` command.
 
 
 ### Decomposing the "Unknown resource type" Puppet error message  [JUNIOR]
@@ -24,17 +24,17 @@ Your error message may look like (we are going later to see which parts can be d
 
 Here's how to decompose it:
 
-    Error: Could not retrieve catalog from remote server: Error 500 on SERVER: Server Error: Evaluation Error: Error while evaluating a Resource Statement 
+    Error: Could not retrieve catalog from remote server: Error 500 on SERVER:  
 
-This is your Puppet agent throwing an Error, saying that it was not able to get the catalog of the resources to apply from the server. Then it shows the server's 500 error related to problems while evaluating a resource statement in the code:
+This is your Puppet agent reporting an Error, saying that it was not able to get the catalog of the resources to apply from the server and got a 500 error (yes, Puppet client and server communicate over https). Next is shown the actual server error message:
 
-    Unknown resource type: 'concat' 
+    Server Error: Evaluation Error: Error while evaluating a Resource Statement Unknown resource type: 'concat' 
 
-This is the specific message, where the 'concat' resource type can and will be different, and gives the key information for solving it: Puppet is looking for a resource type, here 'concat', and it doesn't find it.
+This is the specific message, where instead of 'concat' there can be any Puppet resource, and gives us the key information for solving it: Puppet is looking for a resource type, here 'concat', and it doesn't find it.
 
     (file: /etc/puppetlabs/code/environments/production/modules/openvpn/manifests/config.pp, line: 6, column: 5)
 
-Another key information: where Puppet failed to compile our code. In a normal client-server infrastructure, the file path is on the Puppet server's filesystem (path may be different, what matters is that this is the file to check). If you use the puppet apply command, there's no server involved and the path is local.
+Another key information: where Puppet failed to compile our code. In a normal client-server infrastructure, the file path is on the Puppet server's filesystem (path may be different, what matters is that this is the file to check). If there's no server involved and you use the puppet apply command, then the path is on your local filesystem.
     
     on node lab.psick.io
 
@@ -61,9 +61,9 @@ Puppet is used typically to automate the management of configurations on multipl
 
 This is possible thanks to Puppet's extensible and modular structure.
 
-Additional resource types can therefore be found in Puppet modules which are shared on sites like GitHub and on a public repository called the [Forge](https://forge.puppet.com).
+Additional resource types can therefore be found in Puppet modules which are shared on sites like GitHub and on a public repository called the [Forge](https://forge.puppet.com){:target="_blank"}.
 
-Whatever the name, in Puppet language, we always declare a resource type with the following syntax:
+Whatever its name, in Puppet language, we always declare a resource type with the following syntax:
 
 ```puppet
     resource_type { 'title':
@@ -82,14 +82,14 @@ Our problem here is that in line 6 column 5 in the /etc/puppetlabs/code/environm
     }
 ```
 
-that uses the resource 'concat' which is not available, because it's not a native resource type, shipped with puppet itself, and we don't have the module that provides the concat resource.
+that uses the resource 'concat' which is not available, because it's not a native resource type shipped with Puppet itself, and we don't have the module that provides it.
 
 
 ### How to solve Unknown resource type errors [JUNIOR]
 
 The quick answer is to install the module that contains the resource type you are trying to use, and the quick way to find it is to look at the dependencies of the module which is using the missing resource.
 
-Puppet modules can require other modules, in this case the 'openvpn' module on this example requires an additional module which provides the 'concat' resource.
+Puppet modules can require other modules, in this case the 'openvpn' module requires an additional module which provides the 'concat' resource.
 
 The dependencies of every module are defined in the `metadata.json` file, at the root of the module directory, and indeed in our /etc/puppetlabs/code/environments/production/modules/openvpn/metadata.json we have the following:
 
@@ -113,7 +113,7 @@ The dependencies of every module are defined in the `metadata.json` file, at the
 The important information here is:
 
 - we are using the module puppet/openvpn (Here 'puppet' is the user name on the Forge of the Vox Pupuli community of modules authors)
-- This module depends on 2 additions modules: puppetlabs/concat and puppetlabs/stdlib, they are both from the 'puppetlabs' Forge user, which is the Puppet company itself) 
+- This module depends on 2 additional modules: puppetlabs/concat and puppetlabs/stdlib, they are both from the 'puppetlabs' Forge user, which is the Puppet company itself) 
 
 So, in order to use the puppet/openvpn module we also need the puppetlabs/concat and puppetlabs/stdlib modules.
 
@@ -153,11 +153,11 @@ We can install additional modules in various ways which depends on how is manage
 
 #### Using the Puppetfile 
 
-If we are using a Puppet server, it's likely and advisable that in your company you are managing the full content of the **/etc/puppetlabs/code/environments/** dir with r10k (in puppet Open Source) or Code Manager (in Puppet Enterprise), so you should never manually touch any file there: a deployment procedure, eventually driven by a CI/CD tool, will do it for you
+If we are using a Puppet server, it's likely and advisable that in your company you are managing the full content of the **/etc/puppetlabs/code/environments/** dir with r10k (if using Puppet Open Source) or Code Manager (in Puppet Enterprise), so you should never manually touch any file there: a deployment procedure, eventually driven by a CI/CD tool, will do it for you.
 
 In this case any new external module should be listed in your control-repo's Puppetfile.
 
-The control repo is a single git repository which contains a Puppet environment.
+The control repo is a single git repository which contains all the Puppet code and data we need to manage the whole infrastructure. Every node uses a Puppet environment (default is called production), which has the contents of the control repo.
 
 When it is deployed by tools like r10k or CodeManager, commonly used in Puppet world, for each branch of the control repo a Puppet environment is created in the **$environmentpath**.
 
@@ -272,19 +272,19 @@ If you use Puppet to manage Windows, you might need these resources and modules:
 
 As a general reference, if the missing resource type has a double colon in its name, (like: apache::vhost), then the name of the module HAS to be the first part before the double quotes (apache). Next problem would be to find the right apache module from the Forge, and that can take some time if it's not referenced in the metadata.json file.
 
-If you bumped into code which is using example42's revolutionary Puppet modules, be aware of the following:
+If you bumped into code which is using example42's *revolutionary Puppet modules*, be aware of the following:
 
 | Resource Type | Module |
 | --- | --- |
 | tp::install | example42/tp |
 | tp::conf | example42/tp |
 | tp::dir | example42/tp |
-| tp::dir | example42/tp |
+| tp::repo | example42/tp |
 | tp::test | example42/tp |
 | tp::info | example42/tp |
 | psick::* | example42/psick |
 
-* Any defined resource type (also called define) from the psick module, there are quite a few: psick::puppet::access, psick::puppet::module, psick::puppet::set_external_fact, psick::netinstall, psick::yum::repo, psick::yum::plugin, psick::rclocal::script, psick::profile::script, psick::sudo::directive, psick::network::route, psick::network::routing_table, psick::network::set_lo_ip, psick::network::interface, psick::network::rule, psick::network::validate_gw, psick::network::netplan, psick::network::netplan::interface, psick::bolt::project, psick::limits::limit, psick::limits::config, psick::nfs::export, psick::nfs::mount, psick::openssh::keypair, psick::openssh::keyscan, psick::openssh::keygen, psick::openssh::config, psick::systemd::unit_file, psick::java::install_tarball, psick::services::init_script, psick::services::systemd_script, psick::archive, psick::users::managed, psick::aws::cli::script, psick::git::config, psick::php::module, psick::php::pear::module, psick::php::pear::config, psick::sysctl::set, psick::chruby::gem, psick::tools::create_dir, psick::tools::gpgkey, psick::kmod::module.
+(*) Any defined resource type (also called define) from the psick module, there are quite a few: psick::puppet::access, psick::puppet::module, psick::puppet::set_external_fact, psick::netinstall, psick::yum::repo, psick::yum::plugin, psick::rclocal::script, psick::profile::script, psick::sudo::directive, psick::network::route, psick::network::routing_table, psick::network::set_lo_ip, psick::network::interface, psick::network::rule, psick::network::validate_gw, psick::network::netplan, psick::network::netplan::interface, psick::bolt::project, psick::limits::limit, psick::limits::config, psick::nfs::export, psick::nfs::mount, psick::openssh::keypair, psick::openssh::keyscan, psick::openssh::keygen, psick::openssh::config, psick::systemd::unit_file, psick::java::install_tarball, psick::services::init_script, psick::services::systemd_script, psick::archive, psick::users::managed, psick::aws::cli::script, psick::git::config, psick::php::module, psick::php::pear::module, psick::php::pear::config, psick::sysctl::set, psick::chruby::gem, psick::tools::create_dir, psick::tools::gpgkey, psick::kmod::module.
 
 ## Conclusions
 
