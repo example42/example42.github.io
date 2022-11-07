@@ -5,7 +5,7 @@ title: Puppet consulting, the example42 way
 
 If you think that this is a mere low budget marketing self-promoting post, you are right.
 
-Still, if you are interested in Puppet consulting, or, for some really arcane reason, in example42, keep on reading, as I guarantee that everything is written here is true and happened for real.
+Still, if you are interested in Puppet consulting, or, for some really arcane reason, in example42, keep on reading, as I guarantee that everything written here is true and happened for real.
 
 
 ### example42, an idea, an approach to work
@@ -31,13 +31,13 @@ Let me show some examples of real support cases, approached in the example42's w
 
 #### Really Instant Puppet support 
 
-One of the most interesting and satisfactory example of example42's Instant Support has been for an english University: we receive an mail from the website contact form asking for support on a Puppet issue, after some minutes I reply, giving the availability for an Hangouts call. We setup the call in a few minutes and on a shared screen we start to diagnose the problem.
+One of the most interesting and satisfactory example of example42's Instant Support has been for an English University: we receive a mail from the website contact form asking for support on a Puppet issue, after some minutes I reply, giving the availability for an Hangouts call. We setup the call in a few minutes and on a shared screen we start to diagnose the problem.
 
-We discover that the Puppet server's CA (an old 3.x Open Source installation) is expired and clients can't connect anymore (oh those default 5 years which pass so fast!): the problem has emerged 3 days ago and couldn't be solved by the person I have the call with (a consultant who had the bad luck of having to cope with a Puppet setup he has little confidence with).
+We discover that the Puppet server's CA (an old 3.x Open Source installation) is expired and clients can't connect anymore (oh those default 5 years which pass so fast!): the problem has emerged since 3 days and couldn't be solved by the person I have the call with (a consultant who has the bad luck of having to cope with a Puppet setup he has little confidence with).
 
-After having the confirmation that the number of managed nodes is really small (about 15), I suggest to just reinitialize a brand new Puppet CA and re-sign every client. I explain the consequences and the impact of such a brutal approach (the need to connect to each client and cleanup it's certificates), and the fact that that saner alternative to extend Puppet's CA is a bit more complicated in an old setup and needs further investigations from my side. The customer agrees to follow this procedure.
+After having the confirmation that the number of managed nodes is really small (about 15), I suggest to just reinitialize a brand new Puppet CA and re-sign every client. I explain the consequences and the impact of such a brutal approach (the need to connect to each client and cleanup it's certificates), and the fact that the saner alternative to extend Puppet's CA is a bit more complicated in an old setup and needs further investigations from my side. The customer agrees to follow this procedure.
 
-We backup the leftovers of the old CA, we regenerate a new one, we test and prepare the one liner command to run on each client, and after 30 minutes of call, the problem is solved and clients are happily running using the new CA. I spend the last 30 minutes of the call explaining some basic Puppet concepts, where to look for troubleshooting problems and how the (old) infrastructure may evolve in the future (this last topic is actually of few interest for my interlocutor, given he just found himself in the wrong place at the wrong moment).
+We backup the leftovers of the old CA, we regenerate a new one, we test and prepare the one liner command to run on each client, and after 30 minutes of call, the problem is solved and client nodes are happily running using the new CA. I spend the last 30 minutes of the call explaining some basic Puppet concepts, where to look for troubleshooting problems and how the (old) infrastructure may evolve in the future (this last topic is actually of few interest for my interlocutor, given he just found himself in the wrong place at the wrong moment).
 
 Lesson here: sometimes a simple practical solution is more effective and takes less time than a technically correct but more complex one.
 
@@ -58,11 +58,11 @@ Thanks to the Gods of the Cloud, not all the cases are urgent and we don't alway
 
 Most of my synchronous Puppet support is done during calls scheduled on the calendar. This happens usually with customers with which there's an ongoing support contract. 
 
-Sometimes these calls are scheduled in a recurring manner, sometimes they are arranged days or weeks before, in *one* case I sometimes happen to receive the call invitation in the same day it's scheduled, but that's a big customer which I like and, in any case, I know that in that day a call is expected to be scheduled.
+Sometimes these calls are scheduled in a recurring manner, sometimes they are arranged days or weeks before, in *one* case I sometimes happen to receive the call invitation in the same day it's scheduled, but that's a big customer which I like and, in any case, I know that in that day a call is expected to be done.
 
 If my calendar is free and I haven't other things to do, I don't have problems in accepting also these last minute calls, if not, I propose a different time and we always manage to get the thing done.
 
-It's not rare, with customers that have an ongoing support contract, to receive emails asking for support for some new Puppet issue or error. When this happens, I connect to the customer infrastructure, check the issue, arrange a call with the customer where I show how I can fix, or have fixed, the problem.
+It's not rare, with customers that have an ongoing support contract, to receive emails asking for support for some new Puppet issue or error. When this happens, I connect to the customer infrastructure, check the issue, arrange a call where I show how I can fix, or have fixed, the problem.
 
 Plain, straight to the point and usually effective. The customer pays for the time spent on it, according to the contract terms.
 
@@ -72,7 +72,7 @@ I lied before (actually this misleading AI did).
 
 The AI wrote that services are not free, but that's not always the case. Via example42's website you can contact me directly via WhatApp, and ask me any Puppet related question. As soon as possible, I reply, if I've a ready answer I just give it, if the issue requires more investigation details are asked. Then if the effort to diagnose and solve the problem seems to require more than a few minutes I ask to consider one of the paid support services we provide.
 
-In a case I actually happened to spend a few hours, including a shared screen call, to give some advice. It generally happens with individuals from countries where the cost of life is much lower than european one, in such cases I really don't feel comfortable at requesting hourly rates which might cost a significant part of an average salary.
+In a case I actually happened to spend a few hours, including a shared screen call, to give some advice. It generally happens with individuals from countries where the cost of life is much lower than european one, in such cases I really don't feel comfortable requesting hourly rates which might cost a significant part of an average salary.
 
 So, don't be shy, if you have any Puppet related issue or something to clarify, just contact me via WhatsApp, I'll be happy to help you.
 
@@ -89,7 +89,7 @@ How can you share sensitive information with someone you don't know, without a N
 
 Well, first of all, I can sign all the NDA you want, I can sign a contract, I can sign a blood pact with you, if you want. But I don't think that's necessary. (This one comes from Copilot! 🤖).
 
-I don't have problems in adapting to every procedure you may require, even I prefer to go straight to the point and face the technically challenges of the problem, rather than wasting time in signing papers.
+I don't have problems in adapting to every procedure you may require, even I prefer to go straight to the point and face the technically challenges of the problem, rather than wasting time in signing papers or preparing slides on what has to be done.
 
 For the rest I guess you have to trust my integrity, experience and knowledge.
 
@@ -101,26 +101,26 @@ I've been in IT for more than 25 years, working on operations, networking and se
 
 I'm also working almost exclusively on Puppet for 15 years and know how to discover what's the potential effect of a change and how to investigate what's its range of impact on the infrastructure.
 
-But most of all, when there's not an ongoing contract where I'm granted access to the client's systems, we work on a shared screen session, where YOU control what is done, I just give you advice and options to the best of my knowledge, and you decide what to do. I don't have access to your infrastructure, I don't have access to your data, I don't have access to your secrets. I just see your screen.
+But most of all, when there's not an ongoing contract where I'm granted access to the client's systems, we work on a shared screen session, where customer controls what is done, I just give advice and options to the best of my knowledge, and customer decides what to do and when. I don't have access to the infrastructure, I don't have access to customers' data, I don't have access to their secrets. I just see their screen.
 
 
 ### Work and life balance
 
 Engagement for example42's Puppet support can be done at **any time** and **any day**, from **every continent**.
 
-I never offer a strict SLA or guarantees on intervention times, but in most of the cases the reply and the actual start of the activity is within the day.
+We never offer a strict SLA or guarantees on intervention times, but in most of the cases the reply and the actual start of the activity is within the day.
 
 You may wonder what hellish life I might be doing, giving this around the clock availability.
 
-My answer is that I don't care about working outside plain working hours or in festive days, as I don't mind about playing my hobbies during working hours.
+My answer is that I don't care about working outside plain working hours or in festive days, as I don't mind about playing with my hobbies during working hours.
 
 When I work asynchronously, commits in my customer's control-repos might be at midnight or at 6 AM GMT+1, my usual timezone (ehi, I wrote commits, not deployments to production: they are always verified and checked with the customer).
 
-When I work synchronously, typically in conference calls, sometimes onsite, I don't need to have to plan it weeks before. If I can, I can connect and give support as soon as I'm notified of a request.
+When I work synchronously, typically in conference calls, sometimes onsite, I don't need to plan them weeks before. If I can, I can connect and give support as soon as I'm notified of a request.
 
 The main reason all this does not drive me crazy, is that I like my work, I love to develop things with Puppet, and I like to share what I know about it.
 
-The other reason is that I've actually have plenty of free time to do other things, also because, generally to solve a Puppet problem or develop code I take only a fraction of time of a normal DevOps engineer with generic Puppet experience (everyone has his/her skills, my ones are very vertical on Puppet but still quite broad on IT operations, security and networking)
+Another reason is that I've actually have plenty of free time to do other things, also because to solve a Puppet problem or develop code I usually take only a fraction of time of a DevOps engineer with generic Puppet experience (everyone has his/her skills, my ones are very vertical on Puppet but still quite broad on IT operations, security and networking).
 
 Final reason, I guess, is that I'm a flexibly and handy person who adapts to customers' needs whenever possible.
 
