@@ -10,7 +10,7 @@ Still, if you are interested in Puppet consulting, or, for some really arcane re
 
 ### example42, an idea, an approach to work
 
-Example42 started in 2008 as an Open Source project, then, in 2005, it became a company based in Berlin, and finally, at the beginning of this year it turned into a brand of Lab42 Srl, my company, based in Italy.
+Example42 started in 2008 as an Open Source project, then, in 2015, it became a company based in Berlin, and finally, at the beginning of this year it turned into a brand of Lab42 Srl, my company, based in Italy.
 
 The idea behind example42 is to provide a set of Puppet modules, which are Open Source, and a set of services, which are not. (this sentence, exactly as is, was suggested by one of my editor's AIs, not sure exactly which one but I like it).
 
