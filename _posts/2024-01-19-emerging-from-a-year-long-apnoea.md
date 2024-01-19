@@ -26,7 +26,7 @@ For the moment I can anticipate the conferences where I will be present in the n
 - [KubeCon Europe2024](https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/){:target="_blank"}  in Paris, Frances, March 1922, 2024
 - [Google Next'24](https://cloud.withgoogle.com/next/sf){:target="_blank"}  in Las Vegas, USA, April 9-11, 2024
 
-At the Config Management Camp I'll be presenting a talk about [Strategies fro Puppet code upgrade and refactoring](https://cfp.cfgmgmtcamp.org/2024/talk/JJ9WFC/){:target="_blank"}, join me there if you want to know more about how to handle code upgrades and refactoring in a sane way.
+At the Config Management Camp I'll be presenting a talk about [Strategies for Puppet code upgrade and refactoring](https://cfp.cfgmgmtcamp.org/2024/talk/JJ9WFC/){:target="_blank"}, join me there if you want to know more about how to handle code upgrades and refactoring in a sane way.
 
 Keep puppetizing, because if you have to manage a system whose lifecycle is longer than a few weeks, Puppet is still the best way to do it.
 
