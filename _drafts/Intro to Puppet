@@ -1,0 +1,37 @@
+Puppet is a software that allows you to automate system administration tasks.
+
+It is an open source tool and is used by system administrators and DevOps engineers to manage the configuration of their IT infrastructure, such as servers, applications, networks and services.
+
+Puppet is used to automate repetitive tasks, deploy applications, and manage changes across multiple systems.
+
+It can also be used to enforce security policies across the entire IT environment.
+
+Puppet is written in Ruby and uses a declarative configuration language known as Puppet Language.
+
+
+It can be used to manage both Windows and Linux systems, as well as virtual machines.
+
+It also supports cloud computing platforms such as Amazon Web Services, Microsoft Azure and Google Cloud Platform.
+
+
+Puppet language is a domain-specific language used for automating system administration tasks such as configuration management, application deployment, and provisioning.
+
+Puppet code is written in the form of manifests, the manifests are compiled into a system-specific catalog containing resources and dependency relationships between those resources.
+ 
+Puppet applies the catalog to the target system, making the appropriate changes to the system to ensure it complies with the catalog. 
+
+It allows the user to define the state of the system, and Puppet will take the necessary steps to bring the system to the desired state. 
+
+Puppet is a powerful tool for automating system administration tasks.
+
+It can help to streamline the process of setting up and maintaining servers, allowing system administrators to focus on higher-level tasks.
+
+
+
+## Hiera
+
+Hiera is a Hierarchical data store. It is a key/value lookup tool for configuration data and is most commonly used in Puppet to provide the data that the Puppet manifests then use. It allows administrators to separate data from code, making it easier to manage and maintain configurations.
+
+Hiera uses a hierarchy to determine the data sources it will use to retrieve the requested data. The hierarchy is defined in a configuration file, which allows you to specify multiple data sources and their order of precedence. This allows you to add more data sources as needed, or change the order in which they are consulted.
+
+Hiera is also capable of merging data from multiple sources. This is useful for cases where the same data can be stored in multiple locations, such as system-wide settings and user-specific settings. By merging the data, Hiera is able to provide an aggregated view of the data. This makes it easier to manage and maintain configurations.

@@ -19,14 +19,14 @@ No promises yet, let facts speak for themselves, when they will be ready.
 
 For the moment I can anticipate the conferences where I will be present in the next months, see you there:
 
-- [AIDays](https://www.aiconf.it/) in Milan, Italy, January 30, 2024
-- [FOSDEM](https://fosdem.org/2024/) in Brussels, Belgium, February 3-4, 2024
-- [Config Management Camp](https://cfgmgmtcamp.eu/) in Gent, Belgium, February 5-7, 2024
-- [Incontro Devops Italia 2024](https://2024.incontrodevops.it/) in Bologna, Italy, March 15, 2024
-- [KubeCon Europe2024](https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/) in Paris, Frances, March 1922, 2024
-- [Google Next'24](https://cloud.withgoogle.com/next/sf) in Las Vegas, USA, April 9-11, 2024
+- [AIDays](https://www.aiconf.it/){:target="_blank"}  in Milan, Italy, January 30, 2024
+- [FOSDEM](https://fosdem.org/2024/){:target="_blank"}  in Brussels, Belgium, February 3-4, 2024
+- [Config Management Camp](https://cfgmgmtcamp.eu/){:target="_blank"}  in Gent, Belgium, February 5-7, 2024
+- [Incontro Devops Italia 2024](https://2024.incontrodevops.it/){:target="_blank"}  in Bologna, Italy, March 15, 2024
+- [KubeCon Europe2024](https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/){:target="_blank"}  in Paris, Frances, March 1922, 2024
+- [Google Next'24](https://cloud.withgoogle.com/next/sf){:target="_blank"}  in Las Vegas, USA, April 9-11, 2024
 
-At the Config Management Camp I'll be presenting a talk about [Strategies fro Puppet code upgrade and refactoring](https://cfp.cfgmgmtcamp.org/2024/talk/JJ9WFC/), join me there if you want to know more about how to handle code upgrades and refactoring in a sane way.
+At the Config Management Camp I'll be presenting a talk about [Strategies fro Puppet code upgrade and refactoring](https://cfp.cfgmgmtcamp.org/2024/talk/JJ9WFC/){:target="_blank"}, join me there if you want to know more about how to handle code upgrades and refactoring in a sane way.
 
 Keep puppetizing, because if you have to manage a system whose lifecycle is longer than a few weeks, Puppet is still the best way to do it.
 
