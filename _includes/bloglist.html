@@ -1,7 +1,22 @@
-<p>
-{% for post in site.posts %}
-{% if post.language != "de" %}
-{{ post.date | date: "%Y-%m-%d" }} - <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></br>
-{% endif %}
-{% endfor %}
-</p>
+<section id="blog">
+    <div class="content-section-a">
+
+        <div class="container">
+
+            <div class="row">
+                <div>
+                    <div class="lead">
+                    <ul class="posts">
+                    {% for post in site.posts %}
+                      <li>
+                      {{ post.date | date: "%Y-%m-%d" }} - <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a>
+                      </li>
+                    {% endfor %}
+                    </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+</section>
