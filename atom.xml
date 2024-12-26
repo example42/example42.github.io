@@ -11,8 +11,8 @@ layout: null
  <updated>{{ site.time | date_to_xmlschema }}</updated>
  <id>{{ site.url }}/</id>
  <author>
-   <name>example42 GmbH</name>
-   <email>sales@example42.com</email>
+   <name>example42</name>
+   <email>current@lab42.it</email>
  </author>
 
  {% for post in site.posts %}
