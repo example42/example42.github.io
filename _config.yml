@@ -19,11 +19,13 @@ permalink: pretty
 # ----------------------- #
 #   3rd Party Settings    #
 # ----------------------- #
-include: ['guide/slides/beginner/file/_images/logoguide.jpg','guide/slides/beginner/file/_images/logoguide.jpg']
 
 social:
   - title: github
     url: https://github.com/example42
   - title: linkedin
     url: https://www.linkedin.com/company/example42
-
+  - title: youtube
+    url: https://youtube.com/@AbnormalDevOpsIterations
+  - title: twitter
+    url: https://x.com/example42

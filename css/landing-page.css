@@ -31,7 +31,7 @@ h6 {
     padding-bottom: 50px;
     text-align: center;
     color: #f8f8f8;
-    background: url(../img/splash4.jpg) no-repeat center center;
+    background: url(../img/splash-1.jpg) no-repeat center center;
     background-size: cover;
 }
 
@@ -97,7 +97,7 @@ h6 {
     }
 
     .intro-header {
-        background: url(../img/splash4.jpg) no-repeat center center;
+        background: url(../img/splash-1.jpg) no-repeat center center;
     }
 
     ul.intro-social-buttons > li {
