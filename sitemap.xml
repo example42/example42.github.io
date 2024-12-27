@@ -2,6 +2,26 @@
 layout: null
 ---
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+<loc>{{ site.url }}</loc>
+<priority>0.80</priority>
+</url>
+<url>
+<loc>{{ site.url }}/services/</loc>
+<priority>0.80</priority>
+</url>
+<url>
+<loc>{{ site.url }}/wwww/</loc>
+<priority>0.80</priority>
+</url>
+<url>
+<loc>{{ site.url }}/AbnormalDevOpsIterations/</loc>
+<priority>0.80</priority>
+</url>
+<url>
+<loc>{{ site.url }}/blog/</loc>
+<priority>0.80</priority>
+</url>
 {% for post in site.posts %}
 <url>
 <loc>{{ site.url }}{{ site.baseurl }}{{ post.url }}/</loc>
