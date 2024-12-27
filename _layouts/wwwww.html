@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-	{% include head.html %}
+<head>
+{% include head.html %}
+{% include analytics.html %}
+</head>
+<body>
+{% include header.html %}
 
-	<body>
-		{% include header.html %}
-		{% include why_puppet.html %}
-		{% include why_example42.html %}
-		{% include footer.html %}
-		{% include js.html %}
-		{% include analytics.html %}
-	</body>
+{% include footer.html %}
+{% include js.html %}
+</body>
 </html>
