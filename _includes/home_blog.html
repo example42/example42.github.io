@@ -6,19 +6,19 @@
           <div class="clearfix"></div>
           <h2 class="section-heading">example42's blog</h2>
           <div class="lead">
-          <ul class="posts">
-          {% for post in site.posts limit:8 %}
-            <li>
-            <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
-            </li>
-          {% endfor %}
-          </ul>
-          <a href="/blog/">All the blog posts</a>
+            <ul class="posts">
+            {% for post in site.posts limit:8 %}
+              <li>
+              <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
+              </li>
+            {% endfor %}
+            </ul>
+            <a href="/blog/">All the blog posts</a>
           </div>
         </div>
-      </div>
-      <div class="col-lg-4 col-lg-offset-2  col-sm-6">
-        <img class="img-responsive" src="img/imm-1.png" alt=""Example42 blog>
+        <div class="col-lg-4 col-lg-offset-2  col-sm-6">
+          <img class="img-responsive" src="{{ site.url }}/img/imm-1.png" alt=""Example42 blog>
+        </div>
       </div>
     </div>
   </div>
