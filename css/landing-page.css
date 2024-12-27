@@ -34,14 +34,7 @@ h6 {
     background: url(../img/splash4.jpg) no-repeat center center;
     background-size: cover;
 }
-.intro-guide {
-    padding-top: 200px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
-    padding-bottom: 200px;
-    text-align: center;
-    color: #f8f8f8;
-    background: url(../img/DevOpsGuide-Front.jpg) no-repeat center center;
-    background-size: cover;
-}
+
 .intro-message {
     position: relative;
     padding-top: 10%;
@@ -65,6 +58,24 @@ h6 {
 
 .intro-message > h3 {
     text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+}
+
+.services-header {
+    padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    padding-bottom: 20px;
+    text-align: center;
+    color: #f8f8f8;
+    background: url(../img/background-services.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+.blog-header {
+    padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    padding-bottom: 20px;
+    text-align: center;
+    color: #f8f8f8;
+    background: url(../img/background-blog.jpg) no-repeat center center;
+    background-size: cover;
 }
 
 @media(max-width:767px) {
