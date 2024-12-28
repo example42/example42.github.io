@@ -104,16 +104,16 @@ h6 {
     background-size: cover;
 }
 .lightback-5 {
-    background-size: cover;
     background: url(../img/lightback-5.jpg) no-repeat center center;
+    background-size: cover;
 }
 .lightback-6 {
     background: url(../img/lightback-6.jpg) no-repeat center center;
     background-size: cover;
 }
 .lightback-7 {
-    background-size: cover;
     background: url(../img/lightback-7.jpg) no-repeat center center;
+    background-size: cover;
 }
 @media(max-width:767px) {
     .intro-message {
