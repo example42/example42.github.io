@@ -2,9 +2,12 @@
   <div class="content-section-a">
     <div class="container">
       <div class="row">
-        <div class="col-lg-4">
-          <h2><a href="{{ site.url }}/AbnormalDevOpsIterations/">Abnormal DevOps Iteration {{ page.number }}</a></h2>
+        <div class="col-lg-2">
+          <img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ page.number }}.png" alt="ADI {{ page.number }} - {{ page.guest }}: {{ page.title }}">
           Posted: {{ page.date | date: "%Y-%m-%d" }}
+        </div>
+        <div class="col-lg-2">
+          <h2><a href="{{ site.url }}/AbnormalDevOpsIterations/">Abnormal DevOps</br>Iteration {{ page.number }}</a></h2>
         </div>
         <div class="col-lg-8">
         <h1>{{ page.guest }} - {{ page.title }}</h2>

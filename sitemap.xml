@@ -15,7 +15,7 @@ layout: null
 <priority>0.80</priority>
 </url>
 <url>
-<loc>{{ site.url }}/AbnormalDevOpsIterations/</loc>
+<loc>{{ site.url }}//</loc>
 <priority>0.80</priority>
 </url>
 <url>
@@ -23,6 +23,13 @@ layout: null
 <priority>0.80</priority>
 </url>
 {% for post in site.posts %}
+<url>
+<loc>{{ site.url }}{{ site.baseurl }}{{ post.url }}</loc>
+<lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
+<priority>0.60</priority>
+</url>
+{% endfor %}
+{% for post in site.episodes %}
 <url>
 <loc>{{ site.url }}{{ site.baseurl }}{{ post.url }}</loc>
 <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
