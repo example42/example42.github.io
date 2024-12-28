@@ -81,7 +81,7 @@ p {
 
 .adi-header {
     padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     text-align: center;
     color: #f8f8f8;
     background: url(../img/background-podcast.jpg) no-repeat center center;
