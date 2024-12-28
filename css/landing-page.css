@@ -89,12 +89,6 @@ p {
     vertical-align: middle;
 }
 
-.central-image {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
 .float-image {
     float: left; /* or right */
     margin: 10px; /* Adjust margin as needed */
