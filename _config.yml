@@ -29,3 +29,8 @@ social:
     url: https://youtube.com/@AbnormalDevOpsIterations
   - title: twitter
     url: https://x.com/example42
+
+collections:
+  episodes:
+    output: true
+    permalink: /episodes/:path/
