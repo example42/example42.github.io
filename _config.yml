@@ -6,7 +6,7 @@ url: https://www.example42.com
 title: Puppet Training, Consulting and Development. IT Automation and DevOps.
 email: info@example42.com
 author: Example42
-description: > # "Example42 delivers Puppet training, consulting and development services. It provides consulting on automation and DevOps practices"
+description: "Example42 delivers Puppet training, consulting and development services. It provides consulting on automation and DevOps practices"
 
 # ----------------------- #
 #    Jekyll & Plugins     #
