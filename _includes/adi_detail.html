@@ -1,13 +1,12 @@
-<section id="blogs">
+<section id="adi">
   <div class="content-section-a">
     <div class="container">
       <div class="row adi-list">
         <div class="col-lg-2">
-          <a href="{{ site.url }}/AbnormalDevOpsIterations/"><img class="img-responsive" src="{{ site.url }}/img/pic-adi.png" alt="Abnormal DevOps Iterations"></a>
-          <h4>{{ page.number }}</h4>
+          <a href="{{ site.url }}/AbnormalDevOpsIterations/"><img class="img-responsive central-image" src="{{ site.url }}/img/pic-adi.png" alt="Abnormal DevOps Iterations"></a>
         </div>
         <div class="col-lg-2">
-          <img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ page.number }}.png" alt="ADI {{ page.number }} - {{ page.guest }}: {{ page.title }}">
+          <h1>ADI {{ page.number }}</h1>
         </div>
         <div class="col-lg-8">
         <h1>{{ page.guest }} - {{ page.title }}</h2>
@@ -15,6 +14,7 @@
       </div>
       <div class="row">
         <div class="col-lg-5">
+          <img class="img-responsive float-image" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ page.number }}.png" alt="ADI {{ page.number }} - {{ page.guest }}: {{ page.title }}">
           {{ content }}
           <div class="tags">{% for tag in page.tags %}#{{ tag }} {% endfor %}</div>
         </div>
