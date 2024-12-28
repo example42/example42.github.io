@@ -87,6 +87,13 @@ h6 {
     background-size: cover;
 }
 
+.adi-list {
+    padding-top: 10px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    padding-bottom: 10px;
+    text-align: center;
+    color: #f8f8f8;
+}
+
 .back-white {
     background-color: #f8f8f8;
     padding: 30px 0;
@@ -95,6 +102,7 @@ h6 {
     background-color: #ebe8e8e2;
     padding: 30px 0;
 }
+
 
 .lightback-1 {
     background: url(../img/lightback-1.jpg) no-repeat center center;

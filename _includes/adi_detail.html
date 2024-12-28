@@ -1,7 +1,7 @@
 <section id="blogs">
   <div class="content-section-a">
     <div class="container">
-      <div class="row">
+      <div class="row adi-list">
         <div class="col-lg-2">
           <img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ page.number }}.png" alt="ADI {{ page.number }} - {{ page.guest }}: {{ page.title }}">
           Posted: {{ page.date | date: "%Y-%m-%d" }}
@@ -14,11 +14,11 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-5">
           {{ content }}
           <div class="tags">{% for tag in page.tags %}#{{ tag }} {% endfor %}</div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-7">
           <div class="video-container">
           <iframe src="https://www.youtube.com/embed/{{ page.youtube }}" class="video" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
           </div>

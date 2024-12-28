@@ -8,12 +8,13 @@
 
           {% assign sorted_posts = site.episodes | sort: "path" | reverse %}
           {% for post in sorted_posts %}
-          <div class="row">
+          <div class="row adi-list">
             <div class="col-lg-4">
-              <img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ post.number }}.png" alt="ADI {{ post.number }} - {{ post.guest }}: {{ post.title }}">
+              <a href="{{ site.url }}{{ post.url }}" target="_parent"><img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ post.number }}.png" alt="ADI {{ post.number }} - {{ post.guest }}: {{ post.title }}"></a>
             </div>
             <div class="col-lg-8">
-            <strong>{{ post.number }} </strong> -  {{ post.guest }}: <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a>
+            <h1>{{ post.number }}</h1>
+            <h2>{{ post.guest }}: <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a></h2>
             </div>
           </div>
           {% endfor %}
