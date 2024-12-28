@@ -1,20 +1,22 @@
-<section id="blog">
+<section id="episodes">
   <div class="content-section-a">
     <div class="container">
-      <h1>Human Intelligence</h1>
+      <div class="row">
+        <h1>Human Intelligence</h1>
 
-      {% assign sorted_posts = site.episodes | sort: "path" | reverse %}
-      {% for post in sorted_posts %}
-      <div class="row adi-list">
-        <div class="col-lg-4">
-          <a href="{{ site.url }}{{ post.url }}" target="_parent"><img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ post.number }}.png" alt="ADI {{ post.number }} - {{ post.guest }}: {{ post.title }}"></a>
+        {% assign sorted_posts = site.episodes | sort: "path" | reverse %}
+        {% for post in sorted_posts %}
+        <div class="row adi-list">
+          <div class="col-lg-4">
+            <a href="{{ site.url }}{{ post.url }}" target="_parent"><img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ post.number }}.png" alt="ADI {{ post.number }} - {{ post.guest }}: {{ post.title }}"></a>
+          </div>
+          <div class="col-lg-8">
+          <h3>{{ post.number }} - {{ post.guest }}</h3>
+          <h3><a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a></h3>
+          </div>
         </div>
-        <div class="col-lg-8">
-        <h3>{{ post.number }} - {{ post.guest }}</h3>
-        <h3><a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a></h3>
-        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
   </div>
 </section>
