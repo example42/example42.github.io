@@ -3,12 +3,14 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-        <h2>{{ page.title }}</h2>
-        {% if page.update_post and page.update_url %}
-        <h4>Update: <a href="{{ page.update_url}}">{{ page.update_post }}</a></h4>
-        {% endif %}
+        <h1>ADI {{ page.number }}: {{ page.guest }} - {{ page.title }}</h2>
+        <div class="aspect-ratio aspect-ratio--16x9 mt4">
+          <iframe src="https://www.youtube.com/embed/{{ page.youtube }}" class="aspect-ratio--object" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
         <div class="post">{{ content }}</div>
         </div>
+        <div class="tags">{{ page.tags }}</div>
+        </div>        
       </div>
     </div>
   </div>  

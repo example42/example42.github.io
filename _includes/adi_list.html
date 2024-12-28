@@ -15,12 +15,10 @@
 
           <div class="lead">
           <ul class="posts">
-          {% assign numbered_posts = site.episodes | where: "extname", ".md" %}
-          {% assign sorted_posts = numbered_posts | sort: "path" | reverse %}
+          {% assign sorted_posts = site.episodes | sort: "path" | reverse %}
           {% for post in sorted_posts %}
-            {% assign file_number = post.path | split: "/" | last | replace: ".md", "" | plus: 0 %}
             <li>
-            <strong>{{ post.path | split: '/' | last | replace: '.md', '' }} </strong>: <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a>
+            <strong>{{ post.number }} </strong>: <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }} with {{ post.guest }}</a>
             </li>
           {% endfor %}
           </ul>
