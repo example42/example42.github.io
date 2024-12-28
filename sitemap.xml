@@ -24,7 +24,7 @@ layout: null
 </url>
 {% for post in site.posts %}
 <url>
-<loc>{{ site.url }}{{ site.baseurl }}{{ post.url }}/</loc>
+<loc>{{ site.url }}{{ site.baseurl }}{{ post.url }}</loc>
 <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
 <priority>0.60</priority>
 </url>
