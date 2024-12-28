@@ -4,21 +4,12 @@
       <div class="row">
         <div>
           <div class="lead">
-            Released weekly on:</br>
-            <a href="https://youtube.com/@AbnormalDevOpsIterations" class="btn btn-default btn-lg" target="_blank"><i class="fa fa-youtube fa-fw"></i> <span class="network-name">YouTube</span></a>
-          </div>
-          <div class="lead">
-            Audio only versions also available on:</br>
-            <a href="https://open.spotify.com/show/4viAGMM539m0A230xqKhqD?si=bd0d41f805054313" target="_blank">Spotify</a></br>
-            <a href="https://music.amazon.com/podcasts/fbb3a98e-1877-4e66-8b65-23388d0e867e/abnormal-devops-iterations" target="_blank">Amazon Music</a></br>
-          </div>
-
-          <div class="lead">
-          <ul class="posts">
+          <h2>Abnormal DevOps Iterations: Human Intelligence</h2>
+          <ul>
           {% assign sorted_posts = site.episodes | sort: "path" | reverse %}
           {% for post in sorted_posts %}
             <li>
-            <strong>{{ post.number }} </strong>: <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }} with {{ post.guest }}</a>
+            <strong>{{ post.number }} </strong> -  {{ post.guest }}: <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a>
             </li>
           {% endfor %}
           </ul>

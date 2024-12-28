@@ -33,7 +33,7 @@ social:
 collections:
   episodes:
     output: true
-    permalink: /AbnormalDevOpsIterations/:path/:title/
+    permalink: /AbnormalDevOpsIterations/:title/
   posts:
     output: true
     permalink: /blog/:year/:month/:day/:title/

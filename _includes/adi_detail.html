@@ -16,7 +16,9 @@
           <div class="tags">{% for tag in page.tags %}#{{ tag }} {% endfor %}</div>
         </div>
         <div class="col-lg-6">
-          <iframe src="https://www.youtube.com/embed/{{ page.youtube }}" class="aspect-ratio--object" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/{{ page.youtube }}" class="video" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
         </div>
       </div>
     </div>
