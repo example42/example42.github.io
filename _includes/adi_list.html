@@ -5,6 +5,7 @@
         <div>
           <div class="lead">
           <h2>Abnormal DevOps Iterations: Human Intelligence</h2>
+          <h2>A podcast about Puppet, DevOps, IT operations, AI and everything</h2>
 
           {% assign sorted_posts = site.episodes | sort: "path" | reverse %}
           {% for post in sorted_posts %}
@@ -13,8 +14,8 @@
               <a href="{{ site.url }}{{ post.url }}" target="_parent"><img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ post.number }}.png" alt="ADI {{ post.number }} - {{ post.guest }}: {{ post.title }}"></a>
             </div>
             <div class="col-lg-8">
-            <h1>{{ post.number }}</h1>
-            <h2>{{ post.guest }}: <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a></h2>
+            <h2>{{ post.number }} - {{ post.guest }}</h2>
+            <h2><a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a></h2>
             </div>
           </div>
           {% endfor %}
