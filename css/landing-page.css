@@ -83,17 +83,22 @@ h6 {
     padding-bottom: 20px;
     text-align: center;
     color: #f8f8f8;
-    background: url(../img/splash-adi.png) no-repeat center center;
+    background: url(../img/background-podcast.jpg) no-repeat center center;
     background-size: cover;
     vertical-align: middle;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .adi-list {
     padding-top: 10px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     padding-bottom: 10px;
-    text-align: center;
-    color: #f8f8f8;
+    text-align: left;
     vertical-align: middle;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .back-white {
