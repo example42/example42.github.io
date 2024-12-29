@@ -3,23 +3,19 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <div class="intro-message">
+          <div>
             <h1>{{ page.title }}</h1>
             <hr class="intro-divider">
             <h2>{{ page.description }}</h2>
           </div>
         </div>
       </div>
-
-      <textarea id="source" >
-        class: center, middle
         <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
         <script>
           var slideshow = remark.create({
             sourceUrl: '{{ site.url }}/{{ page.source }}'
           });
         </script>
-      </textarea>
     </div>
   </div>
 </section>
