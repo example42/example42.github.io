@@ -13,14 +13,13 @@
 
       <textarea id="source" >
         class: center, middle
+        <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+        <script>
+          var slideshow = remark.create({
+            sourceUrl: '{{ site.url }}/{{ page.source }}'
+          });
+        </script>
       </textarea>
     </div>
   </div>
 </section>
-<script src="https://remarkjs.com/downloads/remark-latest.min.js">
-</script>
-<script>
-  var slideshow = remark.create({
-    sourceUrl: '{{ site.url }}/{{ page.source }}'
-  });
-</script>
