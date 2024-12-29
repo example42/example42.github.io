@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /img/
+Disallow: /login/
+Allow: /
+
+Sitemap: https://example42.com/sitemap.xml
