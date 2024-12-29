@@ -13,9 +13,14 @@
 
       <textarea id="source" >
         class: center, middle
-        {{ content }}
       </textarea>
     </div>
   </div>
 </section>
-  
+<script src="https://remarkjs.com/downloads/remark-latest.min.js">
+</script>
+<script>
+  var slideshow = remark.create({
+    sourceUrl: '{{ page.source }}.md'
+  });
+</script>
