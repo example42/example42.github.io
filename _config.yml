@@ -37,3 +37,7 @@ collections:
   posts:
     output: true
     permalink: /blog/:year/:month/:day/:title/
+  presentations:
+    output: true
+    permalink: /Tutorials/:title/
+  
