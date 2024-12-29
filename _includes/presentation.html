@@ -2,22 +2,15 @@
   <div class="presentation-header">
     <div class="container">
       <div class="row">
-        <div class="col-lg-12">
-          <div>
-            <h1>{{ page.title }}</h1>
-            <hr class="intro-divider">
-            <h2>{{ page.description }}</h2>
-          </div>
-        </div>
+        <textarea id="source">
+        {{ page.content }}
+        </textarea>
       </div>
-      <textarea id="source">
-{{ page.content }}
-      </textarea>
     </div>
   </div>
 </section>
 
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>
-  var slideshow = remark.create({navigation: {scroll: false,}});
+  var slideshow = remark.create({navigation: {scroll: true,}});
 </script>
