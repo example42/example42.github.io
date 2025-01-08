@@ -291,3 +291,16 @@ p.copyright {
     font-size: 12px;
     font-family: 'Roboto', Arial, sans-serif;
 }
+
+.services-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%; /* Adjust as needed */
+}
+
+.services-container a {
+    display: flex;
+    align-items: center;
+    height: 100%; /* Adjust as needed */
+}
