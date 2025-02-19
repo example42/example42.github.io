@@ -12,7 +12,7 @@
             <a href="{{ site.url }}{{ post.url }}" target="_parent"><img class="img-responsive" src="{{ site.url }}/AbnormalDevOpsIterations/img/{{ post.number }}.png" alt="ADI {{ post.number }} - {{ post.guest }}: {{ post.title }}"></a>
           </div>
           <div class="col-lg-7">
-          <h3>{{ post.number }} - {{ post.guest }}</br>
+          <h3>{{ post.number }} - {% for g in post.guest %}{{ g }} / {% endfor %} </br>
           <a href="{{ site.url }}{{ post.url }}" target="_parent">{{ post.title }}</a></h3>
           <div class="tags">{% for tag in post.tags %}#{{ tag }} {% endfor %}</div>
           </div>

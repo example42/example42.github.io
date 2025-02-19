@@ -30,13 +30,15 @@ First chapter provides an overview of Kubernetes, its key features, ecosystem, a
 ## What is Kubernetes?  
 - Kubernetes (commonly called **K8s**) is an open-source platform for **automating deployment**, **scaling**, and **management** of containerized applications.  
 - Originally developed by **Google**; donated to the **Cloud Native Computing Foundation (CNCF)** in 2015.  
-- Provides an abstraction layer for managing workloads in distributed systems. 
+- Provides an abstraction layer for managing workloads in distributed systems.
+- **Kubernetes** is derived from the Greek word for **helmsman** or **pilot**.
+- **Kubernetes** is often abbreviated with **K8s** which stands for **K**-**8** letters between **K** and **s**.
 
 🔗 [Introduction to Kubernetes](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/)  
 
 ---
 
-## Why Kubernetes?
+## 🔗 [Why Kubernetes](https://cloud.google.com/learn/what-is-kubernetes) ?
 
 ### Solves Key Challenges of Containerized Workloads  
 1. **Resource Efficiency**: Optimizes utilization of compute, storage, and network resources.  
@@ -51,8 +53,6 @@ First chapter provides an overview of Kubernetes, its key features, ecosystem, a
 - Backed by major organizations (Google, Red Hat, Amazon, Microsoft, etc.).
 - Widely adopted by enterprises for cloud-native applications.
 - **CNCF Survey 2021**: 91% of respondents use Kubernetes in production.
-
-🔗 [Why Kubernetes](https://cloud.google.com/learn/what-is-kubernetes)  
 
 ---
 
@@ -122,7 +122,7 @@ First chapter provides an overview of Kubernetes, its key features, ecosystem, a
 - **Prometheus**: Metric collection, monitoring, and alerting system.  🔗 [Prometheus Kubernetes Integration](https://prometheus.io/docs/prometheus/latest/installation/)
 - **Grafana**: Visualization tool for monitoring data.  🔗 [Grafana Kubernetes Integration](https://grafana.com/docs/grafana/latest/installation/kubernetes/)
 
-#### Networking Plugins [CNI Plugins Documentation](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/)
+#### Networking Plugins 🔗 [CNI Plugins Documentation](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/)
 - **Flannel**: Simple and easy-to-use networking solution. 🔗 [Flannel](https://github.com/flannel-io/flannel)
 - **Calico**: Provides network policy enforcement. 🔗 [Calico Documentation](https://docs.projectcalico.org/)
 - **WeaveNet**: Network plugin with built-in encryption and observability. 🔗 [WeaveNet Documentation](https://www.weave.works/docs/net/latest/)
@@ -204,7 +204,6 @@ First chapter provides an overview of Kubernetes, its key features, ecosystem, a
 ### Key Takeaways:  
 - Kubernetes (K8s) automates deployment, scaling, and management of containerized applications.  
 - Features: Service discovery, load balancing, self-healing, declarative configuration, scalability.  
-- Architecture: Control Plane (API server, etcd, scheduler, controllers) and Nodes (kubelet, kube-proxy).  
 - Use cases: Microservices, high-availability applications, CI/CD pipelines, hybrid/multi-cloud.  
 - Ecosystem: Helm (packages), Prometheus (monitoring), Istio (service mesh), CNCF projects.  
 - Managed solutions: EKS, GKE, AKS, OpenShift, Tanzu, DigitalOcean Kubernetes.
@@ -218,7 +217,6 @@ First chapter provides an overview of Kubernetes, its key features, ecosystem, a
 - Learn about the Control Plane and Node components.  
 - Install Kubernetes using tools like kubeadm and Minikube.  
 - Configure clusters for security, scalability, and performance.  
-- Follow best practices for managing configurations and resources.  
 
 ---
 
@@ -271,22 +269,23 @@ First chapter provides an overview of Kubernetes, its key features, ecosystem, a
 - Worker Nodes: Run workloads (pods) and communicate with the control plane.
 - Scalable and fault-tolerant.
 - For HA, run multiple instances (at least 3) of control plane components
+- Worker Nodes can be added or removed dynamically.
 
 ---
 
 ## Installation Tools  
 
-**kubeadm**  🔗 [Documentation](https://kubernetes.io/docs/reference/setup-tools/kubeadm/)
+**  🔗 [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/) **
   - A standard tool to set up Kubernetes clusters easily.  
   - Automates installation of control plane and worker node components.  
   - Ideal for production-grade clusters.
 
-**kind** 🔗 [Documentation](https://kind.sigs.k8s.io/docs/user/quick-start/)
+** 🔗 [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) **
   - Kubernetes in Docker for local development.  
   - Creates a multi-node cluster using Docker containers.  
   - Suitable for testing and development.
 
-**Minikube** 🔗 [Documentation](https://minikube.sigs.k8s.io/docs/)
+** 🔗 [Minikube](https://minikube.sigs.k8s.io/docs/) **
   - Lightweight Kubernetes for local testing.  
   - Sets up a single-node cluster on a local machine.  
   - Suitable for development and practice.  
@@ -302,15 +301,15 @@ On a node where you want to install Kubernetes, ensure the following prerequisit
 - **Disable swap**: Disable swap to ensure Kubernetes runs smoothly.
 - **Firewall Rules on control plane**
   Open required ports for inbound traffic (defaults, can be customized):
-  - API Server: 6443 (used by All)
-  - etcd Server client API: 2379-2380 (used by etcd and kube-apiserver)
-  - Kubelet API: 10250 (used by kubelet and control plane)
-  - Controller Manager: 10257 (used by kube-controller-manager)
-  - Scheduler: 10259 (used by kube-scheduler)
+  - API Server: **6443** (used by All)
+  - etcd Server client API: **2379-2380** (used by etcd and kube-apiserver)
+  - Kubelet API: **10250** (used by kubelet and control plane)
+  - Controller Manager: **10257** (used by kube-controller-manager)
+  - Scheduler: **10259** (used by kube-scheduler)
 - **Firewall Rules on worker nodes**
-  - Kubelet API: 10250 (used by kubelet and control plane)
-  - Kube-proxy: 10256 (used by kube-proxy and load balancers)
-  - NodePort Services: 30000-32767 (used by external clients)
+  - Kubelet API: **10250** (used by kubelet and control plane)
+  - Kube-proxy: **10256** (used by kube-proxy and load balancers)
+  - NodePort Services: **30000-32767** (used by external clients)
   
 ---
 ## Installing Kubernetes with kubeadm 1/2
@@ -375,59 +374,59 @@ The tool **kubectl** uses **kubeconfig** files where are stored cluster informat
 The default kubeconfig path is **~/.kube/config**.
 
 Inside a kubeconfig file you can have different contexts, each pointing to a different cluster.
+
 With the command `kubectl config get-contexts` you can see the available contexts.
+
 With the command `kubectl config use-context <context-name>` you can switch between contexts.
+
 With the command `kubectl config view` you can see the merged kubeconfig settings.
 
 ---
 
-## Kubernetes Configuration 
+## Kubernetes [ Namespaces 🔗 ](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) 
 
+Namespaces are a way to divide cluster resources between multiple users or teams, they isolate resources within the same cluster and are ideal for multi-team or multi-environment use cases.
+Common namespaces are:
+- **default**: The default namespace for objects with no other namespace.
+- **kube-system**: Namespace for objects created by Kubernetes system.
+- **kube-public**: Namespace for objects that need to be accessible by all users.
 
+When working with kubectl you always need to be aware that your commands are run within a specific namespace, you can change the namespace with the `--namespace` flag or by running:
 
-#### Use ConfigMaps and Secrets  
-- **ConfigMaps**: Store non-sensitive configuration data separately from application code.  
-  - 🔗 [ConfigMaps Documentation](https://kubernetes.io/docs/concepts/configuration/configmap/)  
-- **Secrets**: Store sensitive data securely.  
-  - 🔗 [Secrets Documentation](https://kubernetes.io/docs/concepts/configuration/secret/)  
+```bash
+kubectl config set-context --current --namespace=<namespace-name>
+```
 
----
+If you need to create new namespaces, run:
 
-#### Leverage Namespaces  
-- **Namespaces**:  
-  - Isolate resources within the same cluster.  
-  - Ideal for multi-team or multi-environment use cases (e.g., dev, staging, production).  
-  - 🔗 [Namespaces Documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)  
-
----
-
-#### Resource Management  
-1. **Resource Quotas**:  
-   - Limit resource consumption per namespace.  
-   - 🔗 [Resource Quotas Documentation](https://kubernetes.io/docs/concepts/policy/resource-quotas/)  
-
-2. **Limit Ranges**:  
-   - Set default requests and limits for containers in a namespace.  
-   - 🔗 [Limit Ranges Documentation](https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/limit-range/)  
+```bash
+kubectl create namespace <namespace-name>
+``` 
 
 ---
 
 ## Chapter 2: Cluster Architecture, Installation, and Configuration | Wrap-Up 
 
 ### Key Takeaways:  
-- **Cluster Architecture**: Control Plane manages cluster state; nodes run workloads.  
+- **Cluster Architecture**:
+  - Control Plane manages cluster state; nodes run workloads. 
+  - Control Plane components: API server, etcd, scheduler and controllers
+  - Nodes components: kubelet, kube-proxy and the container runtime (Docker, containerd, CRI-O...).
 - **Installation Tools**:  
   - kubeadm: Standard tool for production clusters.  
   - Minikube: Lightweight tool for local testing. 
   - kind: Kubernetes in Docker for development. 
-- **Configuration Best Practices**:  
-  - Use ConfigMaps/Secrets for app configs and sensitive data.  
+- **Configuration**:  
+  - Kubeconfigs are the configuration files for kubectl.
   - Organize resources with namespaces.  
-  - Enforce resource limits using ResourceQuotas and LimitRanges. 
 
 ---
 
 ## Chapter 3: Workloads and Scheduling  
+
+### Resources and objects in Kubernetes
+- Difference between resources and objects.
+- Common commands to interact with resources.
 
 ### Manage Workloads Effectively  
 - Discover Kubernetes workloads: Pods, Deployments, StatefulSets, and Jobs.  
@@ -435,18 +434,69 @@ With the command `kubectl config view` you can see the merged kubeconfig setting
 - Master scheduling concepts like node affinity, taints/tolerations, and resource allocation.  
 - Practice debugging and resolving workload issues.
 
+---
+
+## Kubernetes [objects and resources](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/)  🔗
+
+Kubernetes **objects** are persistent entities in the Kubernetes system.
+
+Kubernetes uses these entities to represent the state of your cluster.
+
+Each object has a **spec** field that describes the desired state, and a **status** field that describes the current state of the object.
+
+Kubernetes provides several built-in objects, like pods, services, and deployments and additionally allows you to define custom objects.
+
+**Resources** are the endpoints in the Kubernetes API that store a collection of objects of a certain kind.
+
+The difference between a resource and an object is that the resource is a "noun", while the object is a "instance" of a resource.
+
+If you are familiar with OOP, the resource is the class, and the object is the instance of the class.
+
+Or, to put it in a simpler way, the resource is the menu item and the object is the dish.
 
 ---
 
-## Key Kubernetes Workloads  
+## Kubernetes [Resources](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) 🔗
 
-#### 1. **Pods**  
+Kubernetes provides several built-in resources to manage the cluster:
+- **Nodes**: Worker machines in the cluster.
+- **Namespaces**: Organize resources within a cluster.
+- **Pods**: Running instances of a container.
+- **Deployments**: Manage replica sets and pods.
+- **Services**: Expose applications running in pods.
+- **ConfigMaps**: Store configuration data.
+- **Secrets**: Store sensitive information securely.
+
+For the complete list of the available resources run:
+```bash
+kubectl api-resources
+```
+
+---
+
+## kubectl commands
+
+These are common and useful kubectl commands to use with resources:
+- **kubectl get**: Display info a resource.
+- **kubectl describe**: Show detailed information about a resource.
+- **kubectl create**: Create a new resource from a file or stdin.
+- **kubectl apply**: Apply a configuration to a resource by file name or stdin.
+- **kubectl delete**: Delete a resource.
+- **kubectl edit**: Edit a resource.
+- **kubectl explain**: Show documentation of a resource.
+
+---
+
+## Pods
+
+**   [Pods](https://kubernetes.io/docs/concepts/workloads/pods/) 🔗 **
 - Smallest deployable unit in Kubernetes.  
 - Can run a single container or multiple tightly coupled containers.  
 - Pods share:  
   - **Network namespace**: Same IP and ports.  
   - **Storage**: Shared volumes.  
-- 🔗 [Pods Documentation](https://kubernetes.io/docs/concepts/workloads/pods/)  
+  - **Lifecycle**: Start and stop together.
+- **PodSpec**: Defines the pod's configuration (containers, volumes, etc.).
 
 ---
 
@@ -457,7 +507,7 @@ With the command `kubectl config view` you can see the merged kubeconfig setting
 kubectl run my-pod --image=nginx --restart=Never  
 ```  
 
-#### YAML File  
+#### YAML File (output redacted)
 ```yaml  
 apiVersion: v1  
 kind: Pod  
@@ -465,9 +515,115 @@ metadata:
   name: my-pod  
 spec:  
   containers:  
-    - name: nginx  
-      image: nginx  
+    - name: my-pod  
+      image: nginx
+  restartPolicy: Never
 ``` 
+
+---
+
+### Example: Showing Pod Information (output redacted)
+
+```bash
+$ kubectl get pods my-pod
+NAME                      READY   STATUS    RESTARTS   AGE
+my-pod                    1/1     Running   0          3m39s
+```
+
+```bash
+$ kubectl get pods my-pod -o yaml
+kind: Pod
+metadata:
+  labels:
+    run: my-pod
+  name: my-pod
+  namespace: default
+spec:
+  containers:
+  - image: nginx
+    imagePullPolicy: Always
+    name: my-pod
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-cmz5n
+      readOnly: true
+  nodeName: minikube
+  volumes:
+  - name: kube-api-access-cmz5n
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2025-01-24T14:40:19Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  containerStatuses:
+  - containerID: docker://edb170adedefdf9655ec2dfd296411c796ba28e2ee03c85e683ec5e8e1a1307e
+    image: nginx:latest
+    name: my-pod
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2025-01-24T14:40:18Z"
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-cmz5n
+      readOnly: true
+  hostIP: 192.168.49.2
+  podIP: 10.244.0.12
+```
+
+---
+
+### Example: Describing a Pod (output redacted)
+
+```bash
+$ kubectl describe pod my-pod
+Name:             my-pod
+Namespace:        default
+Service Account:  default
+Node:             minikube/192.168.49.2
+Labels:           run=my-pod
+Status:           Running
+IP:               10.244.0.12
+Containers:
+  my-pod:
+    Image:          nginx
+    State:          Running
+    Ready:          True
+    Restart Count:  0
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-cmz5n (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-cmz5n:
+    ConfigMapName:           kube-root-ca.crt
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m30s  default-scheduler  Successfully assigned default/my-pod to minikube
+  Normal  Pulling    2m30s  kubelet            Pulling image "nginx"
+  Normal  Pulled     2m25s  kubelet            Successfully pulled image "nginx" in 4.887s (4.887s including waiting). Image size: 197009709 bytes.
+  Normal  Created    2m25s  kubelet            Created container: my-pod
+  Normal  Started    2m25s  kubelet            Started container my-pod
 
 ---
 
@@ -497,14 +653,14 @@ kind: Deployment
 metadata:  
   name: my-deployment  
 spec:  
-  replicas: 3  
+  replicas: 1
   selector:  
     matchLabels:  
-      app: nginx  
+      app: my-deployment  
   template:  
     metadata:  
       labels:  
-        app: nginx  
+        app: my-deployment  
     spec:  
       containers:  
         - name: nginx  
@@ -820,14 +976,15 @@ spec:
 
 ---
 
-## Chapter 3: Workloads and Scheduling | Wrap-Up  
+## Chapter 3: Resources, Workloads and Scheduling | Wrap-Up
 
-### Key Takeaways:  
+### Key Takeaways:
+- **Resources**: Nodes, Namespaces, Pods, Deployments, StatefulSets, DaemonSets, Jobs/CronJobs.
 - **Workloads**: Pods (smallest deployable unit), Deployments (stateless apps), StatefulSets (stateful apps), Jobs/CronJobs (batch/scheduled tasks), DaemonSets (node-specific tasks).  
 - **Scheduling**:  
   - Node affinity, taints/tolerations, and priority classes control pod placement.  
   - Resource requests/limits manage CPU and memory allocation.  
-  - Network policies secure pod communication.  
+  - Network policies secure pod communication.
 - **Debugging**: Use `kubectl describe`, `kubectl logs`, and ephemeral containers for troubleshooting.  
 
 ---
@@ -1616,6 +1773,7 @@ spec:
 - Monitor cluster performance with Metrics Server, Prometheus, and Grafana.  
 - Debug and troubleshoot issues with logs, events, and ephemeral containers.  
 - Prepare for disaster recovery by restoring etcd and validating cluster state.  
+- Magage cluster resources with best practices for limits, requests, and priority classes.
 
 ---
 
@@ -1814,6 +1972,25 @@ Update the `etcd` pod configuration to point to the restored data directory.
 
 🔗 [Cluster Administration Documentation](https://kubernetes.io/docs/tasks/administer-cluster/)  
 
+
+---
+
+#### Resource Management
+
+**Resource Requests and Limits**:
+- **Resource Requests**: Minimum CPU/Memory a pod needs to run.
+- **Resource Limits**: Maximum CPU/Memory a pod can consume.
+- Prevents resource starvation and overcommitment.
+- 🔗 [Resource Management Documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+
+**Resource Quotas**:  
+  - Limit resource consumption per namespace.  
+  - 🔗 [Resource Quotas Documentation](https://kubernetes.io/docs/concepts/policy/resource-quotas/)  
+
+**Limit Ranges**:  
+  - Set default requests and limits for containers in a namespace.
+  - 🔗 [Limit Ranges Documentation](https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/limit-range/)  
+
 ---
 
 ## Chapter 7: Cluster Maintenance and Troubleshooting | Wrap-Up   
@@ -1828,7 +2005,11 @@ Update the `etcd` pod configuration to point to the restored data directory.
 - **Troubleshooting**:  
   - Debug pods using logs (`kubectl logs`) and ephemeral containers.  
   - Analyze events (`kubectl get events`) and validate DNS/network configurations.  
-- Disaster Recovery: Restore etcd from backups and validate control plane.  
+- **Disaster Recovery**:
+  - Restore etcd from backups and validate control plane.  
+- **Resource Management**:  
+  - Set resource requests and limits to prevent overcommitment.  
+  - Use Resource Quotas and Limit Ranges to manage resource consumption.
 
 ---
 

@@ -9,7 +9,7 @@
           <h1>ADI</br>{{ page.number }}</h1>
         </div>
         <div class="col-lg-8">
-        <h1>{{ page.guest }} - {{ page.title }}</h2>
+        <h1>{% for g in page.guest %}{{ g }} {% endfor %} - {{ page.title }}</h2>
         </div>
       </div>
       <div class="row">
