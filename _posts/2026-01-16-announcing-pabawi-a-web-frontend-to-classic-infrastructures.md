@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Announcing Pabawi, a web frontend to classic infrastructures
+title: Announcing Pabawi, a web frontend for classic infrastructures
 ---
 
 Is there still space in AI and Cloud native days, for a new tool to manage classic infrastructures, basic on physical or virtual servers?
