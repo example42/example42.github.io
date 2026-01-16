@@ -37,17 +37,17 @@ Check the [git repopsitory](https://github.com/example42/pabawi.git) for install
 
 Here some screenshots, from a test setup with few nodes. The interface adapts well and is still fast on larger setups (currently tested with infrastructures up to 350 nodes).
 
-### Inventory and Node Management
+### Nodes Inventory
 
 ![Inventory Page](/img/posts/screenshots/inventory.png){:height="50%" width="50%"}
 
-*Node inventory with multi-source support and node detail interface for operations*
+*Node inventory with multi-source support, blazing fast search and filtering options*
 
-### Task Execution and Reports
+### Task Execution
 
 ![Task Execution](/img/posts/screenshots/task-execution.png){:height="50%" width="50%"}
 
-*Bolt task execution interface and Puppet run reports with detailed metrics*
+*Bolt task execution interface with automatic parameters discovery*
 
 ### Executions Tracking
 
@@ -57,14 +57,20 @@ Here some screenshots, from a test setup with few nodes. The interface adapts we
 
 ### Node Details
 
-![Node Detail](/img/posts/screenshots/node-detail-age.png){:height="50%" width="50%"}
+![Node Detail](/img/posts/screenshots/node-detail-page.png){:height="50%" width="50%"}
 
 *Node detail page with access to facts, reports, events, managed resources and other useful info*
 
+### Puppet reports
 
-## Special launch free installation service
+![Node Detail](/img/posts/screenshots/puppet-reports.png){:height="50%" width="50%"}
 
-Pabawi is easy to integrate in your existing Puppet / Bolt infrastructure and has contextual setup instructions for each integration, but if you want help in trying it in your infrastructure, example42 offers a **free installation service**, no strings attached.
+*Puppet reports view, with run times and number of affected resource.*
+
+
+## Free installation service
+
+Pabawi is easy to integrate in your existing Puppet / Bolt infrastructure and has contextual setup instructions for each integration, but if you want help in trying it in your infrastructure, example42 offers a launch special, time limited, **free installation service**, no strings attached.
 
 In a shared screen call we can setup Pabawi with you, either using its container image or via npm.
 
