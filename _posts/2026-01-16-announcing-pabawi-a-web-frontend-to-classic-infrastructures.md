@@ -9,9 +9,11 @@ If you handle good old servers, and use Puppet, Bolt or Ansible to configure and
 
 **Pabawi** is a new, moderm, sleek web frontend to inventory your systems, check they configuration management status, and run actions on them.
 
+Needless to sat that it's also Open Source.
+
 Version 0.4.0, just released after a few weeks of AI based coding, has integrations with Bolt, Hiera, PuppetDB and PuppetServer.
 
-Current version is expected to be run by a Puppet developer / user on her/his localhost, featuring:
+Current version is expected to be run by a Puppet developer or user on her/his localhost, featuring:
 
 - **Multi-Source Inventory**: View and manage nodes from Bolt inventory and PuppetDB
 - **Command Execution**: Run ad-hoc commands on remote nodes with whitelist security
@@ -29,13 +31,13 @@ Current version is expected to be run by a Puppet developer / user on her/his lo
 - **Puppet code analysys**: Analyses Puppet code base, reporting class usage, lint issues, outdated modules in Puppetfile
 
 
-Ansible and other tools integrations are planned for future versions.
+More robust users management and RBAC, Ansible and other tools integrations are planned for future versions.
 
-Check the [git repopsitory](https://github.com/example42/pabawi.git) for installation instructions and details.
+Check the [git repository](https://github.com/example42/pabawi.git) for installation instructions and details.
 
 ## Screenshots
 
-Here some screenshots, from a test setup with few nodes. The interface adapts well and is still fast on larger setups (currently tested with infrastructures up to 350 nodes).
+Here are some screenshots, from a test setup with few nodes. The interface adapts well and is still fast on larger setups (currently tested with infrastructures up to 350 nodes).
 
 ### Nodes Inventory
 
@@ -68,14 +70,14 @@ Here some screenshots, from a test setup with few nodes. The interface adapts we
 *Puppet reports view, with run times and number of affected resource.*
 
 
-## Free installation service
+## Free installation service (time limited)
 
 Pabawi is easy to integrate in your existing Puppet / Bolt infrastructure and has contextual setup instructions for each integration, but if you want help in trying it in your infrastructure, example42 offers a launch special, time limited, **free installation service**, no strings attached.
 
 In a shared screen call we can setup Pabawi with you, either using its container image or via npm.
 
-We want to test and validate it in different conditions, collecting users feedback and suggestions.
+We want to test and validate it in different conditions, collecting users' feedback and suggestions.
 
-Just contact me on [LinkedIN](https://www.linkedin.com/in/alessandrofranceschi/) for planning a call: half an hour should be enought to set it up and see how it works.
+Just contact me on [LinkedIN](https://www.linkedin.com/in/alessandrofranceschi/) for planning a call: half an hour should be enough to set it up and see how it works.
 
 Alessandro Franceschi
