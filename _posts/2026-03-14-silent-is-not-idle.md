@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Announcing Pabawi, a web frontend for classic infrastructures
+title: Silent is not idle
 ---
 
 # Pabawi is Growing Fast: from v0.4 to v0.8 in Two Months
