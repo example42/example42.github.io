@@ -62,7 +62,7 @@ quotes:
 Episode body text here.
 ```
 
-`guest` can be a bare string (`guest: Name`) or a YAML list. The template iterates over it with `{% for g in page.guest %}`.
+`guest` can be a bare string (`guest: Name`) or a YAML list. The template iterates over it with ` for g in page.guest `.
 
 ### Adding a New Episode
 
