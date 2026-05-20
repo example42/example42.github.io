@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Puppet Evaluation Error. Error while evaluating a Resource Statement - Unknown resource type
+description: "What causes the Puppet 'Unknown resource type' error, how to read the full error message, and how to fix it by adding the missing module dependency."
 ---
 
 So you got the **Error while evaluating a Resource Statement, Unknown resource type** with Puppet and are searching for solutions?

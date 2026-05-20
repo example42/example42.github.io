@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Announcing Pabawi, a web frontend for classic infrastructures
+description: "Introducing Pabawi — an open source web frontend for Puppet, Bolt, and Ansible that brings inventory, reporting, and command execution into a single modern UI."
 ---
 
 Is there still space in AI and Cloud native days for a new tool to manage classic infrastructures based on physical or virtual servers?

@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Puppet is acquired and example42 goes back to the roots
+description: "Perforce acquires Puppet — and why classic infrastructure configuration management is still essential regardless of cloud, containers, or serverless trends."
 ---
 
 On April 11th, 2022 Puppet's CEO Yvonne Wassenaar [announced](https://puppet.com/blog/an-open-letter-from-the-ceo-of-puppet){:target="_blank"} the acquisition from Perforce.

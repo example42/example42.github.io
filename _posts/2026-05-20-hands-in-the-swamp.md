@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Hands in the Swamp
+description: "First hands-on with Swamp — an AI workflow automation tool — building a Docker image test extension, hitting naming bugs, and the usual AI-assisted rabbit hole."
 ---
 
 This is weird, and I guess a sign of the weird times we live in.

@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Pabawi Version One released
+description: "Pabawi 1.0 is out: Proxmox and AWS provisioning, per-node journal, multi-source inventory with groups, and a proper documentation site at pabawi.example42.com."
 ---
 
 # Pabawi 1.0

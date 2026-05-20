@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: HashiConf Europe 2022 - Vibes from a perfect conference
+description: "A personal account of HashiConf Europe 2022 in Amsterdam — community, road trip, and a live demo of installing HashiCorp tools with Tiny Puppet."
 ---
 
 IT conferences are main attractions in our jobs with machines, the occasions to meet again remote friends you've known for years, know people with whom you have something in common and stay updated on vendors' products.

@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Desktop as Code with TP Desktop
+description: "Manage your desktop setup as code with tp desktop — install apps, configure dotfiles, and handle secrets reproducibly across Linux, macOS, and Windows using Puppet and YAML."
 ---
 
 We manage via code the configurations of servers, cloud resources and infrastructures.

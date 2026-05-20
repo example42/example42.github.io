@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Silent is not idle
+description: "Pabawi goes from v0.4 to v0.8 in two months: Ansible integration, RBAC, SSH management, and a clearer vision for the one-pane-of-glass for classic infrastructure."
 ---
 
 # Pabawi is Growing Fast: from v0.4 to v0.8 in Two Months

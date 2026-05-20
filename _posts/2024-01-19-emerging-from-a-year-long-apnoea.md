@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Emerging from a year long apnoea
+description: "Example42 resurfaces after a year of silence: a record commercial year, upcoming conferences, and a recommitment to open source Puppet work in 2024."
 ---
 
 The last post on example42's blog was from December 2022, more than a year ago.

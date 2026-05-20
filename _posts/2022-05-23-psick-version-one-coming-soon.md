@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Psick module version 1 coming soon!
+description: "What's new in Psick module version 1: classification, base profiles, tp integration, and the new direct management approach for managing infrastructure with Puppet."
 ---
 
 Psick (Puppet Systems Infrastructure Construction Kit) is a project that aims to provide a top of the notch Puppet infrastructure in a quick and easy way. It's composed by:

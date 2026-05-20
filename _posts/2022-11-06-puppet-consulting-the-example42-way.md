@@ -1,6 +1,7 @@
 ---
 layout: blog
 title: Puppet consulting, the example42 way
+description: "Real examples of how example42 delivers Puppet consulting and support: instant troubleshooting, infrastructure reviews, training, and custom module development."
 ---
 
 If you think that this is a mere low budget marketing self-promoting post, you are right.
